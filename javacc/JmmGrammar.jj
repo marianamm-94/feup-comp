@@ -76,7 +76,7 @@ MainDeclaration:
 
 OtherMethodDeclaration:
 	Type <IDENTIFIER> <OPEN_PAREN> (Type <IDENTIFIER> (<COLON> Type <IDENTIFIER>)*)? <CLOSE_PAREN>
-	<OPEN_BRACE> MethodBody <RETURN> Expression <SEMI_COLON> <CLOSE_BRACE>
+	<OPEN_BRACE> MethodBody <RETURN> ExpressionAnd <SEMI_COLON> <CLOSE_BRACE>
 ;
 
 
@@ -93,7 +93,7 @@ Statement:
 	<OPEN_BRACE> (Statement)* <CLOSE_BRACE> 
 	| IfStatement
 	| WhileStatement
-	|  (ExpressionAnd)? <EQUAL> ExpressionAnd <SEMI_COLON> 
+	|  ExpressionAnd (<EQUAL> ExpressionAnd)? <SEMI_COLON> 
 ;
 
 IfStatement:
@@ -136,21 +136,22 @@ ExpressionExclamation:
 ;
 
 ExpressionFullStop:
-	Expression (<FULLSTOP> (<LENGTH> | ExpressionIdentifier) )*
+	ExpressionEnd (<FULLSTOP> (<LENGTH> | ExpressionIdentifier) )*
 ;
 
 ExpressionIdentifier:
 	<IDENTIFIER> <OPEN_PAREN> (Parameter)? <CLOSE_PAREN>
 ;
 Parameter:
-	ExpressionAnd (<SEMI_COLON> ExpressionAnd)*
+	ExpressionAnd (<COLON> ExpressionAnd)*
 ;
-Expression:
+ExpressionEnd:
 	<INTEGER> 
 	|<TRUE>
 	| <FALSE>
 	| <IDENTIFIER>
 	| <THIS>
+	| <OPEN_PAREN> ExpressionAnd <CLOSE_PAREN>
 	| <NEW> (<INT> Array | <IDENTIFIER> <OPEN_PAREN> <CLOSE_PAREN>)
 ;
 
