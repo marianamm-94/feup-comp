@@ -28,14 +28,21 @@ public class SimpleParser implements JmmParser {
 
     @Override
     public JmmParserResult parse(String jmmCode, Map<String, String> config) {
+        return parse(jmmCode, "Program", config);
+    }
+
+    @Override
+    public JmmParserResult parse(String jmmCode, String startingRule, Map<String, String> config) {
 
         try {
 
             JmmGrammarParser parser = new JmmGrammarParser(SpecsIo.toInputStream(jmmCode));
-            parser.Program();
+            // parser.Program();
+            SpecsSystem.invoke(parser, startingRule);
 
             Node root = parser.rootNode();
-            root.dump("");
+            // root.dump("");
+            System.out.println(((JmmNode) root).sanitize().toTree());
 
             if (!(root instanceof JmmNode)) {
                 return JmmParserResult.newError(new Report(ReportType.WARNING, Stage.SYNTATIC, -1,
