@@ -10,6 +10,8 @@ import pt.up.fe.comp.jmm.report.Report;
 import pt.up.fe.comp.jmm.report.ReportType;
 import pt.up.fe.comp.jmm.report.Stage;
 import pt.up.fe.specs.util.SpecsIo;
+import pt.up.fe.specs.util.SpecsSystem;
+
 
 /**
  * Copyright 2022 SPeCS.
