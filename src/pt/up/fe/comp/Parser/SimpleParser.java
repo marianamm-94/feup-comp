@@ -1,4 +1,4 @@
-package pt.up.fe.comp;
+package pt.up.fe.comp.Parser;
 
 import java.util.Collections;
 import java.util.Map;

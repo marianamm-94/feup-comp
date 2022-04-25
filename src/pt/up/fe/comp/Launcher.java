@@ -7,6 +7,8 @@ import java.util.Map;
 
 import pt.up.fe.comp.jmm.analysis.JmmSemanticsResult;
 import pt.up.fe.comp.jmm.parser.JmmParserResult;
+import pt.up.fe.comp.Parser.SimpleParser;
+import pt.up.fe.comp.SymbolTable.JmmAnalyser;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
 import pt.up.fe.specs.util.SpecsSystem;
@@ -43,13 +45,6 @@ public class Launcher {
 
         // Check if there are parsing errors
         TestUtils.noErrors(parserResult.getReports());
-
-        // Parse stage  
-
-        JmmParserResult parserResult = parser.parse(input, config);  
-
-        // Check if there are parsing errors  
-        TestUtils.noErrors(parserResult.getReports());  
 
         // Instantiate JmmAnalysis  
 

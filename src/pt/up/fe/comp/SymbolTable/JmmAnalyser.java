@@ -1,6 +1,4 @@
-package pt.up.fe.comp;  
-
-  
+package pt.up.fe.comp.SymbolTable;  
 
 import java.util.Collections;  
 
