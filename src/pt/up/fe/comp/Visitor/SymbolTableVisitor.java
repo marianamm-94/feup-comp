@@ -28,11 +28,11 @@ public class SymbolTableVisitor extends PreorderJmmVisitor<Boolean, Boolean>  {
     }
 
     public boolean visitClass(JmmNode node, Boolean dummy){
-        for (JmmNode child : node.getChildren()){
-            String childKind=child.getKind();
-        }
-
-        return dummy;
+        String className=node.get("name");
+        symbolTable.setClassName(className);
+        //como ver o extends?? nome superclasse
+        //node.getOptional("super_name");
+        return true;
     }
     public boolean visitImport(JmmNode node, Boolean dummy){
         StringBuilder importString = new StringBuilder(node.get("name"));
@@ -42,6 +42,7 @@ public class SymbolTableVisitor extends PreorderJmmVisitor<Boolean, Boolean>  {
         return true;
     }
     public boolean visitMainDeclaration(JmmNode node, Boolean dummy){
+        
         return dummy;
     }
     public boolean visitOtherMethodDeclaration(JmmNode node, Boolean dummy){

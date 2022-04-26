@@ -1,7 +1,8 @@
-package pt.up.fe.comp.Parser;
+package pt.up.fe.comp;
 
 import java.util.Collections;
 import java.util.Map;
+
 
 import pt.up.fe.comp.jmm.ast.JmmNode;
 import pt.up.fe.comp.jmm.parser.JmmParser;
@@ -27,6 +28,7 @@ import pt.up.fe.specs.util.SpecsSystem;
  */
 
 public class SimpleParser implements JmmParser {
+
     @Override
     public JmmParserResult parse(String jmmCode, Map<String, String> config) {
         return parse(jmmCode, "Program", config);
