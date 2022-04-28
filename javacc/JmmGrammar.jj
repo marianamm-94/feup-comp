@@ -55,7 +55,7 @@ TOKEN :
 Program : (ImportDeclaration)* ClassDeclaration <EOF> ;
 
 ImportDeclaration:
-	<IMPORT> <IDENTIFIER> ({ jjtThis.put("name", lastConsumedToken.getImage()); } ) (<FULLSTOP> <IDENTIFIER> ({ jjtThis.put("name", lastConsumedToken.getImage()); } ) )* <SEMI_COLON>
+	<IMPORT> <IDENTIFIER> ({ jjtThis.put("name", lastConsumedToken.getImage()); } ) (<FULLSTOP> <IDENTIFIER> ({ jjtThis.put("name", lastConsumedToken.getImage()); } ) #DotImport )* <SEMI_COLON>
 ;
 
 ClassDeclaration: 
@@ -71,7 +71,7 @@ MethodDeclaration #void:
 ;
 
 MainDeclaration:
-	<STATIC> <VOID> <MAIN> <OPEN_PAREN> <STRING> <OPEN_BRACKET> <CLOSE_BRACKET> <IDENTIFIER> <CLOSE_PAREN>
+	<STATIC> <VOID> <MAIN> <OPEN_PAREN> <STRING> <OPEN_BRACKET> <CLOSE_BRACKET> <IDENTIFIER> ({ jjtThis.put("name", lastConsumedToken.getImage()); } ) <CLOSE_PAREN>
 	<OPEN_BRACE> MethodBody <CLOSE_BRACE>
 ;
 
@@ -86,12 +86,15 @@ MethodBody:
 ;
 
 Type: 
-	<INT> ({ jjtThis.put("name", lastConsumedToken.getImage()); jjtThis.put("isArray","False"); } ) ((<OPEN_BRACKET> <CLOSE_BRACKET>)({jjtThis.put("isArray","True");}))? | <BOOLEAN> ({ jjtThis.put("name", lastConsumedToken.getImage()); jjtThis.put("isArray","False");} )| <IDENTIFIER> ({ jjtThis.put("name", lastConsumedToken.getImage()); jjtThis.put("isArray","False");} )
+	<INT> ({ jjtThis.put("name", lastConsumedToken.getImage()); jjtThis.put("isArray","False"); } ) ((<OPEN_BRACKET> <CLOSE_BRACKET>)({jjtThis.put("isArray","True");}))? 
+	| <BOOLEAN> ({ jjtThis.put("name", lastConsumedToken.getImage()); jjtThis.put("isArray","False");} )
+	| <STRING> ({ jjtThis.put("name", lastConsumedToken.getImage()); jjtThis.put("isArray","False");} )
+	| <IDENTIFIER> ({ jjtThis.put("name", lastConsumedToken.getImage()); jjtThis.put("isArray","False");} )
 ; 
 
 
 Statement #void:
-	<OPEN_BRACE> (Statement)* <CLOSE_BRACE> 
+	<OPEN_BRACE> (Statement)* <CLOSE_BRACE> #CompoundStatement
 	| IfStatement
 	| WhileStatement
 	| ExpressionAnd (<EQUAL> ExpressionAnd #Assignment(2) )? <SEMI_COLON> 

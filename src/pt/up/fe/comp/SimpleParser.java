@@ -3,7 +3,6 @@ package pt.up.fe.comp;
 import java.util.Collections;
 import java.util.Map;
 
-
 import pt.up.fe.comp.jmm.ast.JmmNode;
 import pt.up.fe.comp.jmm.parser.JmmParser;
 import pt.up.fe.comp.jmm.parser.JmmParserResult;
