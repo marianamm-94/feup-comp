@@ -5,8 +5,12 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+import pt.up.fe.comp.Jasmin.JasminEmitter;
+import pt.up.fe.comp.Ollir.JmmOptimizer;
 import pt.up.fe.comp.SymbolTable.JmmAnalyser;
 import pt.up.fe.comp.jmm.analysis.JmmSemanticsResult;
+import pt.up.fe.comp.jmm.jasmin.JasminResult;
+import pt.up.fe.comp.jmm.ollir.OllirResult;
 import pt.up.fe.comp.jmm.parser.JmmParserResult;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
@@ -57,7 +61,24 @@ public class Launcher {
 
         TestUtils.noErrors(analysisResult.getReports());  
 
-        // ... add remaining stages  
+        // Instantiate JmmOptimization
+         var optimizer = new JmmOptimizer();
+
+        // Parse stage
+        OllirResult ollirResult = optimizer.toOllir(analysisResult);
+ 
+        // Check if there are parsing errors
+         TestUtils.noErrors(ollirResult.getReports());
+
+
+        // Instantiate JasminEmitter
+        var jasminEmitter = new JasminEmitter();
+
+        // Parse stage
+        JasminResult jasminResult = jasminEmitter.toJasmin(ollirResult);
+ 
+         // Check if there are parsing errors
+         TestUtils.noErrors(jasminResult.getReports());
     }
 
 }

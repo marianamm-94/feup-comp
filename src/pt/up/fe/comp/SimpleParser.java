@@ -1,5 +1,6 @@
 package pt.up.fe.comp;
 
+
 import java.util.Collections;
 import java.util.Map;
 
