@@ -72,4 +72,13 @@ public class Utils {
             return false;
     }
 
+    public static boolean importValid(String importValue, SymbolTable symbolTable){
+        for(String importName : symbolTable.getImports()) {
+            String[] splitImport = importName.split("\\.");
+            if (splitImport[splitImport.length - 1].equals(importValue))
+                return true;
+        }
+        return false;
+    }
+
 }

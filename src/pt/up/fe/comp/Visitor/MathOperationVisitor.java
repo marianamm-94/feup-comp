@@ -9,7 +9,7 @@ public class MathOperationVisitor extends PreorderJmmVisitor<JmmAnalyser, Boolea
     public MathOperationVisitor() {
         addVisit("Add", this::MathOperationVisit);
         addVisit("Sub", this::MathOperationVisit);
-        addVisit("Mul", this::MathOperationVisit);
+        addVisit("Mult", this::MathOperationVisit);
         addVisit("Div", this::MathOperationVisit);
     }
 

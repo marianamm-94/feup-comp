@@ -8,7 +8,7 @@ public class BoolOperationVisitor extends PreorderJmmVisitor<JmmAnalyser, Boolea
 
     public BoolOperationVisitor() {
         addVisit("And", this::boolVisitAnd);
-        addVisit("Not", this::boolVisitNot);
+        addVisit("Exclamation_mark", this::boolVisitNot);
         addVisit("Less", this::boolVisitLess);
     }
 
