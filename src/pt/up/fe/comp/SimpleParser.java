@@ -43,7 +43,7 @@ public class SimpleParser implements JmmParser {
             // parser.Program();
             SpecsSystem.invoke(parser, startingRule);
 
-            Node root = parser.rootNode();
+            var root = parser.rootNode();
             // root.dump("");
             System.out.println(((JmmNode) root).sanitize().toTree());
 

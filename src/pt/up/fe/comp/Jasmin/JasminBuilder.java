@@ -1,6 +1,8 @@
 package pt.up.fe.comp.Jasmin;
 
-import org.specs.comp.ollir.ClassUnit;
+import org.specs.comp.ollir.*;
+
+import java.util.HashMap;
 
 public class JasminBuilder {
 
@@ -55,6 +57,7 @@ public class JasminBuilder {
     }
 
     private void addMethods() {
+        //method header
         for (var method : classUnit.getMethods()) {
             jasminCode.append(".method public ");
             if (method.isStaticMethod())
@@ -68,12 +71,25 @@ public class JasminBuilder {
                 jasminCode.append(method.getMethodName());
 
             jasminCode.append("(");
-            for (var param : method.getParams()) {
+            for (var param : method.getParams())
+                jasminCode.append(JasminUtils.getJasminType(param.getType()));
+            jasminCode.append(")").append(JasminUtils.getJasminType(method.getReturnType())).append("\n");
 
+            //method body
+            for(var instruction : method.getInstructions()){
+                 for(var label : method.getLabels(instruction))
+                     jasminCode.append(label).append(":\n");
             }
-
         }
-        // getLabels(instructions)
     }
 
+    private String addInstructions(Instruction instruction, Method method){
+        switch (instruction.getInstType()){
+            case ASSIGN:
+                return JasminMethodAssignment.getInstructionsAssign((AssignInstruction) instruction,method);
+            case CALL:
+                return "";
+        }
+        return "";
+    }
 }

@@ -1,10 +1,7 @@
 package pt.up.fe.comp.Jasmin;
 
-import org.specs.comp.ollir.AccessModifiers;
-import org.specs.comp.ollir.ArrayType;
-import org.specs.comp.ollir.ClassType;
-import org.specs.comp.ollir.ClassUnit;
-import org.specs.comp.ollir.Type;
+import org.specs.comp.ollir.*;
+import pt.up.fe.specs.util.exceptions.NotImplementedException;
 
 public class JasminUtils {
     static ClassUnit classUnit;
@@ -20,29 +17,28 @@ public class JasminUtils {
             case PROTECTED:
                 return "protected";
             default:
-                return "";
+                return "Error Acess Modifiers";
         }
     }
 
     public static String getJasminType(Type type) {
 
-        switch (type.getTypeOfElement().toString()) {
-            case "ARRAYREF":
+        switch (type.getTypeOfElement()) {
+            case ARRAYREF:
                 return getJasminArrayType((ArrayType) type);
-            case "INT32":
+            case INT32:
                 return "I";
-            case "OBJECTREF":
+            case OBJECTREF:
                 return getJasminObjectType((ClassType) type);
-            case "BOOLEAN":
+            case BOOLEAN:
                 return "Z";
-            case "VOID":
+            case VOID:
                 return "V";
-            case "String":
+            case STRING:
                 return "Ljava/lang/String;";
 
         }
-        return "Error Jasmin Type";
-
+       throw new NotImplementedException(type.getTypeOfElement());
     }
 
     private static String getJasminObjectType(ClassType type) {
@@ -61,5 +57,6 @@ public class JasminUtils {
         jasminCode.append("[".repeat(type.getNumDimensions())).append("I");
         return jasminCode.toString();
     }
+
 
 }
