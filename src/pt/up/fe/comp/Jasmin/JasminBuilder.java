@@ -39,26 +39,41 @@ public class JasminBuilder {
             jasminCode.append(".field ");
             String accessModifiers = JasminUtils.getAccessModifiers(field.getFieldAccessModifier());
             jasminCode.append(accessModifiers);
-            jasminCode.append(" ");
             if (field.isStaticField())
-                jasminCode.append("static ");
+                jasminCode.append(" static");
             if (field.isFinalField())
-                jasminCode.append("final ");
-            jasminCode.append("'").append(field.getFieldName()).append("' ");
+                jasminCode.append(" final");
+            jasminCode.append(" ").append(field.getFieldName()).append(" ");
             String jasminType = JasminUtils.getJasminType(field.getFieldType());
-            jasminCode.append(jasminType).append(" ");
+            jasminCode.append(jasminType);
             if (field.isInitialized()) {
-                jasminCode.append(" = ");
-                jasminCode.append(field.getInitialValue());
+                jasminCode.append(" = ").append(field.getInitialValue());
             }
             jasminCode.append("\n");
-
         }
 
     }
 
     private void addMethods() {
+        for (var method : classUnit.getMethods()) {
+            jasminCode.append(".method public ");
+            if (method.isStaticMethod())
+                jasminCode.append("static ");
+            if (method.isFinalMethod())
+                jasminCode.append("final ");
 
+            if (method.isConstructMethod())
+                jasminCode.append("<init> ");
+            else
+                jasminCode.append(method.getMethodName());
+
+            jasminCode.append("(");
+            for (var param : method.getParams()) {
+
+            }
+
+        }
+        // getLabels(instructions)
     }
 
 }

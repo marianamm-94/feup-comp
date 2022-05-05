@@ -1,7 +1,8 @@
 package pt.up.fe.comp.Jasmin;
 
-import org.eclipse.jgit.lib.RefRename;
 import org.specs.comp.ollir.AccessModifiers;
+import org.specs.comp.ollir.ArrayType;
+import org.specs.comp.ollir.ClassType;
 import org.specs.comp.ollir.ClassUnit;
 import org.specs.comp.ollir.Type;
 
@@ -27,16 +28,38 @@ public class JasminUtils {
 
         switch (type.getTypeOfElement().toString()) {
             case "ARRAYREF":
-                return "[I";
+                return getJasminArrayType((ArrayType) type);
             case "INT32":
                 return "I";
             case "OBJECTREF":
-                return classUnit.getClassName();
+                return getJasminObjectType((ClassType) type);
             case "BOOLEAN":
                 return "Z";
-        }
+            case "VOID":
+                return "V";
+            case "String":
+                return "Ljava/lang/String;";
 
-        return "";
+        }
+        return "Error Jasmin Type";
 
     }
+
+    private static String getJasminObjectType(ClassType type) {
+        StringBuilder jasminCode = new StringBuilder();
+        String className = type.getName();
+        for (var imported : classUnit.getImports()) {
+            if (imported.endsWith("." + className))
+                jasminCode.append("L").append(imported.replace('.', '/')).append(";");
+        }
+        jasminCode.append("L").append(className).append(";");
+        return jasminCode.toString();
+    }
+
+    private static String getJasminArrayType(ArrayType type) {
+        StringBuilder jasminCode = new StringBuilder();
+        jasminCode.append("[".repeat(type.getNumDimensions())).append("I");
+        return jasminCode.toString();
+    }
+
 }
