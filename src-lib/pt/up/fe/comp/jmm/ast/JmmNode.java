@@ -105,7 +105,7 @@ public interface JmmNode {
     }
 
     /**
-     * Adds a new node at the end of the children list
+     * s a new node at the end of the children list
      * 
      * @param child
      */

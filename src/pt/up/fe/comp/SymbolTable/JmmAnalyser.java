@@ -26,7 +26,7 @@ public class JmmAnalyser implements JmmAnalysis {
         this.symbolTableReports = new ArrayList<>();
     }
 
-    public static JmmSymbolTable getSymbolTable() {
+    public JmmSymbolTable getSymbolTable() {
         return symbolTable;
     }
 

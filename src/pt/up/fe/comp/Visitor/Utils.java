@@ -11,10 +11,10 @@ import pt.up.fe.comp.jmm.analysis.table.Type;
 
 public class Utils {
 
-    public static String getTypeVar(JmmNode node){
+    public static String getTypeVar(JmmNode node, JmmAnalyser symbolTableReport, String parentMethod){
         if (node.getKind().equals("Number")) return "int";
         if (node.getKind().equals("True") || node.getKind().equals("False")) return "boolean";
-        if (node.getKind().equals("this")) return JmmAnalyser.getSymbolTable().getClassName();
+        if (node.getKind().equals("this")) return symbolTableReport.getSymbolTable().getClassName();
 
 
         //continue for other kinds
@@ -37,6 +37,25 @@ public class Utils {
     public static String getReturn(JmmNode node, JmmAnalyser symbolTableReport) {
         //TODO
         return "NOT DONE";
+    }
+
+    public static String getReturnType(JmmNode node, JmmAnalyser symbolTableReport){
+        JmmNode leftNode = node.getChildren().get(0);
+        JmmNode rightNode = node.getChildren().get(1);
+
+        String type = Utils.getTypeNode(node);
+        String method = rightNode.getChildren().get(0).get("name");
+        String valueClass = symbolTableReport.getSymbolTable().getClassName();
+        Boolean valueMethod = symbolTableReport.getSymbolTable().getMethods().contains(method);
+
+        if(rightNode.getKind().equals("Length"))
+            return "int";
+        else if (valueMethod && (method.equals(valueClass) || node.getKind().equals("This"))){
+            Type typeReturn = symbolTableReport.getSymbolTable().getReturnType((method));
+            return typeReturn.getName() + (typeReturn.isArray() ? "[]" : "");
+        }
+
+        return "undefined";
     }
 
     public static boolean isMathOp(String param) {

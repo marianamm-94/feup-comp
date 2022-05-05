@@ -4,7 +4,7 @@ import pt.up.fe.comp.SymbolTable.JmmAnalyser;
 import pt.up.fe.comp.jmm.ast.JmmNode;
 import pt.up.fe.comp.jmm.ast.PreorderJmmVisitor;
 
-public class MathOperationVisitor extends PreorderJmmVisitor {
+public class MathOperationVisitor extends PreorderJmmVisitor<JmmAnalyser, Boolean> {
 
     public MathOperationVisitor() {
         addVisit("Add", this::MathOperationVisit);
@@ -25,17 +25,24 @@ public class MathOperationVisitor extends PreorderJmmVisitor {
         return true;
     }
 
-    private void checkNodeExpression(JmmNode node, JmmAnalyser symbolTableReport, String operation){
+    private Boolean checkNodeExpression(JmmNode node, JmmAnalyser symbolTableReport, String operation){
 
-        if(Utils.isMathOp(node.getKind())) return;
+        if(Utils.isMathOp(node.getKind()))
+            return true;
         else if (Utils.isBoolOp(node.getKind()))
             symbolTableReport.newReport(node, "\"" + node + "\" invalid operator.");
-        else if (node.getKind().equals("FULLSTOP")) {
+        else if (node.getKind().equals("FullStop")) {
             String value = Utils.getReturn(node, symbolTableReport);
             if (!(value.equals("undefined") || value.equals("int")))
                 symbolTableReport.newReport(node, "\"" + node + "\" invalid operator.");
         }
-        //else if (!node.getKind().equals("ArrayAccess") )
+        else if (!node.getKind().equals("ArrayAccess")){
+            String value = Utils.getReturn(node, symbolTableReport);
+            if(!(value.equals("undefined") || value.equals("int")))
+                symbolTableReport.newReport(node, "\"" + node + "\" invalid type.");
+        }
+
+        return true;
     }
 
 }
