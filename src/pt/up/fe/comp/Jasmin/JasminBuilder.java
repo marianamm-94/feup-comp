@@ -89,6 +89,11 @@ public class JasminBuilder {
                 return JasminMethodAssignment.getInstructionsAssign((AssignInstruction) instruction,method);
             case CALL:
                 return "";
+            case PUTFIELD:
+                return "";
+            case RETURN:
+                return JasminReturn.returnInstructions((ReturnInstruction) instruction, method);
+
         }
         return "";
     }
