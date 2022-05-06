@@ -16,7 +16,7 @@ public class JasminGetField {
             name=className;
         else
             name=((Operand) first).getName();
-        jasminCode.append(JasminLoadStore.loadElement(first,table)).append(" getfield ").append(name).append("/").append(((Operand) second).getName()).append(" ").append(type);
+        jasminCode.append(JasminLoadStore.loadElement(first,table)).append("getfield ").append(name).append("/").append(((Operand) second).getName()).append(" ").append(type);
         jasminCode.append("\n");
         return jasminCode.toString();
     }
