@@ -36,7 +36,7 @@ public class MathOperationVisitor extends PreorderJmmVisitor<JmmAnalyser, Boolea
             if (!(value.equals("undefined") || value.equals("int")))
                 symbolTableReport.newReport(node, "\"" + node + "\" invalid operator.");
         }
-        else if (!node.getKind().equals("ArrayAccess")){
+        else if (!node.getKind().equals("Array")){
             String value = Utils.getReturn(node, symbolTableReport);
             if(!(value.equals("undefined") || value.equals("int")))
                 symbolTableReport.newReport(node, "\"" + node + "\" invalid type.");

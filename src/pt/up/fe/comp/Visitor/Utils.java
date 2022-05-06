@@ -58,6 +58,19 @@ public class Utils {
         return "undefined";
     }
 
+    public static Boolean isOp(String param){
+        if(param.equals("Add")) return true;
+        else if(param.equals("Sub")) return true;
+        else if(param.equals("mult")) return true;
+        else if(param.equals("Div")) return true;
+        else if(param.equals("And")) return true;
+        else if(param.equals("Not")) return true;
+        else if(param.equals("Less")) return true;
+        else if(param.equals("ExpressionArray")) return true;
+        else if(param.equals("Array")) return true;
+        return false;
+    }
+
     public static boolean isMathOp(String param) {
         if(param.equals("Add") || param.equals("sub") || param.equals("Mul") || param.equals("Div"))
             return true;

@@ -11,7 +11,7 @@ public class FunctionNotFoundVisitor extends PreorderJmmVisitor<JmmAnalyser, Boo
 
     public FunctionNotFoundVisitor() {
         addVisit("FullStop", this::visitFullStop);
-        addVisit("NewOject", this::visitNewObj);
+        addVisit("NewObject", this::visitNewObj);
     }
 
     public Boolean visitFullStop(JmmNode node, JmmAnalyser symbolTableReport){
@@ -26,20 +26,41 @@ public class FunctionNotFoundVisitor extends PreorderJmmVisitor<JmmAnalyser, Boo
             }
             return true;
         }
-        else if(leftNode.getKind().equals("Identifier")){
+        if(leftNode.getKind().equals("Identifier")){
             String nodeName = leftNode.get("name");
 
             if(Utils.importValid(nodeName, symbolTableReport.getSymbolTable()))
-                if ()
-                symbolTableReport.newReport(leftNode, "\""+nodeName+"\" import invalid");
+                if (isObject(node, nodeName, symbolTableReport))
+                    symbolTableReport.newReport(leftNode, "\""+nodeName+"\" import invalid");
+        }
+        if(leftNode.getKind().equals("This") && rightNode.getKind().equals("FullStopMethod")){
+            if(symbolTableReport.getSymbolTable().getSuper() != null)
+                return true;
+            String ident = leftNode.get("name");
+            if(!symbolTableReport.getSymbolTable().getMethods().contains(ident))
+                symbolTableReport.newReport(node,"Fuction \""+ ident + "\" is not defined");
         }
 
         return true;
     }
 
-    public Boolean visitNewObj(JmmNode jmmNode, JmmAnalyser symbolTableReport) {
-        //TODO
-        return true;
+    public Boolean visitNewObj(JmmNode node, JmmAnalyser symbolTableReport) {
+
+        JmmNode objNode = node.getChildren().get(0);
+        String objName = objNode.get("name");
+        Boolean returnValue = false;
+
+        if(objName.equals(symbolTableReport.getSymbolTable().getClassName()))
+            returnValue = true;
+        else if(symbolTableReport.getSymbolTable().getSuper() != null && objName.equals((symbolTableReport.getSymbolTable().getSuper())))
+                returnValue = true;
+        else if(Utils.importValid(objName,symbolTableReport.getSymbolTable()))
+                returnValue = true;
+        else{
+            symbolTableReport.newReport(objNode, "\""+objName+"\"  not object or import");
+            }
+
+        return returnValue;
     }
 
     public Boolean lengthValidator(JmmNode node){
@@ -59,8 +80,33 @@ public class FunctionNotFoundVisitor extends PreorderJmmVisitor<JmmAnalyser, Boo
         List<Symbol> methodParams = symbolTableReport.getSymbolTable().getParameters(method);
 
        for(Symbol symb: localVariables){
-           if(symb.getName().equals(nodeName))
+           if(symb.getName().equals(nodeName)) {
+               String typeSymb = symb.getType().getName();
+               if (!typeSymb.equals("int") && !typeSymb.equals("String") && !typeSymb.equals("boolean")) {
+                   if(typeSymb.equals(symbolTableReport.getSymbolTable().getClassName()))
+                       if(symbolTableReport.getSymbolTable().getSuper() != null)
+                           return true;
+                       else if(!symbolTableReport.getSymbolTable().getMethods().contains(calledMethod.get("name")))
+                           symbolTableReport.newReport(calledMethod, "\""+calledMethod.get("name")+"\" is not a class method");
+               }
+           }
+           return true;
        }
-    }
 
+        for(Symbol symb: methodParams){
+            if(symb.getName().equals(nodeName)) {
+                String typeSymb = symb.getType().getName();
+                if (!typeSymb.equals("int") && !typeSymb.equals("String") && !typeSymb.equals("boolean")) {
+                    if(typeSymb.equals(symbolTableReport.getSymbolTable().getClassName()))
+                        if(symbolTableReport.getSymbolTable().getSuper() != null)
+                            return true;
+                        else if(!symbolTableReport.getSymbolTable().getMethods().contains(calledMethod.get("name")))
+                            symbolTableReport.newReport(calledMethod, "\""+calledMethod.get("name")+"\" is not a class method");
+                }
+            }
+            return true;
+        }
+
+       return false;
+    }
 }
