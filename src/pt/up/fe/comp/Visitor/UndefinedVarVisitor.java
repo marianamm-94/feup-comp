@@ -1,17 +1,20 @@
 package pt.up.fe.comp.Visitor;
 
 import pt.up.fe.comp.SymbolTable.JmmAnalyser;
+import pt.up.fe.comp.jmm.analysis.table.Symbol;
 import pt.up.fe.comp.jmm.ast.JmmNode;
 import pt.up.fe.comp.jmm.ast.PreorderJmmVisitor;
+
+import java.util.List;
 
 public class UndefinedVarVisitor extends PreorderJmmVisitor<JmmAnalyser, Boolean> {
 
     public UndefinedVarVisitor(){
         addVisit("MethodDeclaration", this::visitMethodDeclaration);
-        addVisit("ObjectMethodParameters", this::visitMethodParameters);
-        addVisit("Return", this::visitReturn);
-        addVisit("VarDeclaration", this::visitVarDeclaration);
-        addVisit("Extends", this::visitExtends);
+        //addVisit("ObjectMethodParameters", this::visitMethodParameters);
+        //addVisit("Return", this::visitReturn);
+        //addVisit("VarDeclaration", this::visitVarDeclaration);
+        //addVisit("Extends", this::visitExtends);
     }
 
     public Boolean visitMethodDeclaration(JmmNode methodNode, JmmAnalyser symbolTableReport){
@@ -19,7 +22,7 @@ public class UndefinedVarVisitor extends PreorderJmmVisitor<JmmAnalyser, Boolean
         JmmNode methodScope = methodNode.getChildren().get(0);
 
         String methodName;
-        if(methodScope.getKind().equals("GenericMethod"))
+        if(methodScope.getKind().equals("OtherMethodDeclaration"))
             methodName = methodScope.getChildren().get(1).get("name");
         else
             methodName = "main";
@@ -58,10 +61,30 @@ public class UndefinedVarVisitor extends PreorderJmmVisitor<JmmAnalyser, Boolean
             definedVar(node, methodName, symbolTableReport );
         else if (Utils.isOp(node.getKind()) || node.getKind().equals("Array"))
             expressionValid(node, methodName, symbolTableReport);
+
     }
 
-    public Boolean definedVar(JmmNode node, String methodName, JmmAnalyser symbolTableReport){
+    public void definedVar(JmmNode node, String methodName, JmmAnalyser symbolTableReport){
 
+        String nameVar = node.get("name");
+
+        List<Symbol> localVars = symbolTableReport.getSymbolTable().getLocalVariables(methodName);
+        List<Symbol> classFields = symbolTableReport.getSymbolTable().getFields();
+        List<Symbol> methodParams = symbolTableReport.getSymbolTable().getParameters(methodName);
+
+        if(!symbolContain(localVars, nameVar) && !symbolContain(classFields, nameVar) && !symbolContain(methodParams, nameVar))
+            symbolTableReport.newReport(node,"Variable \""+nameVar+ "\" is not defined");
+
+    }
+
+    public Boolean symbolContain(List<Symbol> vars, String nameVar){
+
+        for(Symbol symb: vars){
+            if(symb.getName().equals(nameVar))
+                return true;
+        }
+
+        return false;
     }
 
 }

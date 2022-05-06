@@ -6,10 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="bec954bc-6880-45c5-aaf9-995bd8965194" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pt/up/fe/comp/Visitor/FunctionNotFoundVisitor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pt/up/fe/comp/Visitor/FunctionNotFoundVisitor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pt/up/fe/comp/Visitor/MathOperationVisitor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pt/up/fe/comp/Visitor/MathOperationVisitor.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pt/up/fe/comp/Visitor/UndefinedVarVisitor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pt/up/fe/comp/Visitor/UndefinedVarVisitor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pt/up/fe/comp/Visitor/Utils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pt/up/fe/comp/Visitor/Utils.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
