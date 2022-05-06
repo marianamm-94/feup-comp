@@ -13,9 +13,9 @@ public class JasminReturn {
         ElementType returnType = instruction.getOperand().getType().getTypeOfElement();
         jasminCode.append(JasminLoadStore.loadElement(instruction.getOperand(),method.getVarTable()));
         if(returnType==ElementType.INT32 || returnType==ElementType.BOOLEAN)
-            jasminCode.append("ireturn");
+            jasminCode.append("ireturn\n");
         else
-            jasminCode.append("areturn");
+            jasminCode.append("areturn\n");
         return jasminCode.toString();
     }
 }

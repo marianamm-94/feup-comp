@@ -59,14 +59,14 @@ public class JasminBuilder {
     private void addMethods() {
         //method header
         for (var method : classUnit.getMethods()) {
-            jasminCode.append(".method public ");
+            jasminCode.append("\n.method public ");
             if (method.isStaticMethod())
                 jasminCode.append("static ");
             if (method.isFinalMethod())
                 jasminCode.append("final ");
 
             if (method.isConstructMethod())
-                jasminCode.append("<init> ");
+                jasminCode.append("<init>");
             else
                 jasminCode.append(method.getMethodName());
 
@@ -79,22 +79,13 @@ public class JasminBuilder {
             for(var instruction : method.getInstructions()){
                  for(var label : method.getLabels(instruction))
                      jasminCode.append(label).append(":\n");
+                 jasminCode.append(JasminUtils.addInstructions(instruction,method));
             }
+            if(method.getReturnType().getTypeOfElement()==ElementType.VOID)
+                jasminCode.append("return\n");
+            jasminCode.append(".end method\n");
         }
     }
 
-    private String addInstructions(Instruction instruction, Method method){
-        switch (instruction.getInstType()){
-            case ASSIGN:
-                return JasminMethodAssignment.getInstructionsAssign((AssignInstruction) instruction,method);
-            case CALL:
-                return "";
-            case PUTFIELD:
-                return "";
-            case RETURN:
-                return JasminReturn.returnInstructions((ReturnInstruction) instruction, method);
 
-        }
-        return "";
-    }
 }

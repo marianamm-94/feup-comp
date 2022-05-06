@@ -8,15 +8,17 @@ public class JasminMethodAssignment extends JasminBuilder{
         super(classUnit);
     }
     public static String getInstructionsAssign(AssignInstruction assignInstruction, Method method){
+        //TODO::
         Instruction rhs =assignInstruction.getRhs();
         Element lhs = assignInstruction.getDest();
-        Operand o = (Operand) assignInstruction.getDest();
         var table = method.getVarTable();
-        int reg= table.get(o.getName()).getVirtualReg();
 
-        String rhsOperand = new JasminOperand().getOperand(rhs);
-        
-    return "";
+        StringBuilder jasminCode = new StringBuilder();
+
+        jasminCode.append(JasminUtils.addInstructions(rhs,method));
+        jasminCode.append(JasminLoadStore.storeElement(lhs,table));
+
+    return jasminCode.toString();
     }
 
 }

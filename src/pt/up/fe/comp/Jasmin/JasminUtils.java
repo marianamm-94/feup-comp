@@ -54,9 +54,43 @@ public class JasminUtils {
 
     private static String getJasminArrayType(ArrayType type) {
         StringBuilder jasminCode = new StringBuilder();
-        jasminCode.append("[".repeat(type.getNumDimensions())).append("I");
+        jasminCode.append("[".repeat(type.getNumDimensions()));
+        if(type.getTypeOfElements()==ElementType.INT32)
+            jasminCode.append("[I");
+        else
+            jasminCode.append("Ljava/lang/String;");
         return jasminCode.toString();
     }
 
+    public static String addInstructions(Instruction instruction, Method method){
+        switch (instruction.getInstType()){
+            case ASSIGN:
+                return JasminMethodAssignment.getInstructionsAssign((AssignInstruction) instruction,method);
+            case PUTFIELD:
+                return JasminPutField.addPutField((PutFieldInstruction) instruction);
+            case RETURN:
+                return JasminReturn.returnInstructions((ReturnInstruction) instruction, method);
+            case BINARYOPER:
+                return  addBinaryOper((BinaryOpInstruction) instruction);
+            case NOPER:
+                return addNoOper((SingleOpInstruction) instruction);
+            case GETFIELD:
+                return JasminGetField.addGetField((GetFieldInstruction) instruction,method);
+            case CALL:
+                return JasminCall.addCall((CallInstruction) instruction);
+
+        }
+        throw new NotImplementedException(instruction.getInstType());
+    }
+
+    private static String addNoOper(SingleOpInstruction instruction) {
+        //TODO::
+        return "";
+    }
+
+    private static String addBinaryOper(BinaryOpInstruction instruction) {
+        //TODO::
+        return "";
+    }
 
 }
