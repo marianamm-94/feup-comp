@@ -67,13 +67,13 @@ public class JasminUtils {
             case ASSIGN:
                 return JasminMethodAssignment.getInstructionsAssign((AssignInstruction) instruction,method);
             case PUTFIELD:
-                return JasminPutField.addPutField((PutFieldInstruction) instruction);
+                return JasminPutField.addPutField((PutFieldInstruction) instruction,method);
             case RETURN:
                 return JasminReturn.returnInstructions((ReturnInstruction) instruction, method);
             case BINARYOPER:
-                return  addBinaryOper((BinaryOpInstruction) instruction);
+                return  addBinaryOper((BinaryOpInstruction) instruction,method);
             case NOPER:
-                return addNoOper((SingleOpInstruction) instruction);
+                return addNoOper((SingleOpInstruction) instruction,method);
             case GETFIELD:
                 return JasminGetField.addGetField((GetFieldInstruction) instruction,method);
             case CALL:
@@ -83,13 +83,12 @@ public class JasminUtils {
         throw new NotImplementedException(instruction.getInstType());
     }
 
-    private static String addNoOper(SingleOpInstruction instruction) {
-        //TODO::
-        return "";
+    private static String addNoOper(SingleOpInstruction instruction,Method method) {
+        return JasminLoadStore.loadElement(instruction.getSingleOperand(),method.getVarTable());
     }
 
-    private static String addBinaryOper(BinaryOpInstruction instruction) {
-        //TODO::
+    private static String addBinaryOper(BinaryOpInstruction instruction,Method method) {
+
         return "";
     }
 

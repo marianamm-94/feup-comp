@@ -8,9 +8,8 @@ public class JasminGetField {
         Element first =instruction.getFirstOperand();
         Element second = instruction.getSecondOperand();
         var table = method.getVarTable();
-        ClassUnit classUnit=JasminBuilder.classUnit;
         String name;
-        String className=classUnit.getClassName();
+        String className=method.getOllirClass().getClassName();
         String type= JasminUtils.getJasminType(second.getType());
         if(className.equals("this"))
             name=className;
