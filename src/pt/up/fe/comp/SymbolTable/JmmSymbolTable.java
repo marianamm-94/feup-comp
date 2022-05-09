@@ -46,7 +46,7 @@ public class JmmSymbolTable implements SymbolTable {
 
     @Override
     public Type getReturnType(String methodSignature) {
-     return methods.get(methodSignature).getReturnType();
+        return methods.get(methodSignature).getReturnType();
     }
 
     @Override
@@ -76,8 +76,8 @@ public class JmmSymbolTable implements SymbolTable {
     }
 
     public void addMethod(String name,Type returnType, List<Symbol> parameters){
-       JmmMethod method = new JmmMethod(name,returnType,parameters);
-       methods.put(name,method);
+        JmmMethod method = new JmmMethod(name,returnType,parameters);
+        methods.put(name,method);
     }
-    
+
 }

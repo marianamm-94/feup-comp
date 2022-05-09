@@ -27,8 +27,8 @@ public class JmmMethod {
     }
 
     public Type getReturnType() {
-		return returnType;
-	}
+        return returnType;
+    }
 
     public List<Symbol> getParameters() {
         return parameters;
@@ -38,5 +38,5 @@ public class JmmMethod {
         return new ArrayList<>(localVariables.values());
     }
 
-    
+
 }
