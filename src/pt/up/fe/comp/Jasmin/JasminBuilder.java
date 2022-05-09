@@ -57,7 +57,7 @@ public class JasminBuilder {
     }
 
     private void addMethods() {
-        //method header
+
         for (var method : classUnit.getMethods()) {
             jasminCode.append("\n.method public ");
             if (method.isStaticMethod())
@@ -75,7 +75,8 @@ public class JasminBuilder {
                 jasminCode.append(JasminUtils.getJasminType(param.getType()));
             jasminCode.append(")").append(JasminUtils.getJasminType(method.getReturnType())).append("\n");
 
-            //method body
+            jasminCode.append(".limit stack 99\n");
+            jasminCode.append(".limit locals 99\n");
             for(var instruction : method.getInstructions()){
                  for(var label : method.getLabels(instruction))
                      jasminCode.append(label).append(":\n");

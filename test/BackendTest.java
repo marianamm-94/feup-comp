@@ -35,7 +35,7 @@ public class BackendTest {
      //assertEquals("Hello, World!", output.trim());
          JasminEmitter jasminEmitter = new JasminEmitter();
          JasminResult jasminResult=jasminEmitter.toJasmin(new OllirResult(result, Collections.emptyMap()));
-         jasminResult.compile();
+         jasminResult.run();
      }
 
     @Test

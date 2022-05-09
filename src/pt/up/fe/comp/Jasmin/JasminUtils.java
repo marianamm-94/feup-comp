@@ -77,7 +77,7 @@ public class JasminUtils {
             case GETFIELD:
                 return JasminGetField.addGetField((GetFieldInstruction) instruction,method);
             case CALL:
-                return JasminCall.addCall((CallInstruction) instruction);
+                return JasminCall.addCall((CallInstruction) instruction,method);
 
         }
         throw new NotImplementedException(instruction.getInstType());
@@ -88,8 +88,33 @@ public class JasminUtils {
     }
 
     private static String addBinaryOper(BinaryOpInstruction instruction,Method method) {
+        Element left=instruction.getLeftOperand();
+        Element right= instruction.getRightOperand();
+        var varTable= method.getVarTable();
+        StringBuilder jasminCode= new StringBuilder();
+        OperationType opType=instruction.getOperation().getOpType();
 
-        return "";
+        jasminCode.append(JasminLoadStore.loadElement(left,varTable));
+        jasminCode.append(JasminLoadStore.loadElement(right,varTable));
+        jasminCode.append(getJasminOperationType(opType)).append("\n");
+        //goto not implemented
+
+        return jasminCode.toString();
     }
+
+    private static String getJasminOperationType(OperationType opType) {
+        switch (opType){
+            case ADD:
+                return "iadd";
+            case MUL:
+                return "imul";
+            case SUB:
+                return "isub";
+            case DIV:
+                return "idiv";
+        }
+            throw new NotImplementedException(opType);
+    }
+
 
 }

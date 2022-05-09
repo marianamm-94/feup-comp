@@ -6,7 +6,6 @@ import java.util.HashMap;
 
 public class JasminLoadStore {
     public static String loadElement(Element operand, HashMap<String, Descriptor> varTable) {
-        //TODO::
         if(operand.isLiteral())
             return  loadLiteral((LiteralElement) operand);
         int reg =varTable.get(((Operand) operand).getName()).getVirtualReg();
@@ -36,7 +35,6 @@ public class JasminLoadStore {
     }
 
     private static String loadLiteral(LiteralElement operand) {
-        //TODO::
         StringBuilder jasminCode= new StringBuilder();
         String literal= operand.getLiteral();
         jasminCode.append("ldc ").append(literal).append("\n");
@@ -44,7 +42,6 @@ public class JasminLoadStore {
     }
 
     public static String storeElement(Element operand, HashMap<String, Descriptor> varTable) {
-        //TODO:: verificar se esta bem implementado
         int reg =varTable.get(((Operand) operand).getName()).getVirtualReg();
         StringBuilder jasminCode= new StringBuilder();
         ElementType elementType = operand.getType().getTypeOfElement();

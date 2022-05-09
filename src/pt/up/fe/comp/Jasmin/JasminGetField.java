@@ -11,7 +11,7 @@ public class JasminGetField {
         String name;
         String className=method.getOllirClass().getClassName();
         String type= JasminUtils.getJasminType(second.getType());
-        if(className.equals("this"))
+        if(((Operand) first).getName().equals("this"))
             name=className;
         else
             name=((Operand) first).getName();
