@@ -26,11 +26,7 @@ public class JmmAnalyser implements JmmAnalysis {
 
         SymbolTable symbolTable = visitor.getSymbolTable();
 
-        System.out.println(symbolTable.getClassName());
-        System.out.println(symbolTable.getSuper());
-        System.out.println(symbolTable.getFields());
-        System.out.println(symbolTable.getImports());
-        System.out.println(symbolTable.getMethods());//param e return
+        System.out.println(symbolTable.print());
 
         return new JmmSemanticsResult(parserResult, symbolTable, Collections.emptyList());
 

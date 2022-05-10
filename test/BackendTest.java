@@ -28,8 +28,8 @@ import java.util.Collections;
 public class BackendTest {
 
      @Test
-     public void testHelloWorld2() {
-     String result = SpecsIo.getResource("fixtures/public/ollir/myclass3.ollir");
+     public void testHelloWorld3() {
+     String result = SpecsIo.getResource("fixtures/public/cp2/OllirToJasminBasic.ollir");
     // TestUtils.noErrors(result.getReports());
      //var output = result.run();
      //assertEquals("Hello, World!", output.trim());
@@ -37,7 +37,6 @@ public class BackendTest {
          JasminResult jasminResult=jasminEmitter.toJasmin(new OllirResult(result, Collections.emptyMap()));
          jasminResult.run();
      }
-
     @Test
     public void testHelloWorld() {
 
