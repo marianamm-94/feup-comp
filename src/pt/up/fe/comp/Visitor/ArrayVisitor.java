@@ -7,36 +7,28 @@ import pt.up.fe.comp.SymbolTable.JmmAnalyser;
 public class ArrayVisitor extends PreorderJmmVisitor<JmmAnalyser, Boolean> {
 
     public ArrayVisitor(){
-        addVisit("ArrayAccess",this::visitArrayAccess);
-        addVisit("NewIntArray", this::visitNewExpression);
-        addVisit("ArrayAssignment", this::visitArrayAssignment);
+        addVisit("Array",this::visitArray);
     }
 
-    public Boolean visitArrayAccess(JmmNode arrayNode, JmmAnalyser symbolTableReport){
-        JmmNode accessNode = arrayNode.getChildren().get(1);
+    public Boolean visitArray(JmmNode node, JmmAnalyser symbolTableReport){
+        
+        if(node.getNumChildren()==1){
 
-        AccessedArray(arrayNode, symbolTableReport);
-        InsideBrackets(arrayNode, symbolTableReport ,accessNode,"access");
+            JmmNode sizeNode = node.getChildren().get(0);
+            InsideBrackets(node, symbolTableReport ,sizeNode,"size");
+    
+        }
+        else if(node.getNumChildren()==2){
+
+            JmmNode accessNode = node.getChildren().get(1);
+            AccessedArray(node, symbolTableReport);
+            InsideBrackets(node, symbolTableReport ,accessNode,"access");
+
+        }
 
         return true;
     }
 
-    public Boolean visitArrayAssignment(JmmNode arrayNode, JmmAnalyser symbolTableReport){
-        JmmNode accessNode = arrayNode.getChildren().get(1).getChildren().get(0);
-
-        AccessedArray(arrayNode, symbolTableReport);
-        InsideBrackets(arrayNode, symbolTableReport ,accessNode,"access");
-
-        return true;
-    }
-
-    public Boolean visitNewExpression(JmmNode arrayNode, JmmAnalyser symbolTableReport){
-        JmmNode sizeNode = arrayNode.getChildren().get(0);
-
-        InsideBrackets(arrayNode, symbolTableReport ,sizeNode,"size");
-
-        return true;
-    }
 
 
     public void AccessedArray(JmmNode ExpresionNode, JmmAnalyser symbolTableReport){
@@ -60,24 +52,25 @@ public class ArrayVisitor extends PreorderJmmVisitor<JmmAnalyser, Boolean> {
         return;
     }
 
-    private void InsideBrackets(JmmNode arrayNode, JmmAnalyser symbolTableReport, JmmNode node, String context) {
-        String kind = node.getKind();
+    private void InsideBrackets(JmmNode arrayNode, JmmAnalyser symbolTableReport, JmmNode sizeNode, String context) {
+        String kind = sizeNode.getKind();
         // Check if it the index is an identifier
         if(kind.equals("Identifier")){
             String parentMethod = Utils.getParentMethod(arrayNode);
-            String type = Utils.getTypeVar(node, symbolTableReport, parentMethod);
+            String type = Utils.getTypeVar(sizeNode, symbolTableReport, parentMethod);
 
             // If it is an identifier, it must be an integer
             if(!type.equals("int")){
-                symbolTableReport.newReport(node, "Invalid array " + context + ", identifier must be an integer. Provided: " + type);
+                symbolTableReport.newReport(sizeNode, "Invalid array " + context + ", identifier must be an integer. Provided: " + type);
             }
         }
         // Check if the index is a number, an expression that returns a numeric value,
-        // a function that returns an int or another array access
-        else if(!kind.equals("Number") && !Utils.isMathOp(kind) &&
-                !kind.equals("ArrayAccess") && !isReturnInt(node,symbolTableReport)) {
-                    symbolTableReport.newReport(node, "Invalid array " + context + ". Must be an integer.");
+        // or a function that returns an int 
+        else if(!kind.equals("Number") && !Utils.isMathOp(kind) 
+                && !isReturnInt(sizeNode,symbolTableReport)) {
+                    symbolTableReport.newReport(sizeNode, "Invalid array " + context + ". Must be an integer.");
         }
+
         return;
     }
 
