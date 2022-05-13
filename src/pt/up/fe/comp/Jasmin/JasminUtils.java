@@ -15,9 +15,8 @@ public class JasminUtils {
                 return "private";
             case PROTECTED:
                 return "protected";
-            default:
-                return "Error Acess Modifiers";
         }
+        throw new NotImplementedException(accessModifier);
     }
 
     public static String getJasminType(Type type) {
