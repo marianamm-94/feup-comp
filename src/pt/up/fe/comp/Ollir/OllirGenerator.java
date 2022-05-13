@@ -14,11 +14,16 @@ public class OllirGenerator extends AJmmVisitor<Integer,Integer> {
     public OllirGenerator(SymbolTable symbolTable) {
         this.ollirCode = new StringBuilder();
         this.symbolTable=symbolTable;
-
+        //TODO:: Verificar nome
         addVisit("Program",this::programVisit);
         addVisit("ClassDeclaration",this::classDeclarationVisit);
         addVisit("MethodDeclaration",this::methodDeclVisit);
+        addVisit("MethodBody",this::methodBodyVisit);
 
+    }
+
+    public String getCode() {
+        return ollirCode.toString();
     }
 
     private Integer programVisit(JmmNode program, Integer dummy){
@@ -51,7 +56,7 @@ public class OllirGenerator extends AJmmVisitor<Integer,Integer> {
 
 
     private Integer methodDeclVisit(JmmNode methodDecl, Integer dummy){
-        var methodSignature=methodDecl.getJmmChild(1).get("name");
+        var methodSignature=methodDecl.get("name");
         ollirCode.append(".method public ");
         if(methodDecl.getKind().equals("MainDeclaration")){
             ollirCode.append("static ");
@@ -72,7 +77,9 @@ public class OllirGenerator extends AJmmVisitor<Integer,Integer> {
         ollirCode.append("{\n");
 
         int lastParam =OllirUtils.getLastParamIndex(methodDecl);
-
+        //TODO::
+        //tenho um/dois childs antes do statemnet
+        //check if second child is methodbody or argument if(argumnet ->getChild(3) and getNumChildren-2
         var stmts=methodDecl.getChildren().subList(lastParam+1,methodDecl.getNumChildren());
 
         for(var stmt : stmts)
@@ -82,5 +89,27 @@ public class OllirGenerator extends AJmmVisitor<Integer,Integer> {
 
         return 0;
     }
+
+    private Integer methodBodyVisit(JmmNode methodBody, Integer dummy){
+    //TODO::
+       String methodName= methodBody.getJmmParent().get("name"); //methodname not sure if its correct
+
+        for (JmmNode statement : methodBody.getChildren()) {
+            switch (statement.getKind()) {
+                case ("Assignment"):
+                    OllirAssignment.assignmentStatement(methodName, statement);
+                    break;
+
+              //  default:
+                    // Simple Expression
+                //    olliCode.append(ollirExpression(methodName, statement)).append(";");
+
+            }
+           ollirCode.append("\n");
+        }
+        return 0;
+    }
+
+
 
 }

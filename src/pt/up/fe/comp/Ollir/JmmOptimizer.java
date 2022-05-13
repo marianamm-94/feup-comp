@@ -9,6 +9,9 @@ public class JmmOptimizer implements JmmOptimization{
     @Override
     public OllirResult toOllir(JmmSemanticsResult semanticsResult) {
         // TODO Auto-generated method stub
+        var ollirGenerator= new OllirGenerator(semanticsResult.getSymbolTable());
+        ollirGenerator.visit(semanticsResult.getRootNode());
+        var ollirCode=ollirGenerator.getCode();
         return null;
     }
 

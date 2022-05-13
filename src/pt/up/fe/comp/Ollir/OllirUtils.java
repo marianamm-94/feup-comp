@@ -13,9 +13,9 @@ public class OllirUtils {
     public static String getCode(Type type){
         StringBuilder ollircode=new StringBuilder();
 
-        if(type.isArray()){
+        if(type.isArray())
             ollircode.append("array.");
-        }
+
         ollircode.append(getOllirType(type.getName()));
         return ollircode.toString();
     }
@@ -24,14 +24,19 @@ public class OllirUtils {
         switch (jmmType){
             case "void":
                 return "V";
+            case "int":
+                return".i32";
+            case "boolean":
+                return".bool";
+            default:
+                return ( "." + jmmType);
         }
-        throw new NotImplementedException(jmmType);
     }
 //TODO:: VERIFICAR SE FUNCIONA
     public static int getLastParamIndex(JmmNode methodDecl){
         int lastParamIndex=-1;
         for(int i=0;i<methodDecl.getNumChildren();i++){
-            if(methodDecl.getJmmChild(i).getKind().equals("VarDeclaration")){
+            if(methodDecl.getJmmChild(i).getKind().equals("Argument")){
                 lastParamIndex=i;
             }
         }
