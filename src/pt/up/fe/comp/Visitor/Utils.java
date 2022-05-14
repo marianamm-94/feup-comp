@@ -1,8 +1,11 @@
 package pt.up.fe.comp.Visitor;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import pt.up.fe.comp.SymbolTable.JmmAnalyser;
+import pt.up.fe.comp.SymbolTable.Analysis;
+import pt.up.fe.comp.SymbolTable.JmmMethod;
 import pt.up.fe.comp.SymbolTable.JmmSymbolTable;
 import pt.up.fe.comp.jmm.ast.JmmNode;
 import pt.up.fe.comp.jmm.analysis.table.Symbol;
@@ -11,7 +14,7 @@ import pt.up.fe.comp.jmm.analysis.table.Type;
 
 public class Utils {
 
-    public static String getTypeVar(JmmNode node, JmmAnalyser symbolTableReport, String parentMethod){
+    public static String getTypeVar(JmmNode node, Analysis symbolTableReport, String parentMethod){
         if (node.getKind().equals("Number")) return "int";
         if (node.getKind().equals("True") || node.getKind().equals("False")) return "boolean";
         if (node.getKind().equals("this")) return symbolTableReport.getSymbolTable().getClassName();
@@ -34,12 +37,12 @@ public class Utils {
         return "main";
     }
 
-    public static String getReturn(JmmNode node, JmmAnalyser symbolTableReport) {
+    public static String getReturn(JmmNode node, Analysis symbolTableReport) {
         //TODO
         return "NOT DONE";
     }
 
-    public static String getReturnType(JmmNode node, JmmAnalyser symbolTableReport){
+    public static String getReturnType(JmmNode node, Analysis symbolTableReport){
         JmmNode leftNode = node.getChildren().get(0);
         JmmNode rightNode = node.getChildren().get(1);
 
@@ -93,5 +96,16 @@ public class Utils {
         }
         return false;
     }
+
+    public static String getParentMethodName(JmmNode node) {
+        JmmNode currentNode = node;
+        while (!currentNode.getKind().equals("MethodGeneric") && !currentNode.getKind().equals("MethodMain")) {
+            currentNode = currentNode.getJmmParent();
+        }
+        if (currentNode.getKind().equals("MethodGeneric"))
+            return currentNode.getChildren().get(1).get("name");
+        return "main";
+    }
+
 
 }

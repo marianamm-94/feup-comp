@@ -1,10 +1,11 @@
 package pt.up.fe.comp.Visitor;
 
+import pt.up.fe.comp.SymbolTable.Analysis;
 import pt.up.fe.comp.SymbolTable.JmmAnalyser;
 import pt.up.fe.comp.jmm.ast.JmmNode;
 import pt.up.fe.comp.jmm.ast.PreorderJmmVisitor;
 
-public class BoolOperationVisitor extends PreorderJmmVisitor<JmmAnalyser, Boolean> {
+public class BoolOperationVisitor extends PreorderJmmVisitor<Analysis, Boolean> {
 
     public BoolOperationVisitor() {
         addVisit("And", this::boolVisitAnd);
@@ -12,7 +13,7 @@ public class BoolOperationVisitor extends PreorderJmmVisitor<JmmAnalyser, Boolea
         addVisit("Less", this::boolVisitLess);
     }
 
-    public Boolean boolVisitAnd(JmmNode node, JmmAnalyser symbolTableReport) {
+    public Boolean boolVisitAnd(JmmNode node, Analysis symbolTableReport) {
 
         JmmNode leftNode = node.getChildren().get(0);
         JmmNode rightNode = node.getChildren().get(1);
@@ -44,7 +45,7 @@ public class BoolOperationVisitor extends PreorderJmmVisitor<JmmAnalyser, Boolea
         return true;
     }
 
-    public Boolean boolVisitNot(JmmNode node, JmmAnalyser symbolTableReport){
+    public Boolean boolVisitNot(JmmNode node, Analysis symbolTableReport){
 
         JmmNode leftNode = node.getChildren().get(0);
         String parentMethod = Utils.getParentMethod(node);
@@ -61,7 +62,7 @@ public class BoolOperationVisitor extends PreorderJmmVisitor<JmmAnalyser, Boolea
         return true;
     }
 
-    public Boolean boolVisitLess(JmmNode node, JmmAnalyser symbolTableReport){
+    public Boolean boolVisitLess(JmmNode node, Analysis symbolTableReport){
 
         JmmNode leftNode = node.getChildren().get(0);
         JmmNode rightNode = node.getChildren().get(1);

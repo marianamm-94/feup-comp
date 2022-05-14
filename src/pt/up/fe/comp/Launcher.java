@@ -5,8 +5,12 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+import pt.up.fe.comp.Jasmin.JasminEmitter;
+import pt.up.fe.comp.Ollir.JmmOptimizer;
 import pt.up.fe.comp.SymbolTable.JmmAnalyser;
 import pt.up.fe.comp.jmm.analysis.JmmSemanticsResult;
+import pt.up.fe.comp.jmm.jasmin.JasminResult;
+import pt.up.fe.comp.jmm.ollir.OllirResult;
 import pt.up.fe.comp.jmm.parser.JmmParserResult;
 import pt.up.fe.specs.util.SpecsIo;
 import pt.up.fe.specs.util.SpecsLogs;
@@ -45,19 +49,36 @@ public class Launcher {
         // Check if there are parsing errors
         TestUtils.noErrors(parserResult.getReports());
 
-        // Instantiate JmmAnalysis  
+        // Instantiate JmmAnalysis
 
-        JmmAnalyser analyser = new JmmAnalyser();  
+        JmmAnalyser analyser = new JmmAnalyser();
 
-        // Analysis stage  
+        // Analysis stage
 
-        JmmSemanticsResult analysisResult = analyser.semanticAnalysis(parserResult); 
+        JmmSemanticsResult analysisResult = analyser.semanticAnalysis(parserResult);
 
-        // Check if there are parsing errors  
+        // Check if there are parsing errors
 
-        TestUtils.noErrors(analysisResult.getReports());  
+        TestUtils.noErrors(analysisResult.getReports());
 
-        // ... add remaining stages  
+        // Instantiate JmmOptimization
+        var optimizer = new JmmOptimizer();
+
+        // Parse stage
+        OllirResult ollirResult = optimizer.toOllir(analysisResult);
+
+        // Check if there are parsing errors
+        TestUtils.noErrors(ollirResult.getReports());
+
+
+        // Instantiate JasminEmitter
+        var jasminEmitter = new JasminEmitter();
+
+        // Parse stage
+        JasminResult jasminResult = jasminEmitter.toJasmin(ollirResult);
+
+        // Check if there are parsing errors
+        TestUtils.noErrors(jasminResult.getReports());
     }
 
 }

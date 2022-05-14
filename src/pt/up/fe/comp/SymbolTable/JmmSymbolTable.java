@@ -1,9 +1,6 @@
 package pt.up.fe.comp.SymbolTable;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 import pt.up.fe.comp.jmm.analysis.table.Symbol;
@@ -46,7 +43,7 @@ public class JmmSymbolTable implements SymbolTable {
 
     @Override
     public Type getReturnType(String methodSignature) {
-     return methods.get(methodSignature).getReturnType();
+        return methods.get(methodSignature).getReturnType();
     }
 
     @Override
@@ -57,6 +54,10 @@ public class JmmSymbolTable implements SymbolTable {
     @Override
     public List<Symbol> getLocalVariables(String methodSignature) {
         return methods.get(methodSignature).getLocalVariables();
+    }
+
+    public boolean hasMethod(String methodSignature){
+        return methods.containsKey(methodSignature);
     }
 
     public void addImport(String newImport){
@@ -76,8 +77,55 @@ public class JmmSymbolTable implements SymbolTable {
     }
 
     public void addMethod(String name,Type returnType, List<Symbol> parameters){
-       JmmMethod method = new JmmMethod(name,returnType,parameters);
-       methods.put(name,method);
+        JmmMethod method = new JmmMethod(name,returnType,parameters);
+        methods.put(name,method);
     }
-    
+
+    public JmmMethod getMethod(JmmMethod method){
+        return methods.getOrDefault(method.getIdentifier(), null);
+    }
+
+    public JmmMethod getMethodById(String id){
+        return methods.get(id);
+    }
+
+    //HELP
+
+    private List<String> parseMethodInfo(String info) {
+        List<String> list = new ArrayList<>();
+
+        int indexBeg = info.indexOf('(');
+        list.add(info.substring(0, indexBeg));
+
+        int indexEnd = info.indexOf(')');
+        String param = info.substring(indexBeg + 1, indexEnd).trim();
+
+        if (!param.equals("")) {
+            String[] params = param.split(",");
+            list.addAll(Arrays.asList(params));
+        }
+
+        return list;
+    }
+
+    public JmmMethod getMethodByInfo(String methodInfo) {
+        return methods.get(methodInfo);
+    }
+
+    public JmmType returnFieldTypeIfExists(String field) {
+        return (JmmType) fields.get(field).getType();
+    }
+
+    public JmmType hasImport(String identifierName) {
+        for (String importName : getImports()) {
+            String[] imports = importName.split("\\.");
+            if (imports[imports.length - 1].equals(identifierName)) return new JmmType("Accepted", false);
+        }
+        return null;
+    }
+
+    public boolean fieldExists(Symbol symbol){
+        return fields.getOrDefault(symbol.getName(), null) != null;
+    }
+
 }

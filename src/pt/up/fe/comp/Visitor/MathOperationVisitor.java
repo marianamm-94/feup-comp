@@ -30,7 +30,7 @@ public class MathOperationVisitor extends PreorderJmmVisitor<JmmAnalyser, Boolea
         if(Utils.isMathOp(node.getKind()))
             return true;
         else if (Utils.isBoolOp(node.getKind()))
-            symbolTableReport.newReport(node, "\"" + node + "\" invalid operator.");
+            symbolTableReport.newReport(node, "\"" + node + "\" this operator is not valid.");
         else if (node.getKind().equals("FullStop")) {
             String value = Utils.getReturn(node, symbolTableReport);
             if (!(value.equals("undefined") || value.equals("int")))

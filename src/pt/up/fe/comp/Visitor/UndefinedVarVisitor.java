@@ -1,34 +1,37 @@
 package pt.up.fe.comp.Visitor;
 
+import pt.up.fe.comp.SymbolTable.Analysis;
 import pt.up.fe.comp.SymbolTable.JmmAnalyser;
+import pt.up.fe.comp.SymbolTable.JmmMethod;
 import pt.up.fe.comp.jmm.analysis.table.Symbol;
+import pt.up.fe.comp.jmm.analysis.table.Type;
 import pt.up.fe.comp.jmm.ast.JmmNode;
 import pt.up.fe.comp.jmm.ast.PreorderJmmVisitor;
 
 import java.util.List;
 
-public class UndefinedVarVisitor extends PreorderJmmVisitor<JmmAnalyser, Boolean> {
+public class UndefinedVarVisitor extends PreorderJmmVisitor<Analysis, Boolean> {
 
     public UndefinedVarVisitor(){
-        addVisit("MethodDeclaration", this::visitMethodDeclaration);
+        addVisit("OtherMethodDeclaration", this::visitMethodParameters);
         //addVisit("ObjectMethodParameters", this::visitMethodParameters);
-        //addVisit("Return", this::visitReturn);
+        //addVisit("ReturnValue", this::visitReturn);
         //addVisit("VarDeclaration", this::visitVarDeclaration);
         //addVisit("Extends", this::visitExtends);
     }
 
-    public Boolean visitMethodDeclaration(JmmNode methodNode, JmmAnalyser symbolTableReport){
+    public Boolean visitOtherMethodDeclaration(JmmNode methodNode, Analysis symbolTableReport){
 
         JmmNode methodScope = methodNode.getChildren().get(0);
+        String methodName = methodScope.get("name");
 
-        String methodName;
-        if(methodScope.getKind().equals("OtherMethodDeclaration"))
-            methodName = methodScope.getChildren().get(1).get("name");
-        else
-            methodName = "main";
+        JmmNode type = methodScope.getChildren().get(0);
+        String typeVar = type.get("name");
+        boolean isArray = "True" == type.get("isArray");
 
+        JmmNode methodBodyPreview = methodScope.getChildren().get(1);
         JmmNode methodBody = null;
-        for(JmmNode node: methodScope.getChildren()){
+        for(JmmNode node: methodBody.getChildren()){
             if(node.getKind().equals("methodBody")) {
                 methodBody = node;
                 break;
@@ -43,7 +46,21 @@ public class UndefinedVarVisitor extends PreorderJmmVisitor<JmmAnalyser, Boolean
         return true;
     }
 
-    public void expressionValid(JmmNode node, String methodName, JmmAnalyser symbolTableReport){
+    public Boolean visitMethodParameters(JmmNode methodNode, Analysis analysis){
+        String methodName = Utils.getParentMethod(methodNode);
+
+        //Check all params
+        for(JmmNode node: methodNode.getChildren()){
+            if (node.getNumChildren() > 0 && !node.getKind().equals("VarDeclaration"))
+                expressionValid(node, methodName, analysis);
+            else if (node.getKind().equals("Assignment"))
+                definedVar(node, methodName, analysis);
+        }
+
+        return true;
+    }
+
+    public void expressionValid(JmmNode node, String methodName, Analysis symbolTableReport){
 
         JmmNode leftNode = node.getChildren().get(0);
         nodeValid(leftNode,methodName,symbolTableReport);
@@ -55,7 +72,7 @@ public class UndefinedVarVisitor extends PreorderJmmVisitor<JmmAnalyser, Boolean
 
     }
 
-    public void nodeValid(JmmNode node, String methodName, JmmAnalyser symbolTableReport){
+    public void nodeValid(JmmNode node, String methodName, Analysis symbolTableReport){
 
         if(node.getKind().equals(("Identifier")))
             definedVar(node, methodName, symbolTableReport );
@@ -64,7 +81,7 @@ public class UndefinedVarVisitor extends PreorderJmmVisitor<JmmAnalyser, Boolean
 
     }
 
-    public void definedVar(JmmNode node, String methodName, JmmAnalyser symbolTableReport){
+    public void definedVar(JmmNode node, String methodName, Analysis symbolTableReport){
 
         String nameVar = node.get("name");
 
@@ -86,5 +103,6 @@ public class UndefinedVarVisitor extends PreorderJmmVisitor<JmmAnalyser, Boolean
 
         return false;
     }
+
 
 }
