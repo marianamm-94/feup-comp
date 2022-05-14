@@ -14,7 +14,6 @@ public class OllirGenerator extends AJmmVisitor<Integer,Integer> {
     public OllirGenerator(SymbolTable symbolTable) {
         this.ollirCode = new StringBuilder();
         this.symbolTable=symbolTable;
-        //TODO:: Verificar nome
         addVisit("Program",this::programVisit);
         addVisit("ClassDeclaration",this::classDeclarationVisit);
         addVisit("MethodDeclaration",this::methodDeclVisit);
@@ -77,9 +76,7 @@ public class OllirGenerator extends AJmmVisitor<Integer,Integer> {
         ollirCode.append("{\n");
 
         int lastParam =OllirUtils.getLastParamIndex(methodDecl);
-        //TODO::
-        //tenho um/dois childs antes do statemnet
-        //check if second child is methodbody or argument if(argumnet ->getChild(3) and getNumChildren-2
+
         var stmts=methodDecl.getChildren().subList(lastParam+1,methodDecl.getNumChildren());
 
         for(var stmt : stmts)
@@ -92,18 +89,21 @@ public class OllirGenerator extends AJmmVisitor<Integer,Integer> {
 
     private Integer methodBodyVisit(JmmNode methodBody, Integer dummy){
     //TODO::
-       String methodName= methodBody.getJmmParent().get("name"); //methodname not sure if its correct
+       String methodName= methodBody.getJmmParent().get("name");
 
         for (JmmNode statement : methodBody.getChildren()) {
             switch (statement.getKind()) {
+                //childrens name of methodBody
+                //for this checkpoint we dont need to implement if and else and while statement
                 case ("Assignment"):
                     OllirAssignment.assignmentStatement(methodName, statement);
                     break;
-
-              //  default:
-                    // Simple Expression
-                //    olliCode.append(ollirExpression(methodName, statement)).append(";");
-
+                case ("Call"):
+                    OllirCall.callStatement();
+                    break;
+                case ("VarDeclaration"):
+                    OllirUtils.varDeclarationStatement();
+                    break;
             }
            ollirCode.append("\n");
         }

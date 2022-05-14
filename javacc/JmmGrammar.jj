@@ -94,7 +94,7 @@ Type:
 
 
 Statement #void:
-	<OPEN_BRACE> (Statement)* <CLOSE_BRACE> #CompoundStatement
+	(<OPEN_BRACE> (Statement)* <CLOSE_BRACE>) #CompoundStatement
 	| IfStatement
 	| WhileStatement
 	| ExpressionAnd (<EQUAL> ExpressionAnd #Assignment(2) )? <SEMI_COLON> 

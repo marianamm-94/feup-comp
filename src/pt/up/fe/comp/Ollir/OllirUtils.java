@@ -43,4 +43,7 @@ public class OllirUtils {
         return lastParamIndex;
     }
 
+    public static void varDeclarationStatement() {
+        //TODO::
+    }
 }
