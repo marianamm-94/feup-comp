@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 public class OllirGenerator extends AJmmVisitor<Integer,Integer> {
 
     private final StringBuilder ollirCode;
-    private final SymbolTable symbolTable;
+    public final SymbolTable symbolTable;
 
     public OllirGenerator(SymbolTable symbolTable) {
         this.ollirCode = new StringBuilder();
@@ -96,7 +96,7 @@ public class OllirGenerator extends AJmmVisitor<Integer,Integer> {
                 //childrens name of methodBody
                 //for this checkpoint we dont need to implement if and else and while statement
                 case ("Assignment"):
-                    OllirAssignment.assignmentStatement(methodName, statement);
+                    OllirAssignment.assignmentStatement(methodName, statement,symbolTable);
                     break;
                 case ("Call"):
                     OllirCall.callStatement();
