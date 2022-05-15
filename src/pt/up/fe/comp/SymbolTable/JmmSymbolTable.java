@@ -128,4 +128,7 @@ public class JmmSymbolTable implements SymbolTable {
         return fields.getOrDefault(symbol.getName(), null) != null;
     }
 
+    public void setSuperClassName(String super_class_name) {
+        this.superClassName = super_class_name;
+    }
 }
