@@ -2,6 +2,7 @@ package pt.up.fe.comp.Visitor;
 
 import pt.up.fe.comp.SymbolTable.Analysis;
 import pt.up.fe.comp.jmm.analysis.table.Symbol;
+import pt.up.fe.comp.jmm.analysis.table.Type;
 import pt.up.fe.comp.jmm.ast.JmmNode;
 import pt.up.fe.comp.jmm.report.Report;
 import pt.up.fe.comp.jmm.report.ReportType;
@@ -214,7 +215,14 @@ public class SemanticAnalysisUtils {
         if (children.size() == 1) {
             JmmNode child = children.get(0);
             if (child.getKind().contains("EEIdentifier")) {
-                String identifier = child.getKind().replaceAll("'", "").replace("EEIdentifier ", "");
+                try {
+                    Type typeTemp =  method.getLocalVariable(node.get("name")).getType();
+                    JmmType type = new JmmType(typeTemp.getName(),typeTemp.isArray());
+                }
+                catch(Exception e){
+                    analysis.newReport(node, "Variable not defined.");
+                }
+                String identifier = child.get("name");
                 if ( analysis.getSymbolTable().returnFieldTypeIfExists(identifier) != null)
                     analysis.newReport(child,"non-static variable '" + identifier + "' cannot be referenced from a static context");
                 if ((isIdentifier(method, child, analysis, true, true) == null) || (isIdentifier(method, child, analysis, false, true) == null))

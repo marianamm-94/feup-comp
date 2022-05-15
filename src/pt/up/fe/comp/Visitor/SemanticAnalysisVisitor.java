@@ -233,8 +233,16 @@ public class SemanticAnalysisVisitor extends PreorderJmmVisitor<Analysis, Boolea
 
         List<JmmNode> children = node.getChildren();
         if (children.size() != 2) return;
-        if (!children.get(0).getKind().equals("EEIdentifier"))
+        if (!children.get(0).getKind().equals("EEIdentifier")) {
+            try {
+                Type typeTemp =  method.getLocalVariable(node.get("name")).getType();
+                JmmType type = new JmmType(typeTemp.getName(),typeTemp.isArray());
+            }
+            catch(Exception e){
+                analysis.newReport(node, "Variable not defined.");
+            }
             return;
+        }
         if(!children.get(1).getKind().equals("BinOp") || !children.get(1).equals("EENew")
         || !children.get(1).equals("Call") || !children.get(1).equals("Array") || !children.get(1).equals("EEIdentifier"))
             return;
