@@ -43,7 +43,14 @@ public class OllirUtils {
         return lastParamIndex;
     }
 
-    public static void varDeclarationStatement() {
-        //TODO::
+    public static String varDeclaration(JmmNode varDecl,String type) {
+        StringBuilder ollirCode=new StringBuilder();
+        if(varDecl.getJmmChild(0).get("isArray").equals("True")){
+            ollirCode.append("array.");
+            ollirCode.append(getOllirType(type));
+        }else{
+            ollirCode.append(getOllirType(type));
+        }
+        return ollirCode.toString();
     }
 }

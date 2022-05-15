@@ -90,7 +90,7 @@ public class JasminUtils {
         Element right= instruction.getRightOperand();
         var varTable= method.getVarTable();
         StringBuilder jasminCode= new StringBuilder();
-        OperationType opType=instruction.getOperation().getOpType();
+        OperationType opType=instruction.getUnaryOperation().getOpType();
 
         jasminCode.append(JasminLoadStore.loadElement(left,varTable));
         jasminCode.append(JasminLoadStore.loadElement(right,varTable));

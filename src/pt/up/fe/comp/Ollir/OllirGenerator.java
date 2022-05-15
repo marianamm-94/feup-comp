@@ -1,6 +1,7 @@
 package pt.up.fe.comp.Ollir;
 
 import pt.up.fe.comp.jmm.analysis.table.SymbolTable;
+import pt.up.fe.comp.jmm.analysis.table.Type;
 import pt.up.fe.comp.jmm.ast.AJmmVisitor;
 import pt.up.fe.comp.jmm.ast.JmmNode;
 
@@ -18,6 +19,7 @@ public class OllirGenerator extends AJmmVisitor<Integer,Integer> {
         addVisit("ClassDeclaration",this::classDeclarationVisit);
         addVisit("MethodDeclaration",this::methodDeclVisit);
         addVisit("MethodBody",this::methodBodyVisit);
+        addVisit("VarDeclaration",this::varDeclarationVisit);
 
     }
 
@@ -87,6 +89,23 @@ public class OllirGenerator extends AJmmVisitor<Integer,Integer> {
         return 0;
     }
 
+    private Integer varDeclarationVisit(JmmNode varDecl, Integer dummy){
+        String name=varDecl.get("name");
+        String type= varDecl.getJmmChild(0).get("name");
+        if(varDecl.getJmmParent().getKind().equals("ClassDeclaration")){
+            ollirCode.append(".field ");
+            ollirCode.append(name).append(".");
+
+            OllirUtils.varDeclaration(varDecl,type);
+        }
+        else{
+            ollirCode.append(name).append(".");
+            OllirUtils.varDeclaration(varDecl,type);
+        }
+
+        ollirCode.append(";");
+        return 0;
+    }
     private Integer methodBodyVisit(JmmNode methodBody, Integer dummy){
     //TODO::
        String methodName= methodBody.getJmmParent().get("name");
@@ -102,7 +121,7 @@ public class OllirGenerator extends AJmmVisitor<Integer,Integer> {
                     OllirCall.callStatement();
                     break;
                 case ("VarDeclaration"):
-                    OllirUtils.varDeclarationStatement();
+                    visit(statement);
                     break;
             }
            ollirCode.append("\n");
