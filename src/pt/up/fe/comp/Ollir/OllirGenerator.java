@@ -57,6 +57,8 @@ public class OllirGenerator extends AJmmVisitor<Integer,Integer> {
 
 
     private Integer methodDeclVisit(JmmNode methodDecl, Integer dummy){
+        //TODO::
+        //divide in two different methods main and other
         var methodSignature=methodDecl.get("name");
         ollirCode.append(".method public ");
         if(methodDecl.getKind().equals("MainDeclaration")){
@@ -96,14 +98,14 @@ public class OllirGenerator extends AJmmVisitor<Integer,Integer> {
             ollirCode.append(".field ");
             ollirCode.append(name).append(".");
 
-            OllirUtils.varDeclaration(varDecl,type);
+            ollirCode.append(OllirUtils.varDeclaration(varDecl,type));
         }
         else{
             ollirCode.append(name).append(".");
-            OllirUtils.varDeclaration(varDecl,type);
+            ollirCode.append(OllirUtils.varDeclaration(varDecl,type));
         }
 
-        ollirCode.append(";");
+        ollirCode.append(";").append("\n");
         return 0;
     }
     private Integer methodBodyVisit(JmmNode methodBody, Integer dummy){

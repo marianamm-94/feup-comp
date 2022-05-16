@@ -80,4 +80,7 @@ public class JmmSymbolTable implements SymbolTable {
         methods.put(name,method);
     }
 
+    public void addMethod(JmmMethod method) {
+        methods.put(method.getName(),method);
+    }
 }

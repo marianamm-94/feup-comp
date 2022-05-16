@@ -25,11 +25,11 @@ public class OllirUtils {
             case "void":
                 return "V";
             case "int":
-                return".i32";
+                return"i32";
             case "boolean":
-                return".bool";
+                return"bool";
             default:
-                return ( "." + jmmType);
+                return ( jmmType);
         }
     }
 //TODO:: VERIFICAR SE FUNCIONA

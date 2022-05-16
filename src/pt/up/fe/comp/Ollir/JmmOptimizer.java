@@ -4,6 +4,8 @@ import pt.up.fe.comp.jmm.analysis.JmmSemanticsResult;
 import pt.up.fe.comp.jmm.ollir.JmmOptimization;
 import pt.up.fe.comp.jmm.ollir.OllirResult;
 
+import java.util.Collections;
+
 public class JmmOptimizer implements JmmOptimization{
 
     @Override
@@ -12,7 +14,6 @@ public class JmmOptimizer implements JmmOptimization{
         var ollirGenerator= new OllirGenerator(semanticsResult.getSymbolTable());
         ollirGenerator.visit(semanticsResult.getRootNode());
         var ollirCode=ollirGenerator.getCode();
-        return null;
+        return new OllirResult(ollirCode,semanticsResult.getConfig());
     }
-
 }

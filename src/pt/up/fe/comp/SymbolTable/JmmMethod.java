@@ -38,5 +38,7 @@ public class JmmMethod {
         return new ArrayList<>(localVariables.values());
     }
 
-
+    public void addLocalVariables(Type type, String name){
+        localVariables.put(name,new Symbol(type,name));
+    }
 }
