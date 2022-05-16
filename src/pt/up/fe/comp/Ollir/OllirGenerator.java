@@ -17,7 +17,9 @@ public class OllirGenerator extends AJmmVisitor<Integer,Integer> {
         this.symbolTable=symbolTable;
         addVisit("Program",this::programVisit);
         addVisit("ClassDeclaration",this::classDeclarationVisit);
-        addVisit("MethodDeclaration",this::methodDeclVisit);
+        addVisit("MainDeclaration", this::mainDeclarationVisit);
+        addVisit("OtherMethodDeclaration", this::otherMethodDeclarationVisit);
+        //addVisit("MethodDeclaration",this::methodDeclVisit);
         addVisit("MethodBody",this::methodBodyVisit);
         addVisit("VarDeclaration",this::varDeclarationVisit);
 
@@ -54,11 +56,75 @@ public class OllirGenerator extends AJmmVisitor<Integer,Integer> {
         ollirCode.append("}\n");
         return 0;
     }
+    private Integer mainDeclarationVisit(JmmNode mainMethodDecl, Integer dummy){
+        var main="main";
+
+        ollirCode.append(".method public ");
+        ollirCode.append("static ");
+        ollirCode.append("main(");
+
+        var params =symbolTable.getParameters(main);
+
+        var paramCode= params.stream()
+                .map(symbol -> OllirUtils.getCode(symbol))
+                .collect(Collectors.joining(", "));
+
+        ollirCode.append(paramCode);
+        ollirCode.append(").");
+        ollirCode.append(OllirUtils.getCode(symbolTable.getReturnType(main)));
+
+        ollirCode.append("{\n");
+
+        int lastParam =OllirUtils.getLastParamIndex(mainMethodDecl);
+
+        var stmts=mainMethodDecl.getChildren().subList(lastParam+1,mainMethodDecl.getNumChildren());
+
+        for(var stmt : stmts)
+            visit(stmt);
+
+        ollirCode.append("}\n");
+
+        return 0;
+    }
+
+    private Integer otherMethodDeclarationVisit(JmmNode otherMethodDecl, Integer dummy){
+        var methodName=otherMethodDecl.get("name");
+
+        ollirCode.append(".method public ");
+        ollirCode.append( methodName);
+        ollirCode.append("(");
+
+        var params =symbolTable.getParameters( methodName);
+
+        var paramCode= params.stream()
+                .map(symbol -> OllirUtils.getCode(symbol))
+                .collect(Collectors.joining(", "));
+
+        ollirCode.append(paramCode);
+        ollirCode.append(").");
+        ollirCode.append(OllirUtils.getCode(symbolTable.getReturnType( methodName)));
+
+        ollirCode.append("{\n");
+        //int lastParam =OllirUtils.getLastParamIndex(otherMethodDecl);
+
+        for(JmmNode child: otherMethodDecl.getChildren()){
+            if(child.equals("MethodBody")){
+                for(var stmt : child.getChildren())
+                    visit(stmt);
+            }
+        }
+
+        //var stmts=otherMethodDecl.getChildren().subList(lastParam+1,otherMethodDecl.getNumChildren());
 
 
+
+        ollirCode.append("}\n");
+
+        return 0;
+    }
+
+    /*
     private Integer methodDeclVisit(JmmNode methodDecl, Integer dummy){
-        //TODO::
-        //divide in two different methods main and other
         var methodSignature=methodDecl.get("name");
         ollirCode.append(".method public ");
         if(methodDecl.getKind().equals("MainDeclaration")){
@@ -90,6 +156,7 @@ public class OllirGenerator extends AJmmVisitor<Integer,Integer> {
 
         return 0;
     }
+    */
 
     private Integer varDeclarationVisit(JmmNode varDecl, Integer dummy){
         String name=varDecl.get("name");
@@ -100,7 +167,7 @@ public class OllirGenerator extends AJmmVisitor<Integer,Integer> {
 
             ollirCode.append(OllirUtils.varDeclaration(varDecl,type));
         }
-        else{
+        else if(varDecl.getJmmParent().getKind().equals("MethodBody")){
             ollirCode.append(name).append(".");
             ollirCode.append(OllirUtils.varDeclaration(varDecl,type));
         }
@@ -123,7 +190,7 @@ public class OllirGenerator extends AJmmVisitor<Integer,Integer> {
                     OllirCall.callStatement();
                     break;
                 case ("VarDeclaration"):
-                    visit(statement);
+                    varDeclarationVisit(statement,0);
                     break;
             }
            ollirCode.append("\n");
