@@ -79,7 +79,7 @@ public class JmmMethod {
         return String.join("-", name, String.join("-", parameter_types));
     }
 
-    public void addLocalVariable(Type type, String name, boolean value) {
+    public void addLocalVariable(Type type, String name) {
         localVariables.put(name, new Symbol(type, name));
     }
 

@@ -375,4 +375,14 @@ public class SemanticAnalysisUtils {
         return null;
     }
 
+    public static boolean EEIdentifierExists(JmmMethod method, JmmNode assignee, Analysis analysis){
+        try {
+            Type typeTemp =  method.getLocalVariable(assignee.get("name")).getType();
+            return true;
+        }
+        catch(Exception e){
+            return false;
+        }
+    }
+
 }

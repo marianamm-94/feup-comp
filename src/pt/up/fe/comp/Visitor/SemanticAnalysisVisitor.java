@@ -8,6 +8,7 @@ import pt.up.fe.comp.jmm.analysis.table.Type;
 import pt.up.fe.comp.jmm.ast.JmmNode;
 import pt.up.fe.comp.jmm.ast.PreorderJmmVisitor;
 
+import javax.sound.midi.SysexMessage;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,11 +41,7 @@ public class SemanticAnalysisVisitor extends PreorderJmmVisitor<Analysis, Boolea
             JmmNode child = children.get(i);
             String childKind = child.getKind();
 
-            if (childKind.equals("Type")) { // parameters
-
-            } else if (childKind.contains("Argument")) {
-                String methodNameArg = childKind.replaceAll("'","").replace("Argument ","");
-            } else if (childKind.equals("MethodBody")) { //method body (local variables)
+            if (childKind.equals("MethodBody")) { //method body (local variables)
                 List<String> methodList = analysis.getSymbolTable().getMethods();
                 method = analysis.getSymbolTable().getMethodById(methodName);
                 if (!methodList.contains(methodName))
@@ -58,66 +55,22 @@ public class SemanticAnalysisVisitor extends PreorderJmmVisitor<Analysis, Boolea
         return true;
     }
 
-
-    public Boolean visitMethod(JmmNode node, Analysis analysis){
-
-        List<JmmNode> children = node.getChildren();
-        boolean alreadyInBody = false;
-
-        StringBuilder methodInfo = new StringBuilder();
-        JmmMethod method = null;
-
-        for (int i = 0; i < children.size(); i++) {
-
-            JmmNode child = children.get(i);
-            String childKind = child.getKind();
-
-            if (childKind.equals("LParenthesis")) { // parameters
-                if (alreadyInBody) break;
-                List<JmmNode> parameters = new ArrayList<>();
-                while (true) {
-                    i++;
-                    JmmNode aux = children.get(i);
-                    if (aux.getKind().equals("RParenthesis")) break;
-                    parameters.add(children.get(i));
-                }
-            } else if (childKind.contains("Identifier")) {
-                String methodName = childKind.replaceAll("'", "").replace("Identifier ", "");
-                methodInfo.append(methodName).append("(");
-            } else if (childKind.equals("Main")) {
-                methodInfo.append("main(");
-            } else if (childKind.equals("MethodBody")) { //method body (local variables)
-                methodInfo.append(")");
-                method = analysis.getSymbolTable().getMethodByInfo(methodInfo.toString());
-
-                if (method == null)
-                    return false;
-
-                visitMethodBody(method, child, analysis);
-                alreadyInBody = true;
-            } else if (child.getKind().equals("Return")) {
-                visitReturnValue(method, child, analysis);
-            }
-        }
-
-        return true;
-    }
-
     public void visitReturnValue(JmmMethod method, JmmNode node, Analysis analysis) {
         JmmNode child = node.getChildren().get(0);
 
         JmmType type = null;
 
-        if(child.getKind().equals("EETrue")){
-            type = new JmmType("EETrue", false);
+        if(child.getKind().equals("EETrue") || child.getKind().equals("EEFalse")){
+            type = new JmmType("boolean", false);
         }
         else if(child.getKind().equals("EEIdentifier")){
-            try {
+            if(!SemanticAnalysisUtils.EEIdentifierExists(method,child,analysis)){
+                analysis.newReport(child, "Variable for return value not defined.");
+                return;
+            }
+            else{
                 Type typeTemp =  method.getLocalVariable(child.get("name")).getType();
                 type = new JmmType(typeTemp.getName(),typeTemp.isArray());
-            }
-            catch(Exception e){
-                analysis.newReport(child, "Variable not defined.");
             }
         }
         else if(child.getKind().equals("EEInt")){
@@ -128,12 +81,11 @@ public class SemanticAnalysisVisitor extends PreorderJmmVisitor<Analysis, Boolea
         }
 
         if (type == null) {
-            analysis.newReport(child, "Return type doesn't match specification.");
+            analysis.newReport(child, "Return type doesn't match expectation.");
             return;
         }
         if ( !(type.getName().equals(method.getReturnType().getName()) && (type.isArray() == method.getReturnType().isArray()))) {
-            System.out.println("What?");
-            analysis.newReport(child, "Return type doesn't match specification. Should be" + method.getReturnType());
+            analysis.newReport(child, "Return type doesn't match expectation. Should be" + method.getReturnType());
         }
 
     }
@@ -142,21 +94,21 @@ public class SemanticAnalysisVisitor extends PreorderJmmVisitor<Analysis, Boolea
         List<JmmNode> children = node.getChildren();
 
         for (JmmNode child : children) {
-            if(child.getKind().equals("VarDeclaration")) visitVarDeclaration(method, child, analysis);
+            if(child.getKind().equals("VarDeclaration")) visitVarDeclaration(method, child, analysis); //OK but
             if(child.getKind().equals("Assignment")) visitAssignment(method, child, analysis);
             if(child.getKind().equals("WhileStatement")) visitWhileStatement(method, child, analysis);
             if(child.getKind().equals("IfStatement")) visitIfStatement(method, child, analysis);
-            //if(child.getKind().equals("Call")) visitCall();
+            if(child.getKind().equals("Call")) visitCall(method, child, analysis);
         }
     }
 
     public void visitVarDeclaration(JmmMethod method, JmmNode node, Analysis analysis){
         String varName = node.get("name");
         JmmNode typeNode = node.getJmmChild(0);
-        String typeString = typeNode.get("name");
+        String varTypeStr = typeNode.get("name");
         boolean isArray = Boolean.parseBoolean(typeNode.get("isArray"));
 
-        Type varType = new Type(typeString, isArray);
+        Type varType = new Type(varTypeStr, isArray);
         Symbol symbol = new Symbol(varType, varName );
 
         if(method == null){
@@ -165,43 +117,17 @@ public class SemanticAnalysisVisitor extends PreorderJmmVisitor<Analysis, Boolea
                 return;
             }
             else{
-                analysis.newReport(node, "VariableRedefinition: Variable " + symbol + " is already defined in the scope");
+                analysis.newReport(node, "Variable " + symbol + " is already defined in the scope");
             }
         }
         else{
-            JmmMethod tableMethod = analysis.getSymbolTable().getMethod(method);
-            if(tableMethod == null){
-                analysis.newReport(node,"Unexpected type of variable");
-                System.out.println("Unexpected class");
+            if(method.localVariableExists(symbol)){
+                analysis.newReport(node, "Variable " + symbol + " is already defined in the scope");
                 return;
             }
-            if(tableMethod.localVariableExists(symbol)){
-                analysis.newReport(node, "VariableRedefinition: Variable " + symbol + " is already defined in the scope");
-                return;
-            }
-            tableMethod.addLocalVariable(varType, varName, false);
+            method.addLocalVariable(varType, varName);
         }
 
-    }
-
-    public void visitStatement(JmmMethod method, JmmNode node, Analysis analysis) {
-        List<JmmNode> children = node.getChildren();
-
-        for (JmmNode child : children) {
-            switch (child.getKind()) {
-                case "ExpressionMethodCall":
-                    SemanticAnalysisUtils.evaluateExpression(method, child, analysis, true);
-                    break;
-                case "Assignment":
-                    visitAssignment(method, child, analysis);
-                    break;
-                case "IfBody":
-                    visitStatement(method, child, analysis);
-                    break;
-                case "Call":
-
-            }
-        }
     }
 
     public void visitWhileStatement(JmmMethod method, JmmNode node, Analysis analysis) {
@@ -210,9 +136,8 @@ public class SemanticAnalysisVisitor extends PreorderJmmVisitor<Analysis, Boolea
 
         //evaluate condition
         SemanticAnalysisUtils.evaluatesToBoolean(method, leftChild, analysis);
-
         //evaluate body
-        visitStatement(method, rightChild, analysis);
+        visitMethodBody(method, rightChild, analysis);
     }
 
     public void visitIfStatement(JmmMethod method, JmmNode node, Analysis analysis) {
@@ -220,28 +145,38 @@ public class SemanticAnalysisVisitor extends PreorderJmmVisitor<Analysis, Boolea
         for (JmmNode child : children) {
             if (child.getKind().equals("IfCondition"))
                 SemanticAnalysisUtils.evaluatesToBoolean(method, child, analysis);
-            else if (child.getKind().equals("IfBody")) visitStatement(method, child, analysis);
-            else if (child.getKind().equals("ElseBody")) visitStatement(method, child, analysis);
+            else if (child.getKind().equals("IfBody")) visitMethodBody(method, child, analysis);
+            else if (child.getKind().equals("ElseBody")) visitMethodBody(method, child, analysis);
         }
     }
 
     public void visitAssignment(JmmMethod method, JmmNode node, Analysis analysis) {
-        JmmNode ident = node.getJmmChild(0);
+        JmmNode assignee = node.getJmmChild(0);
         JmmNode Expression = node.getJmmChild(1);
 
         System.out.println("assign visit lasflksjf");
+        JmmType identifierType;
 
         List<JmmNode> children = node.getChildren();
-        if (children.size() != 2) return;
-        if (!children.get(0).getKind().equals("EEIdentifier")) {
+        if (children.size() != 2) return; //check if there are two children
+        if(children.get(0).getKind().equals("EEIdentifier")){  //if assigning to EEIdentifier
+            /*
             try {
-                Type typeTemp =  method.getLocalVariable(node.get("name")).getType();
-                JmmType type = new JmmType(typeTemp.getName(),typeTemp.isArray());
+                Type typeTemp =  method.getLocalVariable(assignee.get("name")).getType();
+                identifierType = new JmmType(typeTemp.getName(),typeTemp.isArray());
             }
             catch(Exception e){
-                analysis.newReport(node, "Variable not defined.");
+                analysis.newReport(assignee, "Variable is not defined.");
+                return;
             }
-            return;
+             */
+            if(!SemanticAnalysisUtils.EEIdentifierExists(method, assignee, analysis)){
+                analysis.newReport(assignee, "Variable is not defined.");
+            }
+
+        }
+        else if(children.get(0).getKind().equals("Array")){  //if assigning to Array
+            //check for array and identifier
         }
         if(!children.get(1).getKind().equals("BinOp") || !children.get(1).equals("EENew")
         || !children.get(1).equals("Call") || !children.get(1).equals("Array") || !children.get(1).equals("EEIdentifier"))
