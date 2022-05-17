@@ -25,23 +25,39 @@ public class OllirUtils {
             case "void":
                 return "V";
             case "int":
+            case "EEInt":
                 return"i32";
+            case "EETrue":
+                return"0.bool";
+            case "EEFalse":
+                return"1.bool";
             case "boolean":
                 return"bool";
             default:
-                return ( jmmType);
+                return jmmType;
         }
     }
-//TODO:: VERIFICAR SE FUNCIONA
-    public static int getLastParamIndex(JmmNode methodDecl){
-        int lastParamIndex=-1;
-        for(int i=0;i<methodDecl.getNumChildren();i++){
-            if(methodDecl.getJmmChild(i).getKind().equals("Argument")){
-                lastParamIndex=i;
-            }
+    public static String getOllirOperator(JmmNode node){
+        switch (node.getKind()){
+            case "Add":
+                return " +.i32 ";
+            case "Less":
+                return " <.i32 ";
+            case "Sub":
+                return " -.i32 ";
+            case "Mult":
+                return " *.i32 ";
+            case "Div":
+                return " /.i32 ";
+            case "And":
+                return " &&.bool ";
+            case "Not":
+                return " !.bool ";
         }
-        return lastParamIndex;
+        throw new NotImplementedException(node.getKind());
     }
 
 
+    public static void binaryOperation() {
+    }
 }

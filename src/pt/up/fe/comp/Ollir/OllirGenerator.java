@@ -1,9 +1,11 @@
 package pt.up.fe.comp.Ollir;
 
+import org.specs.comp.ollir.BinaryOpInstruction;
 import pt.up.fe.comp.jmm.analysis.table.SymbolTable;
 import pt.up.fe.comp.jmm.analysis.table.Type;
 import pt.up.fe.comp.jmm.ast.AJmmVisitor;
 import pt.up.fe.comp.jmm.ast.JmmNode;
+
 
 import java.util.stream.Collectors;
 
@@ -19,18 +21,21 @@ public class OllirGenerator extends AJmmVisitor<Integer,Integer> {
         addVisit("ClassDeclaration",this::classDeclarationVisit);
         addVisit("MainDeclaration", this::mainDeclarationVisit);
         addVisit("OtherMethodDeclaration", this::otherMethodDeclarationVisit);
-        //addVisit("MethodDeclaration",this::methodDeclVisit);
         addVisit("MethodBody",this::methodBodyVisit);
+        addVisit("ReturnValue",this::returnVisit);
         addVisit("VarDeclaration",this::varDeclarationVisit);
+        addVisit("Assignment",this::assignmentVisit);
+        addVisit("Call",this::callVisit);
+        addVisit("BinOp",this::binOpVisit);
 
     }
+
 
     public String getCode() {
         return ollirCode.toString();
     }
 
     private Integer programVisit(JmmNode program, Integer dummy){
-        //TODO:: IMPORTS WITH .
         for(var importString: symbolTable.getImports()){
             ollirCode.append("import ").append(importString).append(";\n");
         }
@@ -89,13 +94,13 @@ public class OllirGenerator extends AJmmVisitor<Integer,Integer> {
 
         ollirCode.append("{\n");
 
-        int lastParam =OllirUtils.getLastParamIndex(mainMethodDecl);
-
-        var stmts=mainMethodDecl.getChildren().subList(lastParam+1,mainMethodDecl.getNumChildren());
-
-        for(var stmt : stmts)
-            visit(stmt);
-
+        for(JmmNode child: mainMethodDecl.getChildren()){
+            System.out.println(child.getKind());
+            if(child.getKind().equals("MethodBody")){
+                visit(child);
+            }
+        }
+        ollirCode.append("ret.V;\n");
         ollirCode.append("}\n");
 
         return 0;
@@ -119,19 +124,16 @@ public class OllirGenerator extends AJmmVisitor<Integer,Integer> {
         ollirCode.append(OllirUtils.getCode(symbolTable.getReturnType( methodName)));
 
         ollirCode.append("{\n");
-        //int lastParam =OllirUtils.getLastParamIndex(otherMethodDecl);
+
         for(JmmNode child: otherMethodDecl.getChildren()){
-            System.out.println(child.getKind());
-            if(child.getKind().equals("MethodBody")){
+            if(child.getKind().equals("MethodBody") || child.getKind().equals("ReturnValue")){
                 visit(child);
             }
         }
 
-        //var stmts=otherMethodDecl.getChildren().subList(lastParam+1,otherMethodDecl.getNumChildren());
-
-
 
         ollirCode.append("}\n");
+
 
         return 0;
     }
@@ -149,39 +151,59 @@ public class OllirGenerator extends AJmmVisitor<Integer,Integer> {
             }else{
                 ollirCode.append(OllirUtils.getOllirType(type));
             }
-            ollirCode.append(";").append("\n");
+            ollirCode.append(";\n");
         }
 
         return 0;
     }
     private Integer methodBodyVisit(JmmNode methodBody, Integer dummy){
-    //TODO::
-
-       String methodName= methodBody.getJmmParent().get("name");
-/*
-       for(var child: methodBody.getChildren()){
-           if(child.getKind().equals("VarDeclaration")){
-               visit(child);
-           }
-       }
-*/
-        for (JmmNode statement : methodBody.getChildren()) {
-            switch (statement.getKind()) {
-                case ("Assignment"):
-                    OllirAssignment.assignmentStatement(methodName, statement,symbolTable);
-                    break;
-                case ("Call"):
-                    OllirCall.callStatement();
-                    break;
-                case ("VarDeclaration"):
-                    visit(statement);
-                    break;
-            }
-           ollirCode.append("\n");
+        for(var child : methodBody.getChildren()) {
+            visit(child);
         }
+        return 0;
+    }
+    private Integer returnVisit(JmmNode returnValue, Integer integer) {
+        JmmNode child=returnValue.getJmmChild(0);
+        Type returnType=symbolTable.getReturnType(returnValue.getJmmParent().get("name"));
+
+        ollirCode.append("ret.");
+        ollirCode.append(OllirUtils.getCode(returnType));
+        ollirCode.append(" ");
+
+        if(child.getKind().equals("EEIdentifier")){
+            ollirCode.append(child.get("name"));
+            ollirCode.append(".");
+            ollirCode.append(OllirUtils.getCode(returnType));
+            ollirCode.append(";\n");
+        }else if(child.getKind().equals("EEInt") || child.getKind().equals("EETrue") || child.getKind().equals("EEFalse")){
+            ollirCode.append(child.get("value"));
+            ollirCode.append(".");
+            ollirCode.append(OllirUtils.getCode(returnType));
+            ollirCode.append(";\n");
+        }else {
+            visit(child);
+        }
+
+        return 0;
+    }
+
+    private Integer binOpVisit(JmmNode binOp, Integer integer) {
+
+
+        return 0;
+    }
+
+    private Integer callVisit(JmmNode call, Integer dummy){
+
+        return 0;
+    }
+    private Integer assignmentVisit(JmmNode assignment, Integer dummy){
         return 0;
     }
 
 
 
+
+
 }
+
