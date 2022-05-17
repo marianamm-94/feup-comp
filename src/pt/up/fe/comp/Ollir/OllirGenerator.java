@@ -30,9 +30,9 @@ public class OllirGenerator extends AJmmVisitor<Integer,Integer> {
     }
 
     private Integer programVisit(JmmNode program, Integer dummy){
+        //TODO:: IMPORTS WITH .
         for(var importString: symbolTable.getImports()){
             ollirCode.append("import ").append(importString).append(";\n");
-
         }
         for(var child : program.getChildren())
             visit(child);
@@ -46,12 +46,26 @@ public class OllirGenerator extends AJmmVisitor<Integer,Integer> {
         var superClass = symbolTable.getSuper();
 
         if(superClass!=null)
-            ollirCode.append(" extends").append(superClass);
+            ollirCode.append(" extends ").append(superClass);
 
         ollirCode.append("{\n");
 
-        for(var child : classDecl.getChildren())
-            visit(child);
+        for(var child : classDecl.getChildren()){
+            if(child.getKind().equals("VarDeclaration")){
+                visit(child);
+            }
+        }
+
+        ollirCode.append(".construct ").append(symbolTable.getClassName());
+        ollirCode.append("().V{\n");
+        ollirCode.append("invokespecial(this, \"<init>\").V;\n");
+        ollirCode.append("}\n");
+
+        for(var child : classDecl.getChildren()){
+            if(!child.getKind().equals("VarDeclaration")){
+                visit(child);
+            }
+        }
 
         ollirCode.append("}\n");
         return 0;
@@ -106,11 +120,10 @@ public class OllirGenerator extends AJmmVisitor<Integer,Integer> {
 
         ollirCode.append("{\n");
         //int lastParam =OllirUtils.getLastParamIndex(otherMethodDecl);
-
         for(JmmNode child: otherMethodDecl.getChildren()){
-            if(child.equals("MethodBody")){
-                for(var stmt : child.getChildren())
-                    visit(stmt);
+            System.out.println(child.getKind());
+            if(child.getKind().equals("MethodBody")){
+                visit(child);
             }
         }
 
@@ -123,41 +136,6 @@ public class OllirGenerator extends AJmmVisitor<Integer,Integer> {
         return 0;
     }
 
-    /*
-    private Integer methodDeclVisit(JmmNode methodDecl, Integer dummy){
-        var methodSignature=methodDecl.get("name");
-        ollirCode.append(".method public ");
-        if(methodDecl.getKind().equals("MainDeclaration")){
-            ollirCode.append("static ");
-            ollirCode.append("main( ");
-        }
-        ollirCode.append(methodSignature);
-
-        var params =symbolTable.getParameters(methodSignature);
-
-       var paramCode= params.stream()
-               .map(symbol -> OllirUtils.getCode(symbol))
-               .collect(Collectors.joining(", "));
-
-       ollirCode.append(paramCode);
-       ollirCode.append(").");
-       ollirCode.append(OllirUtils.getCode(symbolTable.getReturnType(methodSignature)));
-
-        ollirCode.append("{\n");
-
-        int lastParam =OllirUtils.getLastParamIndex(methodDecl);
-
-        var stmts=methodDecl.getChildren().subList(lastParam+1,methodDecl.getNumChildren());
-
-        for(var stmt : stmts)
-            visit(stmt);
-
-        ollirCode.append("}\n");
-
-        return 0;
-    }
-    */
-
     private Integer varDeclarationVisit(JmmNode varDecl, Integer dummy){
         String name=varDecl.get("name");
         String type= varDecl.getJmmChild(0).get("name");
@@ -165,24 +143,30 @@ public class OllirGenerator extends AJmmVisitor<Integer,Integer> {
             ollirCode.append(".field ");
             ollirCode.append(name).append(".");
 
-            ollirCode.append(OllirUtils.varDeclaration(varDecl,type));
-        }
-        else if(varDecl.getJmmParent().getKind().equals("MethodBody")){
-            ollirCode.append(name).append(".");
-            ollirCode.append(OllirUtils.varDeclaration(varDecl,type));
+            if(varDecl.getJmmChild(0).get("isArray").equals("True")){
+                ollirCode.append("array.");
+                ollirCode.append(OllirUtils.getOllirType(type));
+            }else{
+                ollirCode.append(OllirUtils.getOllirType(type));
+            }
+            ollirCode.append(";").append("\n");
         }
 
-        ollirCode.append(";").append("\n");
         return 0;
     }
     private Integer methodBodyVisit(JmmNode methodBody, Integer dummy){
     //TODO::
-       String methodName= methodBody.getJmmParent().get("name");
 
+       String methodName= methodBody.getJmmParent().get("name");
+/*
+       for(var child: methodBody.getChildren()){
+           if(child.getKind().equals("VarDeclaration")){
+               visit(child);
+           }
+       }
+*/
         for (JmmNode statement : methodBody.getChildren()) {
             switch (statement.getKind()) {
-                //childrens name of methodBody
-                //for this checkpoint we dont need to implement if and else and while statement
                 case ("Assignment"):
                     OllirAssignment.assignmentStatement(methodName, statement,symbolTable);
                     break;
@@ -190,7 +174,7 @@ public class OllirGenerator extends AJmmVisitor<Integer,Integer> {
                     OllirCall.callStatement();
                     break;
                 case ("VarDeclaration"):
-                    varDeclarationVisit(statement,0);
+                    visit(statement);
                     break;
             }
            ollirCode.append("\n");
