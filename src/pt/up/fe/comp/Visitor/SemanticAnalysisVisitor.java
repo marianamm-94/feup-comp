@@ -101,6 +101,7 @@ public class SemanticAnalysisVisitor extends PreorderJmmVisitor<Analysis, Boolea
 
     public void visitVarDeclaration(JmmMethod method, JmmNode node, Analysis analysis){
         System.out.println("visiting var dec");
+        System.out.println(method);
         String varName = node.get("name");
         JmmNode typeNode = node.getJmmChild(0);
         String varTypeStr = typeNode.get("name");
@@ -110,18 +111,21 @@ public class SemanticAnalysisVisitor extends PreorderJmmVisitor<Analysis, Boolea
         Symbol symbol = new Symbol(varType, varName );
 
         if(method == null){
-            if(!analysis.getSymbolTable().fieldExists(symbol)){
-                analysis.getSymbolTable().addField(varType, varName);
-                return;
-            }
-            else{
-                analysis.newReport(node, "Variable " + symbol + " is already defined in the scope");
+            List<Symbol> symbols = analysis.getSymbolTable().getFields();
+            for(Symbol symb: symbols){
+                if(symb.getName().equals(varName)) {
+                    analysis.newReport(node, "Variable " + symbol + " is already defined in the scope");
+                    return;
+                }
             }
         }
         else{
-            if(method.localVariableExists(symbol)){
-                analysis.newReport(node, "Variable " + symbol + " is already defined in the scope");
-                return;
+            List<Symbol> symbols = method.getLocalVariables();
+            for(Symbol symb: symbols){
+                if(symb.getName().equals(varName)) {
+                    analysis.newReport(node, "Variable " + symbol + " is already defined in the scope");
+                    return;
+                }
             }
             method.addLocalVariable(varType, varName);
         }

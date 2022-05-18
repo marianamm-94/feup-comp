@@ -308,97 +308,9 @@ public class SemanticAnalysisUtils {
             }
         }
         else if(children.get(1).equals("ExpressionMethodCall")){
-            return evaluateMethodCall(method, children, analysis);
+            return evaluateExpression(method, children.get(1), analysis, true);
         }
 
-        return null;
-    }
-
-    private static JmmType evaluateMethodCall(JmmMethod method, List<JmmNode> nodes, Analysis analysis) {
-
-        JmmNode identifier = nodes.get(0);
-        JmmNode methodNode = nodes.get(1);
-
-        String identifierKind = identifier.getChildren().get(0).getKind();
-        Boolean hasNestedCall = false;
-        String identifierN = "this";
-
-        if (identifier.getKind().equals("Call")) {
-            hasNestedCall = true;
-            JmmType t = evaluateCall(method, identifier, analysis);
-            if (t != null) {
-                JmmType res = analysis.getSymbolTable().hasImport(t.getName());
-                if (t.equals(res)) return t;
-                else if (t.getName().equals(analysis.getSymbolTable().getSuper())) return new JmmType("Accepted", false);
-                else if (t.getName().equals(analysis.getSymbolTable().getClassName())) identifierN = t.getName();
-                else {
-                    analysis.newReport(identifier.getChildren().get(0),"method does not exist or is being invoked with the wrong arguments");
-                    return null;
-                }
-            }
-        } else if (!identifierKind.contains("EEIdentifier") && !identifierKind.equals("EEThis")) {
-            analysis.newReport(identifier.getChildren().get(0),"not a valid identifier");
-            return null;
-        }
-
-
-        if (!hasNestedCall) {
-            Boolean isNew = false;
-            if (!identifierKind.equals("EEThis")) {
-                if (identifierKind.contains("EEIdentifier")) isNew = true;
-                String identifierName = identifierKind;
-                JmmType res = analysis.getSymbolTable().hasImport(identifierName);
-                if (res != null) return res;
-
-                if (!isNew) {
-                    JmmType identifierType = checkIfIdentifierExists(method, identifier.getChildren().get(0), analysis);
-
-                    if (identifierType == null) {
-                        analysis.newReport(identifier.getChildren().get(0),"identifier '" + identifierName + "' is not declared");
-                        return null;
-                    } else if (analysis.getSymbolTable().returnFieldTypeIfExists(identifierName) != null) {
-                        analysis.newReport(identifier.getChildren().get(0), "non-static variable '" + identifierName + "' cannot be referenced from a static context");
-                    }
-
-
-                    identifierN = identifierType.getName();
-                } else identifierN = identifierName;
-
-                if (identifierN.equals(analysis.getSymbolTable().getSuper())) return new JmmType("Accepted", false);
-                if (identifierN.equals("int") || identifierN.equals("boolean")) {
-                    analysis.newReport(identifier.getChildren().get(0), "identifier cannot be int or boolean");
-                    return null;
-                }
-            }
-        }
-
-        String methodName = methodNode.getChildren().get(0).getKind().replaceAll("'", "").replace("Identifier ", "");
-
-        List<JmmNode> parameters = new ArrayList<>(methodNode.getChildren());
-        parameters.remove(0);
-
-        List<String> p = new ArrayList<>();
-        for (JmmNode parameter : parameters) {
-            JmmType type = evaluateExpression(method, parameter, analysis, true);
-
-            if (type == null) {
-                analysis.newReport(parameter,"parameter is not valid");
-                return null;
-            }
-            p.add(type.printType());
-        }
-
-        String methodInfo = methodName + "(" + String.join(",", p) + ")";
-
-        JmmType type = (JmmType) analysis.getSymbolTable().getReturnType(methodInfo);
-
-        if (type != null) return type;
-
-        if (identifierN.equals("this") || identifierN.equals(analysis.getSymbolTable().getClassName())) {
-            if (!analysis.getSymbolTable().getSuper().equals("")) return new JmmType("Accepted", false);
-        }
-
-        analysis.newReport(identifier.getChildren().get(0), "method does not exist or is being invoked with the wrong arguments");
         return null;
     }
 
