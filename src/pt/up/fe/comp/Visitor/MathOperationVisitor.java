@@ -5,7 +5,7 @@ import pt.up.fe.comp.jmm.ast.JmmNode;
 import pt.up.fe.comp.jmm.ast.PreorderJmmVisitor;
 
 public class MathOperationVisitor extends PreorderJmmVisitor<JmmAnalyser, Boolean> {
-
+/*
     public MathOperationVisitor() {
         addVisit("Add", this::MathOperationVisit);
         addVisit("Sub", this::MathOperationVisit);
@@ -44,5 +44,7 @@ public class MathOperationVisitor extends PreorderJmmVisitor<JmmAnalyser, Boolea
 
         return true;
     }
+    */
+
 
 }

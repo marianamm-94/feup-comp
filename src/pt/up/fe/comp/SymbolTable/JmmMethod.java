@@ -38,12 +38,12 @@ public class JmmMethod {
         return new ArrayList<>(localVariables.values());
     }
 
-    private JmmType createType(String t) {
+    private Type createType(String t) {
 
         boolean isArray = t.contains("[]");
         String type = t.replace("[]", "");
 
-        return new JmmType(type, isArray);
+        return new Type(type, isArray);
     }
 
     public boolean equalsMethod(List<String> info) {

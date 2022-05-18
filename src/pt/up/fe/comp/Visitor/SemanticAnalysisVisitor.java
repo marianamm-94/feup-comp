@@ -2,7 +2,6 @@ package pt.up.fe.comp.Visitor;
 
 import pt.up.fe.comp.SymbolTable.Analysis;
 import pt.up.fe.comp.SymbolTable.JmmMethod;
-import pt.up.fe.comp.SymbolTable.JmmType;
 import pt.up.fe.comp.jmm.analysis.table.Symbol;
 import pt.up.fe.comp.jmm.analysis.table.Type;
 import pt.up.fe.comp.jmm.ast.JmmNode;
@@ -55,10 +54,10 @@ public class SemanticAnalysisVisitor extends PreorderJmmVisitor<Analysis, Boolea
     public void visitReturnValue(JmmMethod method, JmmNode node, Analysis analysis) {
         JmmNode child = node.getChildren().get(0);
 
-        JmmType type = null;
+        Type type = null;
 
         if(child.getKind().equals("EETrue") || child.getKind().equals("EEFalse")){
-            type = new JmmType("boolean", false);
+            type = new Type("boolean", false);
         }
         else if(child.getKind().equals("EEIdentifier")){
             if(!SemanticAnalysisUtils.EEIdentifierExists(method,child,analysis)){
@@ -67,14 +66,14 @@ public class SemanticAnalysisVisitor extends PreorderJmmVisitor<Analysis, Boolea
             }
             else{
                 Type typeTemp =  method.getLocalVariable(child.get("name")).getType();
-                type = new JmmType(typeTemp.getName(),typeTemp.isArray());
+                type = new Type(typeTemp.getName(),typeTemp.isArray());
             }
         }
         else if(child.getKind().equals("EEInt")){
-            type = new JmmType("int", false);
+            type = new Type("int", false);
         }
         else {
-            type = SemanticAnalysisUtils.evaluateExpression(method, child, analysis, true);
+            type = SemanticAnalysisUtils.evaluateExpression(method, child, analysis);
         }
 
         if (type == null) {
@@ -153,59 +152,31 @@ public class SemanticAnalysisVisitor extends PreorderJmmVisitor<Analysis, Boolea
     }
 
     public void visitAssignment(JmmMethod method, JmmNode node, Analysis analysis) {
-        JmmNode assignee = node.getJmmChild(0);
-        JmmNode Expression = node.getJmmChild(1);
-
-        System.out.println("assign visit lasflksjf");JmmType identifierType;
-
-        List<JmmNode> children = node.getChildren();
-
-        if (children.size() != 2) return; //check if there are two children
-        if(children.get(0).getKind().equals("EEIdentifier")){  //if assigning to EEIdentifier
-            if(!SemanticAnalysisUtils.EEIdentifierExists(method, assignee, analysis)){
-                analysis.newReport(assignee, "Variable is not defined.");
-            }
-            //check if type matches
+        if(node.getNumChildren()!=2){
+            analysis.newReport(node,"Assignment doesn't have two children!");
         }
-        else if(children.get(0).getKind().equals("Array")){  //if assigning to Array
-            //check for array and identifier
-        }
-        if(!children.get(1).getKind().equals("BinOp") && !children.get(1).getKind().equals("EENew")
-        && !children.get(1).getKind().equals("Call") && !children.get(1).getKind().equals("Array") && !children.get(1).getKind().equals("EEIdentifier")
-        && !children.get(1).getKind().equals("EEInt") && !children.get(1).getKind().equals("EETrue") && !children.get(1).getKind().equals("EEFalse"))
-            return;
+        JmmNode leftChild=node.getJmmChild(0);
+        JmmNode rightChild=node.getJmmChild(1);
 
-
-        JmmType leftOperandType = null;
-        if(SemanticAnalysisUtils.EEIdentifierExists(method, children.get(0),analysis)){
-            Type typeTemp =  method.getLocalVariable(children.get(0).get("name")).getType();
-            leftOperandType = new JmmType(typeTemp.getName(),typeTemp.isArray());
-        }
-
-        if (leftOperandType == null) {
-            analysis.newReport(children.get(0),"Unexpected type: Left Operand.");
+        if(!leftChild.getKind().equals("EEIdentifier")&& !leftChild.getKind().equals("Array"))
+        {
+            analysis.newReport(node,"Left child of assignment must be a variable or Array Index");
             return;
         }
+        Type leftType = SemanticAnalysisUtils.getNodeType(method,leftChild,analysis);
+        Type rightType = SemanticAnalysisUtils.getNodeType(method,rightChild,analysis);
+        if(leftType==null || rightType == null)
+            return;
 
-        JmmType rightOperandType = null;
-        if(children.get(1).getKind().equals("EEInt")) rightOperandType = new JmmType("int",false);
-        else if(children.get(1).getKind().equals("EETrue") || children.get(1).getKind().equals("EEFalse"))
-            rightOperandType = new JmmType("boolean",false);
-        else if(children.get(1).getKind().equals("EEIdentifier") &&SemanticAnalysisUtils.EEIdentifierExists(method, children.get(1),analysis)){
-            Type typeTemp =  method.getLocalVariable(children.get(1).get("name")).getType();
-            rightOperandType = new JmmType(typeTemp.getName(),typeTemp.isArray());
-        }
-        else {
-            rightOperandType = SemanticAnalysisUtils.evaluateExpression(method, children.get(1), analysis, true);
-        }
+        //Left é super e right é a propria classe symbol table gets super e class
 
-        if (rightOperandType == null)
-            analysis.newReport(children.get(1),"Unexpected type: Right Operand.");
-        else if (!leftOperandType.getName().equals(rightOperandType.getName()))
-            analysis.newReport(children.get(1),"Unexpected type: Right Operand should be "+leftOperandType.getName());
-        else if (leftOperandType.isArray())
-            if (!rightOperandType.isArray())
-                analysis.newReport(children.get(1),"Right type expected to be an array.");
+        //left e right sao ambas importadas getImports na symbbol tabel . contains left and right name
+
+        //tem de facto o mesmo tipo(ver se o nome do type é igual e se o is array tambem é igual
+
+        //senao erro
+
+
     }
 
 

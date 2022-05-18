@@ -116,14 +116,14 @@ public class JmmSymbolTable implements SymbolTable {
         return methods.get(methodInfo);
     }
 
-    public JmmType returnFieldTypeIfExists(String field) {
-        return (JmmType) fields.get(field).getType();
+    public Type returnFieldTypeIfExists(String field) {
+        return (Type) fields.get(field).getType();
     }
 
-    public JmmType hasImport(String identifierName) {
+    public Type hasImport(String identifierName) {
         for (String importName : getImports()) {
             String[] imports = importName.split("\\.");
-            if (imports[imports.length - 1].equals(identifierName)) return new JmmType("Accepted", false);
+            if (imports[imports.length - 1].equals(identifierName)) return new Type("Accepted", false);
         }
         return null;
     }
