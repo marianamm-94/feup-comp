@@ -28,6 +28,7 @@ public class SemanticAnalysisUtils {
             case "Call":
                 if (type.equals(evaluateCall(method, node, analysis))) return true;
             case "ExpressionMethodCall":
+                if (type.equals(evaluateMethodCall(method, node, analysis))) return true;
             case "IfExpression":
                 if (type.equals(evaluateExpression(method, node, analysis, true))) return true;
             case "Not":
@@ -67,7 +68,7 @@ public class SemanticAnalysisUtils {
             case "Call":
                 if (type.equals(evaluateCall(method, node, analysis))) return true;
             case "ExpressionMethodCall":
-                if (type.equals(evaluateExpression(method, node, analysis, true))) return true;
+                if (type.equals(evaluateMethodCall(method, node, analysis))) return true;
             case "Array":
                 if (evaluateArrayAccess(method, node, analysis)) return true;
             case "BinOp":
@@ -222,6 +223,7 @@ public class SemanticAnalysisUtils {
     public static Type evaluateExpression(JmmMethod method, JmmNode node, Analysis analysis, boolean rightOperand) {
 
         System.out.println("expression eval aslkjasdlkasjd");
+        System.out.println(node);
 
         if(node.getKind().equals("BinOp")){
 
@@ -288,6 +290,8 @@ public class SemanticAnalysisUtils {
         System.out.println(method.getLocalVariables());
          //node              // children: EEThis EEIdentifier call
                              //children 2: ExpressionMethodCall, ArrayLength
+        Symbol varSymbol = null;
+
         if (children.size() != 2) return null;
         if (children.get(0).getKind().equals("Call")) {
             if(evaluateCall(method, children.get(0), analysis) == null)
@@ -296,22 +300,69 @@ public class SemanticAnalysisUtils {
         else if(children.get(0).getKind().equals("EEIdentifier")){
             if(!EEIdentifierExists(method, children.get(0)))
                 return null;
+            List<Symbol> variablesList = method.getLocalVariables();
+            List<String> imports = analysis.getSymbolTable().getImports();
+            for(Symbol symbol: variablesList){
+                if(symbol.getName().equals(children.get(0).get("name")))
+                    varSymbol = symbol;
+                    break;
+            }
+            for(String impt: imports) {
+                if(varSymbol.getType().getName().equals(impt)){
+                    return new Type("Accept", false);
+                }
+            }
         }
 
         if(children.get(1).getKind().equals("ArrayLength")){
             if(evaluateArray(method, children.get(0), analysis)){
-                List<Symbol> variablesList = method.getLocalVariables();
-                for(Symbol symbol: variablesList){
-                    if(symbol.getName().equals(children.get(0).get("name")))
-                        return new Type(symbol.getType().getName(), false);
-                }
+                if(varSymbol.getName().equals(children.get(0).get("name")))
+                    return new Type(varSymbol.getType().getName(), false);
             }
         }
         else if(children.get(1).getKind().equals("ExpressionMethodCall")){
-            return evaluateExpression(method, children.get(1), analysis, true);
+            return evaluateMethodCall(method, children.get(1), analysis);
         }
 
         return null;
+    }
+
+    public static Type evaluateMethodCall(JmmMethod method, JmmNode node, Analysis analysis){
+
+        List<JmmNode> children = node.getChildren();
+
+        System.out.println("Entered evaluate method call");
+        System.out.println(node);
+        JmmMethod methodFunc = analysis.getSymbolTable().getMethodById(node.get("name"));
+        if(methodFunc == null) return null;
+        List<Symbol> methodParams = methodFunc.getParameters();
+
+        boolean hasReports = false;
+        List<String> methodsDefined = analysis.getSymbolTable().getMethods();
+        if(methodsDefined.contains(methodFunc.getName())){
+            for(int i=0; i< children.size();i++){
+
+                Symbol symbolNow = method.getLocalVariable(children.get(i).get("name"));
+
+                if(methodParams.get(i).getType().getName().equals(symbolNow.getType().getName())){
+                    if(methodParams.get(i).getType().isArray() == symbolNow.getType().isArray()){
+                        continue;
+                    }
+                    else{
+                        analysis.newReport(children.get(i),"Parameter is not of the same type");
+                        hasReports = true;
+                    }
+                }
+                else{
+                    analysis.newReport(children.get(i),"Parameter is not of the same type");
+                    hasReports = true;
+
+                }
+            }
+        }
+
+        if(!hasReports) return methodFunc.getReturnType();
+        else return null;
     }
 
     public static boolean EEIdentifierExists(JmmMethod method, JmmNode assignee){

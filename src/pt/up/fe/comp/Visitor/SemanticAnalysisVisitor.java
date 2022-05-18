@@ -73,12 +73,15 @@ public class SemanticAnalysisVisitor extends PreorderJmmVisitor<Analysis, Boolea
         }
         else {
             type = SemanticAnalysisUtils.evaluateExpression(method, child, analysis, true);
+            System.out.println("Return type is waht");
+            System.out.println(type);
         }
 
         if (type == null) {
             analysis.newReport(child, "Return type doesn't match expectation.");
             return;
         }
+        else if(type.equals(new Type("Accept", false))) return;
         if ( !(type.getName().equals(method.getReturnType().getName()) && (type.isArray() == method.getReturnType().isArray()))) {
             analysis.newReport(child, "Return type doesn't match expectation. Should be" + method.getReturnType());
         }

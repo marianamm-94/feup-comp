@@ -6,9 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="7ff48915-1ade-482d-84b0-d512d4dcb97b" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pt/up/fe/comp/SymbolTable/JmmAnalyser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pt/up/fe/comp/SymbolTable/JmmAnalyser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pt/up/fe/comp/SymbolTable/JmmMethod.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pt/up/fe/comp/SymbolTable/JmmMethod.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pt/up/fe/comp/SymbolTable/JmmSymbolTable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pt/up/fe/comp/SymbolTable/JmmSymbolTable.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pt/up/fe/comp/Visitor/SemanticAnalysisUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pt/up/fe/comp/Visitor/SemanticAnalysisUtils.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pt/up/fe/comp/Visitor/SemanticAnalysisVisitor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pt/up/fe/comp/Visitor/SemanticAnalysisVisitor.java" afterDir="false" />
     </list>
@@ -21,6 +18,16 @@
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
     </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <task path="$PROJECT_DIR$">
+          <activation />
+        </task>
+        <projects_view />
+      </state>
+    </system>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -37,7 +44,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
   </component>
-  <component name="RunManager" selected="Gradle.Cp2Test">
+  <component name="RunManager" selected="Gradle.Cp2Test.test_1_10_ObjectAssignmentPassExtends">
     <configuration name="Cp2Test" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -84,7 +91,7 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="Cp2Test.test_1_15_CallToMethodAssumedInExtends" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="Cp2Test.test_1_10_ObjectAssignmentPassExtends" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -97,7 +104,7 @@
           <list>
             <option value=":test" />
             <option value="--tests" />
-            <option value="&quot;pt.up.fe.comp.Cp2Test.test_1_15_CallToMethodAssumedInExtends&quot;" />
+            <option value="&quot;pt.up.fe.comp.Cp2Test.test_1_10_ObjectAssignmentPassExtends&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -148,11 +155,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Gradle.Cp2Test.test_1_10_ObjectAssignmentPassExtends" />
         <item itemvalue="Gradle.Cp2Test" />
+        <item itemvalue="Gradle.Cp2Test.test_1_19_AssumeArguments" />
         <item itemvalue="JUnit.Cp2Test.test_1_15_CallToMethodAssumedInExtends" />
         <item itemvalue="Gradle.Cp2Test.test_1_00_SymbolTable" />
-        <item itemvalue="Gradle.Cp2Test.test_1_15_CallToMethodAssumedInExtends" />
-        <item itemvalue="Gradle.Cp2Test.test_1_19_AssumeArguments" />
       </list>
     </recent_temporary>
   </component>
