@@ -56,6 +56,10 @@ public class JmmSymbolTable implements SymbolTable {
         return methods.get(methodSignature).getLocalVariables();
     }
 
+    public Symbol getSymbol(String key){
+        return fields.get(key);
+    }
+
     public boolean hasMethod(String methodSignature){
         return methods.containsKey(methodSignature);
     }

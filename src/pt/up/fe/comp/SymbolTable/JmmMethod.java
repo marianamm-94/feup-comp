@@ -64,8 +64,8 @@ public class JmmMethod {
         return true;
     }
 
-    public JmmType returnTypeIfExists(String identifier) {
-        return (JmmType) returnType;
+    public Type returnTypeIfExists(String identifier) {
+        return returnType;
     }
 
     public String getIdentifier() {
