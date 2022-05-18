@@ -44,7 +44,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
   </component>
-  <component name="RunManager" selected="Gradle.Cp2Test.test_1_10_ObjectAssignmentPassExtends">
+  <component name="RunManager" selected="Gradle.Cp2Test">
     <configuration name="Cp2Test" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -68,7 +68,7 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="Cp2Test.test_1_00_SymbolTable" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="Cp2Test.test_1_16_CallToMethodAssumedInImport" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -81,7 +81,7 @@
           <list>
             <option value=":test" />
             <option value="--tests" />
-            <option value="&quot;pt.up.fe.comp.Cp2Test.test_1_00_SymbolTable&quot;" />
+            <option value="&quot;pt.up.fe.comp.Cp2Test.test_1_16_CallToMethodAssumedInImport&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -91,7 +91,7 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="Cp2Test.test_1_10_ObjectAssignmentPassExtends" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="Cp2Test.test_1_17_IncompatibleArguments" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -104,7 +104,30 @@
           <list>
             <option value=":test" />
             <option value="--tests" />
-            <option value="&quot;pt.up.fe.comp.Cp2Test.test_1_10_ObjectAssignmentPassExtends&quot;" />
+            <option value="&quot;pt.up.fe.comp.Cp2Test.test_1_17_IncompatibleArguments&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="Cp2Test.test_1_18_IncompatibleReturn" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;pt.up.fe.comp.Cp2Test.test_1_18_IncompatibleReturn&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -137,29 +160,13 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="Cp2Test.test_1_15_CallToMethodAssumedInExtends" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="comp2022-1d.test" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="pt.up.fe.comp.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="pt.up.fe.comp" />
-      <option name="MAIN_CLASS_NAME" value="pt.up.fe.comp.Cp2Test" />
-      <option name="METHOD_NAME" value="test_1_15_CallToMethodAssumedInExtends" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Gradle.Cp2Test.test_1_10_ObjectAssignmentPassExtends" />
         <item itemvalue="Gradle.Cp2Test" />
         <item itemvalue="Gradle.Cp2Test.test_1_19_AssumeArguments" />
-        <item itemvalue="JUnit.Cp2Test.test_1_15_CallToMethodAssumedInExtends" />
-        <item itemvalue="Gradle.Cp2Test.test_1_00_SymbolTable" />
+        <item itemvalue="Gradle.Cp2Test.test_1_18_IncompatibleReturn" />
+        <item itemvalue="Gradle.Cp2Test.test_1_17_IncompatibleArguments" />
+        <item itemvalue="Gradle.Cp2Test.test_1_16_CallToMethodAssumedInImport" />
       </list>
     </recent_temporary>
   </component>

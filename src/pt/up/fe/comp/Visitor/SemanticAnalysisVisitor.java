@@ -73,8 +73,6 @@ public class SemanticAnalysisVisitor extends PreorderJmmVisitor<Analysis, Boolea
         }
         else {
             type = SemanticAnalysisUtils.evaluateExpression(method, child, analysis, true);
-            System.out.println("Return type is waht");
-            System.out.println(type);
         }
 
         if (type == null) {

@@ -86,23 +86,32 @@ public class SemanticAnalysisUtils {
     private static boolean evaluateArrayAccess(JmmMethod method, JmmNode node, Analysis analysis) {
 
         System.out.println("evaluating array access");
+        System.out.println(node);
 
         List<JmmNode> children = node.getChildren();
 
-        if (!children.get(0).getKind().equals("EEIdentifier")) {
+        System.out.println(children);
 
-
-            analysis.newReport(children.get(0), "\""+children.get(0)+" is not an array");
-            return false;
-        } else {
-            if (!isIdentifier(method, children.get(0), analysis, true)) {
-                analysis.newReport(children.get(0),"\""+children.get(0)+" is not an array");
+        if(node.getJmmParent().getKind().equals("EENew")){
+            if (!evaluatesToInteger(method, children.get(0), analysis)) {
+                analysis.newReport(children.get(0), "Bad array access: expected int.");
                 return false;
             }
         }
-        if (!evaluatesToInteger(method, children.get(1), analysis)) {
-            analysis.newReport(children.get(1),"Bad array access: expected int.");
-            return false;
+        else {
+            if (!children.get(0).getKind().equals("EEIdentifier")) {
+                analysis.newReport(children.get(0), "\"" + children.get(0) + " is not an array");
+                return false;
+            } else {
+                if (!isIdentifier(method, children.get(0), analysis, true)) {
+                    analysis.newReport(children.get(0), "\"" + children.get(0) + " is not an array");
+                    return false;
+                }
+            }
+            if (!evaluatesToInteger(method, children.get(1), analysis)) {
+                analysis.newReport(children.get(1), "Bad array access: expected int.");
+                return false;
+            }
         }
         return true;
     }
@@ -252,7 +261,7 @@ public class SemanticAnalysisUtils {
             System.out.println("expression eval array");
 
             if (evaluateArrayAccess(method, node, analysis))
-                return new Type("int", false);
+                return new Type("int", true);
         }
         else if(node.getKind().equals("Call")){
 
