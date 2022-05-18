@@ -2,7 +2,6 @@ package pt.up.fe.comp.Visitor;
 
 import pt.up.fe.comp.SymbolTable.Analysis;
 import pt.up.fe.comp.SymbolTable.JmmMethod;
-import pt.up.fe.comp.SymbolTable.JmmType;
 import pt.up.fe.comp.jmm.analysis.table.Symbol;
 import pt.up.fe.comp.jmm.analysis.table.Type;
 import pt.up.fe.comp.jmm.ast.JmmNode;
@@ -55,10 +54,10 @@ public class SemanticAnalysisVisitor extends PreorderJmmVisitor<Analysis, Boolea
     public void visitReturnValue(JmmMethod method, JmmNode node, Analysis analysis) {
         JmmNode child = node.getChildren().get(0);
 
-        JmmType type = null;
+        Type type = null;
 
         if(child.getKind().equals("EETrue") || child.getKind().equals("EEFalse")){
-            type = new JmmType("boolean", false);
+            type = new Type("boolean", false);
         }
         else if(child.getKind().equals("EEIdentifier")){
             if(!SemanticAnalysisUtils.EEIdentifierExists(method,child,analysis)){
@@ -66,12 +65,11 @@ public class SemanticAnalysisVisitor extends PreorderJmmVisitor<Analysis, Boolea
                 return;
             }
             else{
-                Type typeTemp =  method.getLocalVariable(child.get("name")).getType();
-                type = new JmmType(typeTemp.getName(),typeTemp.isArray());
+                type =  method.getLocalVariable(child.get("name")).getType();
             }
         }
         else if(child.getKind().equals("EEInt")){
-            type = new JmmType("int", false);
+            type = new Type("int", false);
         }
         else {
             type = SemanticAnalysisUtils.evaluateExpression(method, child, analysis, true);
@@ -156,7 +154,7 @@ public class SemanticAnalysisVisitor extends PreorderJmmVisitor<Analysis, Boolea
         JmmNode assignee = node.getJmmChild(0);
         JmmNode Expression = node.getJmmChild(1);
 
-        System.out.println("assign visit lasflksjf");JmmType identifierType;
+        System.out.println("assign visit lasflksjf");
 
         List<JmmNode> children = node.getChildren();
 
@@ -176,10 +174,9 @@ public class SemanticAnalysisVisitor extends PreorderJmmVisitor<Analysis, Boolea
             return;
 
 
-        JmmType leftOperandType = null;
+        Type leftOperandType = null;
         if(SemanticAnalysisUtils.EEIdentifierExists(method, children.get(0),analysis)){
-            Type typeTemp =  method.getLocalVariable(children.get(0).get("name")).getType();
-            leftOperandType = new JmmType(typeTemp.getName(),typeTemp.isArray());
+            leftOperandType = method.getLocalVariable(children.get(0).get("name")).getType();
         }
 
         if (leftOperandType == null) {
@@ -187,17 +184,19 @@ public class SemanticAnalysisVisitor extends PreorderJmmVisitor<Analysis, Boolea
             return;
         }
 
-        JmmType rightOperandType = null;
-        if(children.get(1).getKind().equals("EEInt")) rightOperandType = new JmmType("int",false);
+        Type rightOperandType = null;
+        if(children.get(1).getKind().equals("EEInt")) rightOperandType = new Type("int",false);
         else if(children.get(1).getKind().equals("EETrue") || children.get(1).getKind().equals("EEFalse"))
-            rightOperandType = new JmmType("boolean",false);
+            rightOperandType = new Type("boolean",false);
         else if(children.get(1).getKind().equals("EEIdentifier") &&SemanticAnalysisUtils.EEIdentifierExists(method, children.get(1),analysis)){
-            Type typeTemp =  method.getLocalVariable(children.get(1).get("name")).getType();
-            rightOperandType = new JmmType(typeTemp.getName(),typeTemp.isArray());
+            rightOperandType = method.getLocalVariable(children.get(1).get("name")).getType();
         }
         else {
             rightOperandType = SemanticAnalysisUtils.evaluateExpression(method, children.get(1), analysis, true);
         }
+
+        List<String> imports = analysis.getSymbolTable().getImports();
+        //if(imports.contains)
 
         if (rightOperandType == null)
             analysis.newReport(children.get(1),"Unexpected type: Right Operand.");
