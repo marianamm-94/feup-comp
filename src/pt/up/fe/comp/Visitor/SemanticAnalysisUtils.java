@@ -275,10 +275,14 @@ public class SemanticAnalysisUtils {
             if(node.getJmmChild(0).getKind().equals("Array")){
                 return evaluateExpression(method, node.getJmmChild(0), analysis, true);
             }
-            else if(node.getJmmChild(0).getKind().equals("EEObject") && SemanticAnalysisUtils.EEIdentifierExists(method, children.get(0),analysis)){
+            else if(node.getJmmChild(0).getKind().equals("EEObject")){ //&& SemanticAnalysisUtils.EEIdentifierExists(method, children.get(0),analysis)){
+
                 System.out.println("Got to expression object");
-                Type typeTemp =  method.getLocalVariable(node.getJmmChild(0).get("name")).getType();
-                return new JmmType(typeTemp.getName(), typeTemp.isArray());
+
+                List<String> imports = analysis.getSymbolTable().getImports();
+                if(imports.contains(node.getJmmChild(0).get("name"))){
+                    return new JmmType(node.getJmmChild(0).get("name"), false);
+                }
             }
         }
 
