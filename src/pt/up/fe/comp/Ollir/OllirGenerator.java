@@ -9,12 +9,14 @@ import pt.up.fe.comp.jmm.ast.JmmNode;
 
 import java.util.stream.Collectors;
 
-public class OllirGenerator extends AJmmVisitor<Integer,Integer> {
+public class OllirGenerator extends AJmmVisitor<Integer,Code> {
 
     private final StringBuilder ollirCode;
     public final SymbolTable symbolTable;
+    private int cont;
 
     public OllirGenerator(SymbolTable symbolTable) {
+        cont=0;
         this.ollirCode = new StringBuilder();
         this.symbolTable=symbolTable;
         addVisit("Program",this::programVisit);
@@ -27,25 +29,28 @@ public class OllirGenerator extends AJmmVisitor<Integer,Integer> {
         addVisit("Assignment",this::assignmentVisit);
         addVisit("Call",this::callVisit);
         addVisit("BinOp",this::binOpVisit);
+        addVisit("EEInt",this::intVisit);
+        addVisit("EEFalse",this::falseVisit);
+        addVisit("EEIdentifier",this::identifierVisit);
+        addVisit("EETrue",this::trueVisit);
 
     }
-
 
     public String getCode() {
         return ollirCode.toString();
     }
 
-    private Integer programVisit(JmmNode program, Integer dummy){
+    private Code programVisit(JmmNode program, Integer dummy){
         for(var importString: symbolTable.getImports()){
             ollirCode.append("import ").append(importString).append(";\n");
         }
         for(var child : program.getChildren())
             visit(child);
 
-        return 0;
+        return null;
     }
 
-    private Integer classDeclarationVisit(JmmNode classDecl, Integer dummy){
+    private Code  classDeclarationVisit(JmmNode classDecl, Integer dummy){
         ollirCode.append("public ").append(symbolTable.getClassName());
 
         var superClass = symbolTable.getSuper();
@@ -73,9 +78,9 @@ public class OllirGenerator extends AJmmVisitor<Integer,Integer> {
         }
 
         ollirCode.append("}\n");
-        return 0;
+        return null;
     }
-    private Integer mainDeclarationVisit(JmmNode mainMethodDecl, Integer dummy){
+    private Code mainDeclarationVisit(JmmNode mainMethodDecl, Integer dummy){
         var main="main";
 
         ollirCode.append(".method public ");
@@ -103,10 +108,10 @@ public class OllirGenerator extends AJmmVisitor<Integer,Integer> {
         ollirCode.append("ret.V;\n");
         ollirCode.append("}\n");
 
-        return 0;
+        return null;
     }
 
-    private Integer otherMethodDeclarationVisit(JmmNode otherMethodDecl, Integer dummy){
+    private Code otherMethodDeclarationVisit(JmmNode otherMethodDecl, Integer dummy){
         var methodName=otherMethodDecl.get("name");
 
         ollirCode.append(".method public ");
@@ -135,10 +140,10 @@ public class OllirGenerator extends AJmmVisitor<Integer,Integer> {
         ollirCode.append("}\n");
 
 
-        return 0;
+        return null;
     }
 
-    private Integer varDeclarationVisit(JmmNode varDecl, Integer dummy){
+    private Code  varDeclarationVisit(JmmNode varDecl, Integer dummy){
         String name=varDecl.get("name");
         String type= varDecl.getJmmChild(0).get("name");
         if(varDecl.getJmmParent().getKind().equals("ClassDeclaration")){
@@ -154,15 +159,17 @@ public class OllirGenerator extends AJmmVisitor<Integer,Integer> {
             ollirCode.append(";\n");
         }
 
-        return 0;
+        return null;
     }
-    private Integer methodBodyVisit(JmmNode methodBody, Integer dummy){
+    private Code  methodBodyVisit(JmmNode methodBody, Integer dummy){
         for(var child : methodBody.getChildren()) {
-            visit(child);
+            Code vis=visit(child);
+            if(vis!=null)
+                ollirCode.append(vis.prefix).append(vis.code);
         }
-        return 0;
+        return null;
     }
-    private Integer returnVisit(JmmNode returnValue, Integer integer) {
+    private Code returnVisit(JmmNode returnValue, Integer integer) {
         JmmNode child=returnValue.getJmmChild(0);
         Type returnType=symbolTable.getReturnType(returnValue.getJmmParent().get("name"));
 
@@ -181,27 +188,91 @@ public class OllirGenerator extends AJmmVisitor<Integer,Integer> {
             ollirCode.append(OllirUtils.getCode(returnType));
             ollirCode.append(";\n");
         }else {
-            visit(child);
+            Code vis=visit(child);
+            if(vis!=null) {
+                ollirCode.append(vis.prefix).append(vis.code);
+                ollirCode.append(";\n");
+            }
         }
 
-        return 0;
+        return null;
     }
 
-    private Integer binOpVisit(JmmNode binOp, Integer integer) {
+    private Code  callVisit(JmmNode call, Integer dummy){
+        //TODO::
+        return null;
+    }
+    private Code assignmentVisit(JmmNode assignment, Integer dummy){
+        //TODO::
+        Code thisCode = new Code();
+        Code lhs= visit(assignment.getJmmChild(0));
+        Code rhs= visit(assignment.getJmmChild(1));
 
+        thisCode.prefix = lhs.prefix;
+        thisCode.prefix += rhs.prefix;
 
-        return 0;
+       // thisCode.code = lhs.code +":="+ tipo da variavel esquerda + rhs.code;
+
+        return thisCode;
     }
 
-    private Integer callVisit(JmmNode call, Integer dummy){
+    private Code  binOpVisit(JmmNode binOp, Integer integer) {
+        Code lhs = visit(binOp.getJmmChild(0));
+        Code rhs = visit(binOp.getJmmChild(1));
 
-        return 0;
+       //TODO:: NOT
+        String op = OllirUtils.getOllirOperator(binOp);
+        String typeOp= OllirUtils.getTypeOperator(binOp);
+
+        Code thisCode = new Code();
+        thisCode.prefix = lhs.prefix;
+        thisCode.prefix += rhs.prefix;
+
+        if(!binOp.getJmmParent().getKind().equals("Assignment")){
+            String temp = createTemp(typeOp);
+            thisCode.prefix += temp + ":="+typeOp + lhs.code + " " + op + rhs.code+";\n";
+            thisCode.code = temp;
+        }else{
+
+            thisCode.code = lhs.code + op + rhs.code+";\n";
+        }
+
+        return thisCode;
     }
-    private Integer assignmentVisit(JmmNode assignment, Integer dummy){
-        return 0;
+
+    private String createTemp(String typeOp) {
+        cont++;
+        return "temp"+cont+typeOp;
     }
 
+    private Code identifierVisit(JmmNode jmmNode, Integer integer) {
+        //TODO::
+        String identifierName=jmmNode.get("name");
+       // symbolTable.getLocalVariables();
+        return null;
+    }
 
+    private Code trueVisit(JmmNode jmmNode, Integer integer) {
+        Code code = new Code();
+        code.prefix="";
+        code.code=OllirUtils.getOllirType(jmmNode.getKind());
+        return code;
+    }
+
+    private Code falseVisit(JmmNode jmmNode, Integer integer) {
+        //TODO:: CHECK
+        Code code = new Code();
+        code.prefix="";
+        code.code=OllirUtils.getOllirType(jmmNode.getKind());
+        return code;
+    }
+
+    private Code intVisit(JmmNode jmmNode, Integer integer) {
+        Code code = new Code();
+        code.prefix="";
+        code.code=jmmNode.get("value")+".i32";
+        return code;
+    }
 
 
 

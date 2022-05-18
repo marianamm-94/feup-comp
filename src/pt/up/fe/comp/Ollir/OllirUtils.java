@@ -38,26 +38,34 @@ public class OllirUtils {
         }
     }
     public static String getOllirOperator(JmmNode node){
-        switch (node.getKind()){
-            case "Add":
-                return " +.i32 ";
-            case "Less":
-                return " <.i32 ";
-            case "Sub":
-                return " -.i32 ";
-            case "Mult":
-                return " *.i32 ";
-            case "Div":
-                return " /.i32 ";
-            case "And":
-                return " &&.bool ";
-            case "Not":
-                return " !.bool ";
+        switch (node.get("op")){
+            case "add":
+                return "+.i32 ";
+            case "less":
+                return "<.bool ";
+            case "sub":
+                return "-.i32 ";
+            case "mult":
+                return "*.i32 ";
+            case "div":
+                return "/.i32 ";
+            case "and":
+                return "&&.bool ";
         }
-        throw new NotImplementedException(node.getKind());
+        throw new NotImplementedException(node.get("op"));
     }
 
-
-    public static void binaryOperation() {
+    public static String getTypeOperator(JmmNode node){
+        switch (node.get("op")){
+            case "add":
+            case "sub":
+            case "mult":
+            case "div":
+                return ".i32 ";
+            case "less":
+            case "and":
+                return ".bool ";
+        }
+        throw new NotImplementedException(node.getKind());
     }
 }
