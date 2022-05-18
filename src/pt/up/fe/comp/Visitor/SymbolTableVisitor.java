@@ -12,7 +12,7 @@ import pt.up.fe.comp.jmm.ast.PreorderJmmVisitor;
 import pt.up.fe.comp.jmm.report.Report;
 
 public class SymbolTableVisitor extends PreorderJmmVisitor<Analysis, Boolean>  {
-    
+
     public SymbolTableVisitor() {
         addVisit("ClassDeclaration", this::visitClass);
         addVisit("ImportDeclaration", this::visitImport);
@@ -28,11 +28,11 @@ public class SymbolTableVisitor extends PreorderJmmVisitor<Analysis, Boolean>  {
             analysis.getSymbolTable().setSuper(child.get("name"));
 
         for(JmmNode varNode: node.getChildren()){
-           if( varNode.getKind().equals("VarDeclaration")){
+            if( varNode.getKind().equals("VarDeclaration")){
                 JmmNode typeNode =varNode.getJmmChild(0);
                 Type type = new Type(typeNode.get("name"),Boolean.parseBoolean(typeNode.get("isArray")));
-               analysis.getSymbolTable().addField(type, varNode.get("name"));
-           }
+                analysis.getSymbolTable().addField(type, varNode.get("name"));
+            }
         }
         return true;
     }
@@ -65,13 +65,13 @@ public class SymbolTableVisitor extends PreorderJmmVisitor<Analysis, Boolean>  {
             returnType = new Type(node.getJmmChild(0).get("name"),Boolean.parseBoolean( node.getJmmChild(0).get("isArray")));
         else
             returnType=new Type("void", false);
-           
+
         for(JmmNode child : node.getChildren()){
-           if(child.getKind().equals("Argument")){
+            if(child.getKind().equals("Argument")){
                 String paramName=child.get("name");
                 Type paramType = new Type(child.getJmmChild(0).get("name"),Boolean.parseBoolean( child.getJmmChild(0).get("isArray")));
                 param.add(new Symbol(paramType, paramName));
-           }
+            }
 
         }
         analysis.getSymbolTable().addMethod(methodName, returnType, param);

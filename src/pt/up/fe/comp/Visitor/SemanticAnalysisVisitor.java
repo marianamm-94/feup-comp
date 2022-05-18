@@ -21,7 +21,6 @@ public class SemanticAnalysisVisitor extends PreorderJmmVisitor<Analysis, Boolea
 
         String methodName = node.get("name");
         JmmMethod method = analysis.getSymbolTable().getMethodById(methodName);
-
         visitMethodBody(method, child, analysis);
         return true;
     }
@@ -42,6 +41,7 @@ public class SemanticAnalysisVisitor extends PreorderJmmVisitor<Analysis, Boolea
                 method = analysis.getSymbolTable().getMethodById(methodName);
                 if (!methodList.contains(methodName))
                     return false;
+                System.out.println("other method"+methodName);
                 visitMethodBody(method, child, analysis);
             } else if (child.getKind().equals("ReturnValue")) {
                 visitReturnValue(method, child, analysis);
@@ -168,13 +168,18 @@ public class SemanticAnalysisVisitor extends PreorderJmmVisitor<Analysis, Boolea
         if(leftType==null || rightType == null)
             return;
 
-        //Left é super e right é a propria classe symbol table gets super e class
+        if(leftType.getName().equals(analysis.getSymbolTable().getSuper()) && rightType.getName().equals(analysis.getSymbolTable().getClassName())){
+           return;
+        }
+       if(analysis.getSymbolTable().getImports().contains(leftType.getName()) && analysis.getSymbolTable().getImports().contains(rightType.getName()) ){
+            return;
+        }
+        if(leftType.isArray()==rightType.isArray() && leftType.getName().equals(rightType.getName())){
+            return;
 
-        //left e right sao ambas importadas getImports na symbbol tabel . contains left and right name
-
-        //tem de facto o mesmo tipo(ver se o nome do type é igual e se o is array tambem é igual
-
-        //senao erro
+        }else{
+            analysis.newReport(node, "Invalid assignment children");
+        }
 
 
     }

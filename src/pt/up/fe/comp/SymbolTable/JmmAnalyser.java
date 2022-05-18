@@ -38,14 +38,8 @@ public class JmmAnalyser implements JmmAnalysis {
         visitor.visit(node, analysis);
 
         new SemanticAnalysisVisitor().visit(node, analysis);
-        //new FunctionNotFoundVisitor().visit(node, analysis);
-        //new BinOperationVisitor().visit(node, analysis);
 
-        System.out.println(analysis.getSymbolTable().getClassName());
-        System.out.println(analysis.getSymbolTable().getSuper());
-        System.out.println(analysis.getSymbolTable().getFields());
-        System.out.println(analysis.getSymbolTable().getImports());
-        System.out.println(analysis.getSymbolTable().getMethods());//param e return
+        System.out.println(analysis.getSymbolTable().print());
         for(int i = 0; i < analysis.getReports().size(); i++){
             System.out.println(analysis.getReports().get(i));
         }
