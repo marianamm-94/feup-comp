@@ -196,7 +196,9 @@ public class SemanticAnalysisVisitor extends PreorderJmmVisitor<Analysis, Boolea
         }
 
         List<String> imports = analysis.getSymbolTable().getImports();
-        //if(imports.contains)
+        if(imports.contains(leftOperandType.getName()) && imports.contains(rightOperandType.getName())){
+            return;
+        }
 
         if (rightOperandType == null)
             analysis.newReport(children.get(1),"Unexpected type: Right Operand.");

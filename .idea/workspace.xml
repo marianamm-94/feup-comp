@@ -5,24 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7ff48915-1ade-482d-84b0-d512d4dcb97b" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/uiDesigner.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src-lib/pt/up/fe/comp/jmm/analysis/table/Symbol.java" beforeDir="false" afterPath="$PROJECT_DIR$/src-lib/pt/up/fe/comp/jmm/analysis/table/Symbol.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pt/up/fe/comp/SymbolTable/JmmMethod.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pt/up/fe/comp/SymbolTable/JmmMethod.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pt/up/fe/comp/SymbolTable/JmmSymbolTable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pt/up/fe/comp/SymbolTable/JmmSymbolTable.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pt/up/fe/comp/SymbolTable/JmmType.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pt/up/fe/comp/Visitor/BadArgsVisitor.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pt/up/fe/comp/Visitor/BinOperationVisitor.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pt/up/fe/comp/Visitor/BoolOperationVisitor.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pt/up/fe/comp/Visitor/FunctionNotFoundVisitor.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pt/up/fe/comp/Visitor/MathOperationVisitor.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pt/up/fe/comp/Visitor/SemanticAnalysisUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pt/up/fe/comp/Visitor/SemanticAnalysisUtils.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pt/up/fe/comp/Visitor/SemanticAnalysisVisitor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pt/up/fe/comp/Visitor/SemanticAnalysisVisitor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pt/up/fe/comp/Visitor/UndefinedVarVisitor.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pt/up/fe/comp/Visitor/Utils.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pt/up/fe/comp/Visitor/WhileIfVisitor.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,7 +32,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Gradle.Cp2Test.test_1_19_AssumeArguments">
     <configuration name="Cp2Test" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -73,8 +56,32 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
+    <configuration name="Cp2Test.test_1_19_AssumeArguments" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;pt.up.fe.comp.Cp2Test.test_1_19_AssumeArguments&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Gradle.Cp2Test.test_1_19_AssumeArguments" />
         <item itemvalue="Gradle.Cp2Test" />
       </list>
     </recent_temporary>
