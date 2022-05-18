@@ -19,7 +19,7 @@ public class SemanticAnalysisUtils {
             case "EETrue":
             case "EEFalse":
                 return true;
-            case "EEIndentifier":
+            case "EEIdentifier":
                 String typeVar = node.get("name");
                 List<Symbol> checkExist = analysis.getSymbolTable().getLocalVariables(method.getName());
                 for(Symbol symbol: checkExist){
