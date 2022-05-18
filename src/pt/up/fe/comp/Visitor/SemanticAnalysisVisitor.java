@@ -54,13 +54,13 @@ public class SemanticAnalysisVisitor extends PreorderJmmVisitor<Analysis, Boolea
     public void visitReturnValue(JmmMethod method, JmmNode node, Analysis analysis) {
         JmmNode child = node.getChildren().get(0);
 
-        Type type = null;
+        Type type;
 
         if(child.getKind().equals("EETrue") || child.getKind().equals("EEFalse")){
             type = new Type("boolean", false);
         }
         else if(child.getKind().equals("EEIdentifier")){
-            if(!SemanticAnalysisUtils.EEIdentifierExists(method,child,analysis)){
+            if(!SemanticAnalysisUtils.EEIdentifierExists(method,child)){
                 analysis.newReport(child, "Variable for return value not defined.");
                 return;
             }
@@ -152,7 +152,6 @@ public class SemanticAnalysisVisitor extends PreorderJmmVisitor<Analysis, Boolea
 
     public void visitAssignment(JmmMethod method, JmmNode node, Analysis analysis) {
         JmmNode assignee = node.getJmmChild(0);
-        JmmNode Expression = node.getJmmChild(1);
 
         System.out.println("assign visit lasflksjf");
 
@@ -160,7 +159,7 @@ public class SemanticAnalysisVisitor extends PreorderJmmVisitor<Analysis, Boolea
 
         if (children.size() != 2) return; //check if there are two children
         if(children.get(0).getKind().equals("EEIdentifier")){  //if assigning to EEIdentifier
-            if(!SemanticAnalysisUtils.EEIdentifierExists(method, assignee, analysis)){
+            if(!SemanticAnalysisUtils.EEIdentifierExists(method, assignee)){
                 analysis.newReport(assignee, "Variable is not defined.");
             }
             //check if type matches
@@ -175,7 +174,7 @@ public class SemanticAnalysisVisitor extends PreorderJmmVisitor<Analysis, Boolea
 
 
         Type leftOperandType = null;
-        if(SemanticAnalysisUtils.EEIdentifierExists(method, children.get(0),analysis)){
+        if(SemanticAnalysisUtils.EEIdentifierExists(method, children.get(0))){
             leftOperandType = method.getLocalVariable(children.get(0).get("name")).getType();
         }
 
@@ -184,20 +183,22 @@ public class SemanticAnalysisVisitor extends PreorderJmmVisitor<Analysis, Boolea
             return;
         }
 
-        Type rightOperandType = null;
+        Type rightOperandType;
         if(children.get(1).getKind().equals("EEInt")) rightOperandType = new Type("int",false);
         else if(children.get(1).getKind().equals("EETrue") || children.get(1).getKind().equals("EEFalse"))
             rightOperandType = new Type("boolean",false);
-        else if(children.get(1).getKind().equals("EEIdentifier") &&SemanticAnalysisUtils.EEIdentifierExists(method, children.get(1),analysis)){
+        else if(children.get(1).getKind().equals("EEIdentifier") &&SemanticAnalysisUtils.EEIdentifierExists(method, children.get(1))){
             rightOperandType = method.getLocalVariable(children.get(1).get("name")).getType();
         }
         else {
             rightOperandType = SemanticAnalysisUtils.evaluateExpression(method, children.get(1), analysis, true);
         }
 
-        List<String> imports = analysis.getSymbolTable().getImports();
-        if(imports.contains(leftOperandType.getName()) && imports.contains(rightOperandType.getName())){
-            return;
+        if(rightOperandType != null) {
+            List<String> imports = analysis.getSymbolTable().getImports();
+            if (imports.contains(leftOperandType.getName()) && imports.contains(rightOperandType.getName())) {
+                return;
+            }
         }
 
         if (rightOperandType == null)

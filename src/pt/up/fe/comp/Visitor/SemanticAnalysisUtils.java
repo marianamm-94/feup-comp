@@ -5,8 +5,6 @@ import pt.up.fe.comp.jmm.analysis.table.Symbol;
 import pt.up.fe.comp.jmm.analysis.table.Type;
 import pt.up.fe.comp.jmm.ast.JmmNode;
 import pt.up.fe.comp.SymbolTable.JmmMethod;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class SemanticAnalysisUtils {
@@ -96,7 +94,7 @@ public class SemanticAnalysisUtils {
             analysis.newReport(children.get(0), "\""+children.get(0)+" is not an array");
             return false;
         } else {
-            if (!isIdentifier(method, children.get(0), analysis, true, true)) {
+            if (!isIdentifier(method, children.get(0), analysis, true)) {
                 analysis.newReport(children.get(0),"\""+children.get(0)+" is not an array");
                 return false;
             }
@@ -134,25 +132,14 @@ public class SemanticAnalysisUtils {
 
         if (children.size() != 2) return false;
 
-        char operation = ' ';
-
-        switch (node.get("op")) {
-            case "add":
-                operation = '+';
-                break;
-            case "sub":
-                operation = '-';
-                break;
-            case "mult":
-                operation = '*';
-                break;
-            case "div":
-                operation = '/';
-                break;
-            case "less":
-                operation = '<';
-                break;
-        }
+        char operation = switch (node.get("op")) {
+            case "add" -> '+';
+            case "sub" -> '-';
+            case "mult" -> '*';
+            case "div" -> '/';
+            case "less" -> '<';
+            default -> ' ';
+        };
 
         boolean hasReport = false;
         if (!evaluatesToInteger(method, children.get(0), analysis)) {
@@ -183,14 +170,13 @@ public class SemanticAnalysisUtils {
         System.out.println("checking identifier");
 
         Type identType = null;
-        if(SemanticAnalysisUtils.EEIdentifierExists(method, node,analysis)){
+        if(SemanticAnalysisUtils.EEIdentifierExists(method, node)){
             identType = method.getLocalVariable(node.get("name")).getType();
         }
         return identType;
     }
 
-    public static boolean isIdentifier(JmmMethod method, JmmNode node, Analysis analysis, boolean isInt, boolean isArray) {
-        String identifier = node.get("name");
+    public static boolean isIdentifier(JmmMethod method, JmmNode node, Analysis analysis, boolean isArray) {
 
         Type typeIdentifier = checkIfIdentifierExists(method, node, analysis);
         if (typeIdentifier == null)
@@ -223,7 +209,7 @@ public class SemanticAnalysisUtils {
                 String identifier = child.get("name");
                 if ( analysis.getSymbolTable().returnFieldTypeIfExists(identifier) != null)
                     analysis.newReport(child,"non-static variable '" + identifier + "' cannot be referenced from a static context");
-                if ( (!isIdentifier(method, child, analysis, true, true)) || (!isIdentifier(method, child, analysis, false, true)))
+                if ( (!isIdentifier(method, child, analysis, true)) || (!isIdentifier(method, child, analysis, true)))
                     return true;
             }
 
@@ -234,25 +220,29 @@ public class SemanticAnalysisUtils {
     }
 
     public static Type evaluateExpression(JmmMethod method, JmmNode node, Analysis analysis, boolean rightOperand) {
-        List<JmmNode> children = node.getChildren();
 
         System.out.println("expression eval aslkjasdlkasjd");
 
         if(node.getKind().equals("BinOp")){
 
             String op = node.get("op");
-            if(op.equals("and")) {
-                if (evaluateOperationWithBooleans(method, node, analysis)) {
-                    return new Type("boolean", false);
-                }
-            }
-            else if(op.equals("less")) {
-                if (evaluateOperationWithIntegers(method, node, analysis))
-                    return new Type("boolean", false);
-            }
-            else if(op.equals("add") || op.equals("sub") || op.equals("div") || op.equals("mult")) {
-                if (evaluateOperationWithIntegers(method, node, analysis))
-                    return new Type("int", false);
+            switch (op) {
+                case "and":
+                    if (evaluateOperationWithBooleans(method, node, analysis)) {
+                        return new Type("boolean", false);
+                    }
+                    break;
+                case "less":
+                    if (evaluateOperationWithIntegers(method, node, analysis))
+                        return new Type("boolean", false);
+                    break;
+                case "add":
+                case "sub":
+                case "div":
+                case "mult":
+                    if (evaluateOperationWithIntegers(method, node, analysis))
+                        return new Type("int", false);
+                    break;
             }
         }
         else if(node.getKind().equals("Array")){
@@ -279,11 +269,12 @@ public class SemanticAnalysisUtils {
 
                 List<String> imports = analysis.getSymbolTable().getImports();
                 String extendClass = analysis.getSymbolTable().getSuper();
-                if(imports.contains(node.getJmmChild(0).get("name")))
+                if(imports.contains(node.getJmmChild(0).get("name"))) {
                     return new Type(node.getJmmChild(0).get("name"), false);
-                //else if(node.getJmmChild(0).get("name").equals(extendClass)){
+                }
+                else if(node.getJmmChild(0).get("name").equals(extendClass)){
                     //idk what to do here
-                //}
+                }
             }
         }
 
@@ -293,33 +284,37 @@ public class SemanticAnalysisUtils {
     public static Type evaluateCall(JmmMethod method, JmmNode node, Analysis analysis) {
         List<JmmNode> children = node.getChildren();
         System.out.println("evaluate call function");
+        System.out.println(children.get(0));
+        System.out.println(method.getLocalVariables());
          //node              // children: EEThis EEIdentifier call
                              //children 2: ExpressionMethodCall, ArrayLength
         if (children.size() != 2) return null;
         if (children.get(0).getKind().equals("Call")) {
-            //evaluate if exisits
-            //evaluatecall(JmmMethod method, JmmNode children.get(0., analysis);
+            if(evaluateCall(method, children.get(0), analysis) == null)
+                return null;
         }
-        else if(children.get(0).equals("EETHis")){
-
-        }
-        else if(children.get(0).equals("EEIdentifier")){
-
+        else if(children.get(0).getKind().equals("EEIdentifier")){
+            if(!EEIdentifierExists(method, children.get(0)))
+                return null;
         }
 
-        if(children.get(1).equals("ArrayLength")){
+        if(children.get(1).getKind().equals("ArrayLength")){
             if(evaluateArray(method, children.get(0), analysis)){
-                return new Type("int", false);
+                List<Symbol> variablesList = method.getLocalVariables();
+                for(Symbol symbol: variablesList){
+                    if(symbol.getName().equals(children.get(0).get("name")))
+                        return new Type(symbol.getType().getName(), false);
+                }
             }
         }
-        else if(children.get(1).equals("ExpressionMethodCall")){
+        else if(children.get(1).getKind().equals("ExpressionMethodCall")){
             return evaluateExpression(method, children.get(1), analysis, true);
         }
 
         return null;
     }
 
-    public static boolean EEIdentifierExists(JmmMethod method, JmmNode assignee, Analysis analysis){
+    public static boolean EEIdentifierExists(JmmMethod method, JmmNode assignee){
         try {
             Type typeTemp =  method.getLocalVariable(assignee.get("name")).getType();
             return true;

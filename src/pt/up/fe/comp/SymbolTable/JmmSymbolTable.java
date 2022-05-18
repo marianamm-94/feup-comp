@@ -56,14 +56,6 @@ public class JmmSymbolTable implements SymbolTable {
         return methods.get(methodSignature).getLocalVariables();
     }
 
-    public Symbol getSymbol(String key){
-        return fields.get(key);
-    }
-
-    public boolean hasMethod(String methodSignature){
-        return methods.containsKey(methodSignature);
-    }
-
     public void addImport(String newImport){
         imports.add(newImport);
     }
@@ -85,54 +77,13 @@ public class JmmSymbolTable implements SymbolTable {
         methods.put(name,method);
     }
 
-    public JmmMethod getMethod(JmmMethod method){
-        return methods.getOrDefault(method.getIdentifier(), null);
-    }
-
     public JmmMethod getMethodById(String id){
         return methods.get(id);
     }
 
     //HELP
-
-    private List<String> parseMethodInfo(String info) {
-        List<String> list = new ArrayList<>();
-
-        int indexBeg = info.indexOf('(');
-        list.add(info.substring(0, indexBeg));
-
-        int indexEnd = info.indexOf(')');
-        String param = info.substring(indexBeg + 1, indexEnd).trim();
-
-        if (!param.equals("")) {
-            String[] params = param.split(",");
-            list.addAll(Arrays.asList(params));
-        }
-
-        return list;
-    }
-
-    public JmmMethod getMethodByInfo(String methodInfo) {
-        return methods.get(methodInfo);
-    }
-
     public Type returnFieldTypeIfExists(String field) {
         return fields.get(field).getType();
     }
 
-    public Type hasImport(String identifierName) {
-        for (String importName : getImports()) {
-            String[] imports = importName.split("\\.");
-            if (imports[imports.length - 1].equals(identifierName)) return new Type("Accepted", false);
-        }
-        return null;
-    }
-
-    public boolean fieldExists(Symbol symbol){
-        return fields.getOrDefault(symbol.getName(), null) != null;
-    }
-
-    public void setSuperClassName(String super_class_name) {
-        this.superClassName = super_class_name;
-    }
 }
