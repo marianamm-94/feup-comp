@@ -11,7 +11,7 @@ class SymbolTable extends Table {
 		int intLocal1;
 		boolean boolLocal1;
 		Bar barLocal1;
-
+        intLocal1=1+2+3;
 		return 0;
 	}
 	

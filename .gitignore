@@ -4,7 +4,8 @@
 /.settings/
 /generated/
 /run/
-
+*.DS_Store
+.idea/
 # Class files
 **/*.class
 !libs-jmm/**/*.class
