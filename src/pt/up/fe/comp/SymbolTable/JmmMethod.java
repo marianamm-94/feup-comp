@@ -15,14 +15,15 @@ public class JmmMethod {
     private List<Symbol> parameters;
     private final HashMap<String, Symbol> localVariables = new HashMap<>();
 
-    public JmmMethod(String name, Type returnType, List<Symbol> parameters){
-        this.name=name;
-        this.returnType=returnType;
-        this.parameters=parameters;
-        for(Symbol parameter: parameters)
-            localVariables.put(parameter.getName(),parameter);
+    public JmmMethod(String name, Type returnType, List<Symbol> parameters) {
+        this.name = name;
+        this.returnType = returnType;
+        this.parameters = parameters;
+        for (Symbol parameter : parameters)
+            localVariables.put(parameter.getName(), parameter);
     }
-    public String getName(){
+
+    public String getName() {
         return name;
     }
 
@@ -38,5 +39,23 @@ public class JmmMethod {
         return new ArrayList<>(localVariables.values());
     }
 
+    public String getIdentifier() {
+
+        List<String> parameter_types = new ArrayList<>();
+        for (Symbol i : parameters) {
+            String parameterId = i.getType().getName() + (i.getType().isArray() ? "[]" : "");
+            parameter_types.add(parameterId);
+        }
+
+        return String.join("-", name, String.join("-", parameter_types));
+    }
+
+    public void addLocalVariable(Type type, String name) {
+        localVariables.put(name, new Symbol(type, name));
+    }
+
+    public Symbol getLocalVariable(String varName) {
+        return localVariables.getOrDefault(varName, null);
+    }
 
 }

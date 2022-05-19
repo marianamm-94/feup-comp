@@ -156,7 +156,7 @@ ExpressionEnd #void:
 	| <IDENTIFIER> ({ jjtThis.put("name", lastConsumedToken.getImage()); } ) #EEIdentifier
 	| <THIS> #EEThis
 	| <OPEN_PAREN> ExpressionAnd <CLOSE_PAREN>
-	| <NEW> (<INT> Array #Array(1)| (<IDENTIFIER> ({ jjtThis.put("name", lastConsumedToken.getImage()); } ) <OPEN_PAREN> <CLOSE_PAREN>) #EEObject) #EENew(1)
+	| <NEW> (<INT> Array #NewArray(1)| (<IDENTIFIER> ({ jjtThis.put("name", lastConsumedToken.getImage()); } ) <OPEN_PAREN> <CLOSE_PAREN>) #EEObject) #EENew(1)
 ;
 
 // Injections for the implementation of JmmNode

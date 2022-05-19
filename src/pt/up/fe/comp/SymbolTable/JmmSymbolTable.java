@@ -1,9 +1,6 @@
 package pt.up.fe.comp.SymbolTable;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 import pt.up.fe.comp.jmm.analysis.table.Symbol;
@@ -78,6 +75,15 @@ public class JmmSymbolTable implements SymbolTable {
     public void addMethod(String name,Type returnType, List<Symbol> parameters){
         JmmMethod method = new JmmMethod(name,returnType,parameters);
         methods.put(name,method);
+    }
+
+    public JmmMethod getMethodById(String id){
+        return methods.get(id);
+    }
+
+    //HELP
+    public Type returnFieldTypeIfExists(String field) {
+        return fields.get(field).getType();
     }
 
 }

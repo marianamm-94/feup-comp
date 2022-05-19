@@ -1,5 +1,6 @@
 package pt.up.fe.comp.jmm.analysis.table;
 
+
 public class Symbol {
     private final Type type;
     private final String name;
@@ -66,4 +67,5 @@ public class Symbol {
 
         return builder.toString();
     }
+
 }
