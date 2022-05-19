@@ -28,9 +28,9 @@ public class OllirUtils {
             case "EEInt":
                 return"i32";
             case "EETrue":
-                return"0.bool";
-            case "EEFalse":
                 return"1.bool";
+            case "EEFalse":
+                return"0.bool";
             case "boolean":
                 return"bool";
             default:
@@ -68,4 +68,16 @@ public class OllirUtils {
         }
         throw new NotImplementedException(node.getKind());
     }
+
+    public static String getParentMethod(JmmNode node) {
+
+        while(!node.getKind().equals("OtherMethodDeclaration") && !node.getKind().equals("MainDeclaration"))
+            node = node.getJmmParent();
+
+        if(node.getKind().equals("OtherMethodDeclaration"))
+            return node.get("name");
+
+        return "main";
+    }
+
 }
