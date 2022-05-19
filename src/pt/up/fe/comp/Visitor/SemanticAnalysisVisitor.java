@@ -41,7 +41,6 @@ public class SemanticAnalysisVisitor extends PreorderJmmVisitor<Analysis, Boolea
                 method = analysis.getSymbolTable().getMethodById(methodName);
                 if (!methodList.contains(methodName))
                     return false;
-                System.out.println("other method"+methodName);
                 visitMethodBody(method, child, analysis);
             } else if (child.getKind().equals("ReturnValue")) {
                 visitReturnValue(method, child, analysis);
@@ -54,35 +53,20 @@ public class SemanticAnalysisVisitor extends PreorderJmmVisitor<Analysis, Boolea
     public void visitReturnValue(JmmMethod method, JmmNode node, Analysis analysis) {
         JmmNode child = node.getChildren().get(0);
 
-        Type type = null;
+        Type type = SemanticAnalysisUtils.getNodeType(method,child,analysis);
 
-        if(child.getKind().equals("EETrue") || child.getKind().equals("EEFalse")){
-            type = new Type("boolean", false);
-        }
-        else if(child.getKind().equals("EEIdentifier")){
-            if(!SemanticAnalysisUtils.EEIdentifierExists(method,child,analysis)){
-                analysis.newReport(child, "Variable for return value not defined.");
-                return;
-            }
-            else{
-                Type typeTemp =  method.getLocalVariable(child.get("name")).getType();
-                type = new Type(typeTemp.getName(),typeTemp.isArray());
-            }
-        }
-        else if(child.getKind().equals("EEInt")){
-            type = new Type("int", false);
-        }
-        else {
-            type = SemanticAnalysisUtils.evaluateExpression(method, child, analysis);
-        }
-
-        if (type == null) {
-            analysis.newReport(child, "Return type doesn't match expectation.");
+        if(type==null)
             return;
-        }
-        if ( !(type.getName().equals(method.getReturnType().getName()) && (type.isArray() == method.getReturnType().isArray()))) {
-            analysis.newReport(child, "Return type doesn't match expectation. Should be" + method.getReturnType());
-        }
+
+        String methodName=method.getName();
+        Type typeMethod=analysis.getSymbolTable().getReturnType(methodName);
+
+        if(type.getName().equals(analysis.getSymbolTable().getClassName()) && typeMethod.getName().equals(analysis.getSymbolTable().getSuper()))
+            return;
+        if(analysis.getSymbolTable().getImports().contains(type.getName()) && analysis.getSymbolTable().getImports().contains(typeMethod.getName()))
+            return;
+        if(!SemanticAnalysisUtils.sameType(type,typeMethod))
+            analysis.newReport(node,"Error on return: different types");
 
     }
 
@@ -94,13 +78,15 @@ public class SemanticAnalysisVisitor extends PreorderJmmVisitor<Analysis, Boolea
             if(child.getKind().equals("Assignment")) visitAssignment(method, child, analysis);
             if(child.getKind().equals("WhileStatement")) visitWhileStatement(method, child, analysis);
             if(child.getKind().equals("IfStatement")) visitIfStatement(method, child, analysis);
-            if(child.getKind().equals("Call")) SemanticAnalysisUtils.evaluateCall(method, child, analysis);
+            if(child.getKind().equals("Call")) visitCall(method, child, analysis);
         }
     }
 
+    private void visitCall(JmmMethod method, JmmNode node, Analysis analysis) {
+       SemanticAnalysisUtils.methodCall(method,node,analysis);
+    }
+
     public void visitVarDeclaration(JmmMethod method, JmmNode node, Analysis analysis){
-        System.out.println("visiting var dec");
-        System.out.println(method);
         String varName = node.get("name");
         JmmNode typeNode = node.getJmmChild(0);
         String varTypeStr = typeNode.get("name");
@@ -174,7 +160,7 @@ public class SemanticAnalysisVisitor extends PreorderJmmVisitor<Analysis, Boolea
        if(analysis.getSymbolTable().getImports().contains(leftType.getName()) && analysis.getSymbolTable().getImports().contains(rightType.getName()) ){
             return;
         }
-        if(leftType.isArray()==rightType.isArray() && leftType.getName().equals(rightType.getName())){
+        if(SemanticAnalysisUtils.sameType(leftType,rightType)==true){
             return;
 
         }else{
