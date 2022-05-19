@@ -5,91 +5,50 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="07c428b5-8a74-4e19-9325-579c7b1e1665" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/AND.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/Argument.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/Array.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/ArrayLength.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/Assignment.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/BOOLEAN.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/BinOp.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/CLASS.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/CLOSE_BRACE.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/CLOSE_BRACKET.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/CLOSE_PAREN.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/COLON.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/Call.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/ClassDeclaration.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/ClassExtend.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/CompoundStatement.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/DIVIDE.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/DotImport.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/EEFalse.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/EEIdentifier.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/EEInt.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/EENew.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/EEObject.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/EEThis.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/EETrue.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/ELSE.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/EQUAL.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/EXCLAMATION_MARK.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/EXTENDS.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/ElseBody.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/ExpressionMethodCall.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/FALSE.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/FULLSTOP.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/IDENTIFIER.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/IF.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/IMPORT.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/INT.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/INTEGER.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/IfBody.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/IfCondition.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/IfStatement.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/ImportDeclaration.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/InvalidToken.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/LENGTH.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/LESS.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/MAIN.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/MINUS.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/MainDeclaration.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/MethodBody.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/NEW.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/Not.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/OPEN_BRACE.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/OPEN_BRACKET.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/OPEN_PAREN.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/OtherMethodDeclaration.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/PLUS.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/PUBLIC.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/Program.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/RETURN.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/ReturnValue.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/SEMI_COLON.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/STATIC.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/STRING.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/THIS.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/TIMES.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/TRUE.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/Type.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/VOID.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/VarDeclaration.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/WHILE.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/WhileBody.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/WhileCondition.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/WhileStatement.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pt/up/fe/comp/Ollir/Code.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pt/up/fe/comp/Ollir/OllirGenerator.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pt/up/fe/comp/Ollir/OllirUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace 2.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace 2.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/javacc/JmmGrammar.jj" beforeDir="false" afterPath="$PROJECT_DIR$/javacc/JmmGrammar.jj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pt/up/fe/comp/Jasmin/JasminEmitter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pt/up/fe/comp/Jasmin/JasminEmitter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pt/up/fe/comp/Jasmin/JasminUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pt/up/fe/comp/Jasmin/JasminUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pt/up/fe/comp/Ollir/JmmOptimizer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pt/up/fe/comp/Ollir/JmmOptimizer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/fixtures/public/cp2/OllirBasic.jmm" beforeDir="false" afterPath="$PROJECT_DIR$/test/fixtures/public/cp2/OllirBasic.jmm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/AND.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/Argument.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/Array.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/ArrayLength.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/Assignment.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/BOOLEAN.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/BinOp.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/CLASS.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/CLOSE_BRACE.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/CLOSE_BRACKET.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/CLOSE_PAREN.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/COLON.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/Call.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/ClassDeclaration.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/ClassExtend.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/CompoundStatement.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/EEInt.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/EENew.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/EETrue.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/EXCLAMATION_MARK.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/ElseBody.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/ExpressionMethodCall.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/FALSE.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/FULLSTOP.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/IF.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/IMPORT.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/InvalidToken.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/MAIN.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/NEW.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/Not.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/OPEN_BRACKET.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/OPEN_PAREN.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/OtherMethodDeclaration.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/Program.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/ReturnValue.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/SEMI_COLON.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/STATIC.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/TRUE.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/Type.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/VOID.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/WHILE.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/generated 2/pt/up/fe/comp/WhileBody.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pt/up/fe/comp/Visitor/SemanticAnalysisUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pt/up/fe/comp/Visitor/SemanticAnalysisUtils.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

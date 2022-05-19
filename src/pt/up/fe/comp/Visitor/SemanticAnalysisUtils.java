@@ -240,7 +240,7 @@ public class SemanticAnalysisUtils {
                return null;
            if(analysis.getSymbolTable().getMethods().contains(rightChild.get("name"))){
                return analysis.getSymbolTable().getReturnType(rightChild.get("name"));
-           }else{
+           } else{
                return null;
            }
        }
@@ -332,6 +332,9 @@ public class SemanticAnalysisUtils {
         {
             if(symbol.getName().equals(node.get("name")))
                 return symbol.getType();
+        }
+        if(analysis.getSymbolTable().getImports().contains(node.get("name"))){
+          return null;
         }
         analysis.newReport(node,"Variable not declared!");
         return null;
