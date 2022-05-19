@@ -22,19 +22,6 @@ public class SymbolTableVisitor extends PreorderJmmVisitor<Analysis, Boolean>  {
 
     public boolean visitClass(JmmNode node, Analysis analysis){
         String className=node.get("name");
-<<<<<<< HEAD
-        symbolTable.setClassName(className);
-        JmmNode child=node.getJmmChild(0);
-        if(child.getKind().equals("ClassExtend"))
-         symbolTable.setSuper(child.get("name"));
-
-        for(JmmNode varNode: node.getChildren()){
-           if( varNode.getKind().equals("VarDeclaration")){
-                JmmNode typeNode =varNode.getJmmChild(0);
-                Type type = new Type(typeNode.get("name"),Boolean.parseBoolean(typeNode.get("isArray")));
-                symbolTable.addField(type, varNode.get("name"));
-           }
-=======
         analysis.getSymbolTable().setClassName(className);
         JmmNode child=node.getJmmChild(0);
         if(child.getKind().equals("ClassExtend"))
@@ -46,7 +33,6 @@ public class SymbolTableVisitor extends PreorderJmmVisitor<Analysis, Boolean>  {
                 Type type = new Type(typeNode.get("name"),Boolean.parseBoolean(typeNode.get("isArray")));
                 analysis.getSymbolTable().addField(type, varNode.get("name"));
             }
->>>>>>> visitors3
         }
         return true;
     }
@@ -59,65 +45,37 @@ public class SymbolTableVisitor extends PreorderJmmVisitor<Analysis, Boolean>  {
                 importString.append(importNode.get("name"));
             }
         }
-<<<<<<< HEAD
-        symbolTable.addImport(importString.toString());
-        return true;
-    }
-    public boolean visitMainDeclaration(JmmNode node, Boolean dummy){
-=======
         analysis.getSymbolTable().addImport(importString.toString());
         return true;
     }
     public boolean visitMainDeclaration(JmmNode node, Analysis analysis){
->>>>>>> visitors3
         String paramName=node.get("name");
         List<Symbol> param=new ArrayList<Symbol>();
         param.add(new Symbol(new Type("String", true),paramName));
         Type type = new Type("void",false);
-<<<<<<< HEAD
-        symbolTable.addMethod("main",type,param);
-        return true;
-    }
-    public boolean visitOtherMethodDeclaration(JmmNode node, Boolean dummy){
-        List<Symbol> param=new ArrayList<Symbol>();
-        String methodName=node.get("name");
-=======
         analysis.getSymbolTable().addMethod("main",type,param);
         return true;
+
     }
-    public boolean visitOtherMethodDeclaration(JmmNode node, Analysis analysis){
-        List<Symbol> param=new ArrayList<Symbol>();
-        String methodName=node.get("name");
+    public boolean visitOtherMethodDeclaration(JmmNode node, Analysis analysis) {
+        List<Symbol> param = new ArrayList<Symbol>();
+        String methodName = node.get("name");
 
->>>>>>> visitors3
         Type returnType;
-        if( node.getJmmChild(0).getKind().equals("Type"))
-            returnType = new Type(node.getJmmChild(0).get("name"),Boolean.parseBoolean( node.getJmmChild(0).get("isArray")));
+        if (node.getJmmChild(0).getKind().equals("Type"))
+            returnType = new Type(node.getJmmChild(0).get("name"), Boolean.parseBoolean(node.getJmmChild(0).get("isArray")));
         else
-            returnType=new Type("void", false);
-<<<<<<< HEAD
-           
-        for(JmmNode child : node.getChildren()){
-           if(child.getKind().equals("Argument")){
-                String paramName=child.get("name");
-                Type paramType = new Type(child.getJmmChild(0).get("name"),Boolean.parseBoolean( child.getJmmChild(0).get("isArray")));
-                param.add(new Symbol(paramType, paramName));
-           }
+            returnType = new Type("void", false);
 
-        }
-        symbolTable.addMethod(methodName, returnType, param);
-=======
-
-        for(JmmNode child : node.getChildren()){
-            if(child.getKind().equals("Argument")){
-                String paramName=child.get("name");
-                Type paramType = new Type(child.getJmmChild(0).get("name"),Boolean.parseBoolean( child.getJmmChild(0).get("isArray")));
+        for (JmmNode child : node.getChildren()) {
+            if (child.getKind().equals("Argument")) {
+                String paramName = child.get("name");
+                Type paramType = new Type(child.getJmmChild(0).get("name"), Boolean.parseBoolean(child.getJmmChild(0).get("isArray")));
                 param.add(new Symbol(paramType, paramName));
             }
 
         }
         analysis.getSymbolTable().addMethod(methodName, returnType, param);
->>>>>>> visitors3
         return true;
     }
-}
+    }

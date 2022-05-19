@@ -4,10 +4,7 @@ import org.specs.comp.ollir.*;
 import pt.up.fe.specs.util.exceptions.NotImplementedException;
 
 public class JasminUtils {
-<<<<<<< HEAD
-=======
     static ClassUnit classUnit;
->>>>>>> visitors3
 
     public static String getAccessModifiers(AccessModifiers accessModifier) {
         switch (accessModifier) {
@@ -47,11 +44,8 @@ public class JasminUtils {
     private static String getJasminObjectType(ClassType type) {
         StringBuilder jasminCode = new StringBuilder();
         String className = type.getName();
-<<<<<<< HEAD
         for (var imported : JasminBuilder.classUnit.getImports()) {
-=======
-        for (var imported : classUnit.getImports()) {
->>>>>>> visitors3
+
             if (imported.endsWith("." + className))
                 jasminCode.append("L").append(imported.replace('.', '/')).append(";");
         }
@@ -62,11 +56,8 @@ public class JasminUtils {
     private static String getJasminArrayType(ArrayType type) {
         StringBuilder jasminCode = new StringBuilder();
         jasminCode.append("[".repeat(type.getNumDimensions()));
-<<<<<<< HEAD
         if(type.getArrayType()==ElementType.INT32)
-=======
-        if(type.getTypeOfElements()==ElementType.INT32)
->>>>>>> visitors3
+
             jasminCode.append("[I");
         else
             jasminCode.append("Ljava/lang/String;");
