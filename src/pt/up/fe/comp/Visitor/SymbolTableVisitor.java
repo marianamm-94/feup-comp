@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import pt.up.fe.comp.SymbolTable.Analysis;
+import pt.up.fe.comp.SymbolTable.JmmMethod;
 import pt.up.fe.comp.SymbolTable.JmmSymbolTable;
 import pt.up.fe.comp.jmm.analysis.table.Symbol;
 import pt.up.fe.comp.jmm.analysis.table.Type;
@@ -53,7 +54,22 @@ public class SymbolTableVisitor extends PreorderJmmVisitor<Analysis, Boolean>  {
         List<Symbol> param=new ArrayList<Symbol>();
         param.add(new Symbol(new Type("String", true),paramName));
         Type type = new Type("void",false);
-        analysis.getSymbolTable().addMethod("main",type,param);
+
+        JmmMethod method = new JmmMethod("main",type, param);
+        for (JmmNode child : node.getChildren()) {
+            if (child.getKind().equals("MethodBody")) {
+
+                for (JmmNode childMethod : child.getChildren()) {
+
+                    if (childMethod.getKind().equals("VarDeclaration")) {
+                        Type typeChild = new Type(childMethod.getJmmChild(0).get("name"), Boolean.parseBoolean(childMethod.getJmmChild(0).get("isArray")));
+                        if(!method.addLocalVariable(typeChild, childMethod.get("name")))
+                            analysis.newReport(node,"Variable already declared");
+                    }
+                }
+            }
+        }
+        analysis.getSymbolTable().addMethod(method);
         return true;
 
     }
@@ -75,7 +91,22 @@ public class SymbolTableVisitor extends PreorderJmmVisitor<Analysis, Boolean>  {
             }
 
         }
-        analysis.getSymbolTable().addMethod(methodName, returnType, param);
+       JmmMethod method = new JmmMethod(methodName, returnType, param);
+        for (JmmNode child : node.getChildren()) {
+            if (child.getKind().equals("MethodBody")) {
+
+                for (JmmNode childMethod : child.getChildren()) {
+
+                    if (childMethod.getKind().equals("VarDeclaration")) {
+                        Type type = new Type(childMethod.getJmmChild(0).get("name"), Boolean.parseBoolean(childMethod.getJmmChild(0).get("isArray")));
+                        if(!method.addLocalVariable(type, childMethod.get("name")))
+                            analysis.newReport(node,"Variable already declared");
+                    }
+                }
+            }
+        }
+
+        analysis.getSymbolTable().addMethod(method);
         return true;
     }
     }

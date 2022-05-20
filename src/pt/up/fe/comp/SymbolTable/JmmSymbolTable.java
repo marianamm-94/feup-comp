@@ -56,6 +56,10 @@ public class JmmSymbolTable implements SymbolTable {
         return methods.get(methodSignature).getLocalVariables();
     }
 
+    public JmmMethod getMethodById(String id){
+        return methods.get(id);
+    }
+
     public void addImport(String newImport){
         imports.add(newImport);
     }
@@ -77,13 +81,11 @@ public class JmmSymbolTable implements SymbolTable {
         methods.put(name,method);
     }
 
-    public JmmMethod getMethodById(String id){
-        return methods.get(id);
-    }
-
-    //HELP
     public Type returnFieldTypeIfExists(String field) {
         return fields.get(field).getType();
     }
 
+    public void addMethod(JmmMethod method) {
+        methods.put(method.getName(),method);
+    }
 }

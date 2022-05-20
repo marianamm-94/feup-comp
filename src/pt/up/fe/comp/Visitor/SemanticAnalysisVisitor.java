@@ -79,7 +79,6 @@ public class SemanticAnalysisVisitor extends PreorderJmmVisitor<Analysis, Boolea
         List<JmmNode> children = node.getChildren();
 
         for (JmmNode child : children) {
-            if(child.getKind().equals("VarDeclaration")) visitVarDeclaration(method, child, analysis); //OK but
             if(child.getKind().equals("Assignment")) visitAssignment(method, child, analysis);
             if(child.getKind().equals("WhileStatement")) visitWhileStatement(method, child, analysis);
             if(child.getKind().equals("IfStatement")) visitIfStatement(method, child, analysis);
@@ -90,38 +89,6 @@ public class SemanticAnalysisVisitor extends PreorderJmmVisitor<Analysis, Boolea
     private void visitCall(JmmMethod method, JmmNode node, Analysis analysis) {
        SemanticAnalysisUtils.methodCall(method,node,analysis);
     }
-
-    public void visitVarDeclaration(JmmMethod method, JmmNode node, Analysis analysis){
-        String varName = node.get("name");
-        JmmNode typeNode = node.getJmmChild(0);
-        String varTypeStr = typeNode.get("name");
-        boolean isArray = Boolean.parseBoolean(typeNode.get("isArray"));
-
-        Type varType = new Type(varTypeStr, isArray);
-        Symbol symbol = new Symbol(varType, varName );
-
-        if(method == null){
-            List<Symbol> symbols = analysis.getSymbolTable().getFields();
-            for(Symbol symb: symbols){
-                if(symb.getName().equals(varName)) {
-                    analysis.newReport(node, "Variable " + symbol + " is already defined in the scope");
-                    return;
-                }
-            }
-        }
-        else{
-            List<Symbol> symbols = method.getLocalVariables();
-            for(Symbol symb: symbols){
-                if(symb.getName().equals(varName)) {
-                    analysis.newReport(node, "Variable " + symbol + " is already defined in the scope");
-                    return;
-                }
-            }
-            method.addLocalVariable(varType, varName);
-        }
-
-    }
-
     public void visitWhileStatement(JmmMethod method, JmmNode node, Analysis analysis) {
         JmmNode leftChild = node.getJmmChild(0); //this is WhileCondition
         JmmNode rightChild = node.getJmmChild(1); //this is WhileBody

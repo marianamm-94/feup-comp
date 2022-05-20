@@ -35,6 +35,9 @@ public class OllirGenerator extends AJmmVisitor<Integer, Code> {
         addVisit("EEFalse", this::falseVisit);
         addVisit("EEIdentifier", this::identifierVisit);
         addVisit("EETrue", this::trueVisit);
+        addVisit("EEThis", this::thisVisit);
+        addVisit("EENew", this::newVisit);
+
 
     }
 
@@ -103,7 +106,6 @@ public class OllirGenerator extends AJmmVisitor<Integer, Code> {
         ollirCode.append("{\n");
 
         for (JmmNode child : mainMethodDecl.getChildren()) {
-            System.out.println(child.getKind());
             if (child.getKind().equals("MethodBody")) {
                 visit(child);
             }
@@ -231,7 +233,7 @@ public class OllirGenerator extends AJmmVisitor<Integer, Code> {
         }
         Type type;
         String returnType;
-        System.out.println("ola"+methodName);
+
         if(symbolTable.getMethods().contains(methodName)){
             returnType=OllirUtils.getCode(symbolTable.getReturnType(methodName));
         }else{
@@ -249,8 +251,8 @@ public class OllirGenerator extends AJmmVisitor<Integer, Code> {
         Code thisCode = new Code();
 
         if(!call.getJmmParent().getKind().equals("MethodBody")) {
-            String temp = createTemp(returnType);
-            finalcode = temp + " :="+returnType+ " " + finalcode;
+            String temp = createTemp("."+returnType);
+            finalcode = temp + " :=."+returnType+ " " + finalcode;
             thisCode.code = temp;
             prefixCode+=finalcode+";\n";
             thisCode.prefix = prefixCode;
@@ -281,9 +283,10 @@ public class OllirGenerator extends AJmmVisitor<Integer, Code> {
             if (symbol.getName().equals(assignment.getJmmChild(0).get("name")))
                 type = OllirUtils.getCode(symbol.getType());
         }
-
-        thisCode.code = lhs.code + " :=." + type + " " + rhs.code;
-
+        if(!assignment.getJmmChild(1).getKind().equals("EENew"))
+            thisCode.code = lhs.code +" :=."+ type + " " + rhs.code;
+        else
+            thisCode.code = lhs.code +" :=."+ type + " " + rhs.code + ";\ninvokespecial("+assignment.getJmmChild(0).get("name")+"."+type+",\"<init>\").V";
         return thisCode;
     }
 
@@ -318,6 +321,7 @@ public class OllirGenerator extends AJmmVisitor<Integer, Code> {
 
     private Code identifierVisit(JmmNode jmmNode, Integer integer) {
         String identifierName = jmmNode.get("name");
+
         String methodSignature = OllirUtils.getParentMethod(jmmNode);
         Code code = new Code();
         code.prefix = "";
@@ -354,7 +358,30 @@ public class OllirGenerator extends AJmmVisitor<Integer, Code> {
         code.code = jmmNode.get("value") + ".i32";
         return code;
     }
+    private Code thisVisit(JmmNode jmmNode, Integer integer) {
+        Code code = new Code();
+        code.prefix = "";
+        code.code = "this";
+        return code;
+    }
 
+    private Code newVisit(JmmNode jmmNode, Integer integer) {
+        Code code = new Code();
+
+        String name=jmmNode.getJmmChild(0).get("name");
+        if(!jmmNode.getJmmParent().getKind().equals("Assignment")){
+            String temp=createTemp("."+name);
+            code.code=temp;
+            code.prefix=temp +" :=." + name+ " new("+name+")."+name+";\n";
+            code.prefix+="invokespecial("+temp+",\"<init>\").V;\n";
+        }
+        else
+        {
+            code.prefix="";
+            code.code=" new("+name+")."+name;
+        }
+        return code;
+    }
 
 }
 

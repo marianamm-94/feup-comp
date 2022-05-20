@@ -79,6 +79,8 @@ public class Launcher {
 
         // Check if there are parsing errors
         TestUtils.noErrors(jasminResult.getReports());
+
+        jasminResult.run();
     }
 
 }

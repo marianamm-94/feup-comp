@@ -50,8 +50,12 @@ public class JmmMethod {
         return String.join("-", name, String.join("-", parameter_types));
     }
 
-    public void addLocalVariable(Type type, String name) {
+    public boolean addLocalVariable(Type type, String name) {
+        if(localVariables.containsKey(name)){
+            return false;
+        }
         localVariables.put(name, new Symbol(type, name));
+        return true;
     }
 
     public Symbol getLocalVariable(String varName) {
