@@ -12,14 +12,14 @@ import java.util.List;
 public class SemanticAnalysisVisitor extends PreorderJmmVisitor<Analysis, Boolean> {
 
     public SemanticAnalysisVisitor(){
-        addVisit("MainMethodDeclaration", this::visitMainMethod);
+        addVisit("MainDeclaration", this::visitMainMethod);
         addVisit("OtherMethodDeclaration",this::visitOtherMethod);
     }
 
     public Boolean visitMainMethod(JmmNode node, Analysis analysis){
         JmmNode child = node.getJmmChild(0);
 
-        String methodName = node.get("name");
+        String methodName = "main";
         JmmMethod method = analysis.getSymbolTable().getMethodById(methodName);
         visitMethodBody(method, child, analysis);
         return true;
@@ -153,7 +153,7 @@ public class SemanticAnalysisVisitor extends PreorderJmmVisitor<Analysis, Boolea
        if(analysis.getSymbolTable().getImports().contains(leftType.getName()) && analysis.getSymbolTable().getImports().contains(rightType.getName()) ){
             return;
         }
-        if(SemanticAnalysisUtils.sameType(leftType,rightType)==true){
+        if(SemanticAnalysisUtils.sameType(leftType,rightType)){
             return;
 
         }else{

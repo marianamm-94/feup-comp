@@ -410,7 +410,7 @@ public class SemanticAnalysisUtils {
 
 
     public static boolean sameType(Type param, Type param2){
-        boolean sameType=param.isArray()==param2.isArray() && param.getName().equals(param2.getName());
+        boolean sameType=(param.isArray()==param2.isArray() && param.getName().equals(param2.getName()));
 
         return sameType;
     }
