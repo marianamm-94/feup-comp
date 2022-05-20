@@ -109,6 +109,15 @@ public class SemanticAnalysisUtils {
 
         if (children.size() != 2) return false;
 
+        if(node.getJmmChild(0).getKind().equals("Call")){
+            node.getJmmChild(0).put("typeValue","boolean");
+            node.getJmmChild(0).put("isArray","false");
+        }
+        if(node.getJmmChild(1).getKind().equals("Call")){
+            node.getJmmChild(1).put("typeValue","boolean");
+            node.getJmmChild(1).put("isArray","false");
+        }
+
         boolean hasReport = false;
 
         if (!evaluatesToBoolean(method, children.get(0), analysis)) {
@@ -126,6 +135,15 @@ public class SemanticAnalysisUtils {
     public static boolean evaluateOperationWithIntegers(JmmMethod method, JmmNode node, Analysis analysis) {
         List<JmmNode> children = node.getChildren();
         if (children.size() != 2) return false;
+
+        if(node.getJmmChild(0).getKind().equals("Call")){
+            node.getJmmChild(0).put("typeValue","int");
+            node.getJmmChild(0).put("isArray","false");
+        }
+        if(node.getJmmChild(1).getKind().equals("Call")){
+            node.getJmmChild(1).put("typeValue","int");
+            node.getJmmChild(1).put("isArray","false");
+        }
 
         char operation = ' ';
 
@@ -162,6 +180,16 @@ public class SemanticAnalysisUtils {
 
     public static boolean evaluateNotOperation(JmmMethod method, JmmNode node, Analysis analysis) {
         List<JmmNode> children = node.getChildren();
+
+        if(node.getJmmChild(0).getKind().equals("Call")){
+            node.getJmmChild(0).put("typeValue","boolean");
+            node.getJmmChild(0).put("isArray","false");
+        }
+        if(node.getJmmChild(1).getKind().equals("Call")){
+            node.getJmmChild(1).put("typeValue","boolean");
+            node.getJmmChild(1).put("isArray","false");
+        }
+
 
         if (!evaluatesToBoolean( method, children.get(0), analysis)) {
             analysis.newReport(children.get(0), "bad operand type for binary operator '!': boolean expected");

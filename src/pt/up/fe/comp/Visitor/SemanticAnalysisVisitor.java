@@ -61,6 +61,11 @@ public class SemanticAnalysisVisitor extends PreorderJmmVisitor<Analysis, Boolea
         String methodName=method.getName();
         Type typeMethod=analysis.getSymbolTable().getReturnType(methodName);
 
+        if(child.getKind().equals("Call")){
+            child.put("typeValue",typeMethod.getName());
+            child.put("isArray",Boolean.toString(typeMethod.isArray()));
+        }
+
         if(type.getName().equals(analysis.getSymbolTable().getClassName()) && typeMethod.getName().equals(analysis.getSymbolTable().getSuper()))
             return;
         if(analysis.getSymbolTable().getImports().contains(type.getName()) && analysis.getSymbolTable().getImports().contains(typeMethod.getName()))
@@ -121,6 +126,11 @@ public class SemanticAnalysisVisitor extends PreorderJmmVisitor<Analysis, Boolea
         JmmNode leftChild = node.getJmmChild(0); //this is WhileCondition
         JmmNode rightChild = node.getJmmChild(1); //this is WhileBody
 
+        if(leftChild.getKind().equals("Call")){
+            leftChild.put("typeValue","boolean");
+            leftChild.put("isArray","false");
+        }
+
         //evaluate condition
         SemanticAnalysisUtils.evaluatesToBoolean(method, leftChild, analysis);
         //evaluate body
@@ -129,9 +139,15 @@ public class SemanticAnalysisVisitor extends PreorderJmmVisitor<Analysis, Boolea
 
     public void visitIfStatement(JmmMethod method, JmmNode node, Analysis analysis) {
         List<JmmNode> children = node.getChildren();
+
         for (JmmNode child : children) {
-            if (child.getKind().equals("IfCondition"))
+            if (child.getKind().equals("IfCondition")){
                 SemanticAnalysisUtils.evaluatesToBoolean(method, child, analysis);
+                if(child.getJmmChild(0).getKind().equals("Call")){
+                    child.getJmmChild(0).put("typeValue","boolean");
+                    child.getJmmChild(0).put("isArray","false");
+                }
+            }
             else if (child.getKind().equals("IfBody")) visitMethodBody(method, child, analysis);
             else if (child.getKind().equals("ElseBody")) visitMethodBody(method, child, analysis);
         }
@@ -151,6 +167,16 @@ public class SemanticAnalysisVisitor extends PreorderJmmVisitor<Analysis, Boolea
         }
         Type leftType = SemanticAnalysisUtils.getNodeType(method,leftChild,analysis);
         Type rightType = SemanticAnalysisUtils.getNodeType(method,rightChild,analysis);
+
+        if(leftChild.getKind().equals("Call")){
+            leftChild.put("typeValue",rightType.getName());
+            leftChild.put("isArray",Boolean.toString(rightType.isArray()));
+        }
+        if(rightChild.getKind().equals("Call")){
+            rightChild.put("typeValue",leftType.getName());
+            rightChild.put("isArray",Boolean.toString(leftType.isArray()));
+        }
+
         if(leftType==null || rightType == null)
             return;
 
