@@ -80,5 +80,10 @@ public class OllirUtils {
 
         return "main";
     }
+    public static String buildCondition(){
+        //TODO::
+        StringBuilder condition = new StringBuilder();
+        return condition.toString();
+    }
 
 }

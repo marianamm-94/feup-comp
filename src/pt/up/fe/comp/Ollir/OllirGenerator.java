@@ -37,9 +37,13 @@ public class OllirGenerator extends AJmmVisitor<Integer, Code> {
         addVisit("EETrue", this::trueVisit);
         addVisit("EEThis", this::thisVisit);
         addVisit("EENew", this::newVisit);
+        addVisit("WhileStatement", this::whileStatementVisit);
+        addVisit("WhileCondition", this::whileConditionVisit);
+        addVisit("WhileBody", this::whileBodyVisit);
 
 
     }
+
 
     public String getCode() {
         return ollirCode.toString();
@@ -382,6 +386,52 @@ public class OllirGenerator extends AJmmVisitor<Integer, Code> {
         }
         return code;
     }
+
+    /*
+       Loop:
+       t1.bool :=.bool i.i32 <.i32 $2.N.i32; t2.i32 :=.i32 $1.A[i.i32].i32;
+       t3.bool :=.bool t2.i32 <.i32 $3.T.i32;
+       if (t1.bool &&.bool t3.bool) goto Body;
+       goto EndLoop;
+       Body:
+       i.i32 :=.i32 i.i32 +.i32 1.i32;
+       goto Loop;
+       EndLoop:
+     */
+    private Code whileStatementVisit(JmmNode jmmNode, Integer integer) {
+        ollirCode.append("Loop:");
+        ollirCode.append("\n");
+
+        for(JmmNode child : jmmNode.getChildren())
+            visit(child);
+
+        ollirCode.append("EndLoop:");
+        ollirCode.append("\n");
+        return null;
+    }
+
+
+    private Code whileConditionVisit(JmmNode jmmNode, Integer integer) {
+    //TODO 2 primeiras linhas apos LOOP (ver como se faz) (com create temp)
+        String condition = OllirUtils.buildCondition();
+        ollirCode.append("if (" + condition + ") goto Body;");
+        ollirCode.append("goto EndLoop;");
+
+       return null;
+    }
+
+    private Code whileBodyVisit(JmmNode jmmNode, Integer integer) {
+        ollirCode.append("Body:");
+        ollirCode.append("\n");
+
+        for (JmmNode child : jmmNode.getChildren())
+            visit(child);
+
+        ollirCode.append("goto Loop;");
+        ollirCode.append("\n");
+        return null;
+    }
+
 
 }
 
