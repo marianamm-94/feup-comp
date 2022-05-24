@@ -37,6 +37,11 @@ public class OllirGenerator extends AJmmVisitor<Integer, Code> {
         addVisit("EETrue", this::trueVisit);
         addVisit("EEThis", this::thisVisit);
         addVisit("EENew", this::newVisit);
+        addVisit("IfStatement", this::ifStatementVisit);
+        addVisit("IfCondition", this::ifConditionVisit);
+        addVisit("IfBody", this::ifBodyVisit);
+        addVisit("ElseBody", this::elseBodyVisit);
+
 
 
     }
@@ -382,6 +387,76 @@ public class OllirGenerator extends AJmmVisitor<Integer, Code> {
         }
         return code;
     }
+
+    /*
+    if ($1.num.i32 >=.i32 1.i32) goto else;                              if (num < 1)
+    num_aux.i32 :=.i32 1.i32;                                            num_aux = 1;
+    goto endif;                                                          else
+    else:                                                                num_aux = num * (this.compFac(num-1));
+    aux1.i32 :=.i32 $1.num.i32 -.i32 1.i32;
+    aux2.i32 :=.i32 invokevirtual(this, "compFac", aux1.i32).i32;
+    num_aux.i32 :=.i32 $1.num.i32 *.i32 aux2.i32;
+    endif:  
+    */
+
+   
+    /*
+    if (i.i32 ==.i32 $2.N.i32) goto then;                                if(i == N) all = true; 
+    goto endif;
+    then:
+    all.bool :=.bool 1.bool;
+    endif:
+ */
+    private Code ifStatementVisit(JmmNode jmmNode, Integer integer) {
+
+        for(JmmNode child : jmmNode.getChildren())
+            visit(child);
+
+        ollirCode.append("endif:");
+        ollirCode.append("\n");
+
+        return null;
+    }
+
+    private Code ifConditionVisit(JmmNode jmmNode, Integer integer) {
+        //ollirCode.append("if (" + CONDITION + ")");
+        ollirCode.append(" goto then;");
+        ollirCode.append("\n");
+
+        //if i always have else part, even when not used
+        //ollirCode.append("goto else;");
+        //ollirCode.append("\n");
+        //if not put it in if statement will it go goto else or goto endif
+
+        //TO DO: CONDITION
+        
+        return null;
+    }
+
+    private Code ifBodyVisit(JmmNode jmmNode, Integer integer) {
+        ollirCode.append("then:");
+        ollirCode.append("\n");
+
+        for (JmmNode child : jmmNode.getChildren())
+            visit(child);
+
+        ollirCode.append("goto endif;");
+        ollirCode.append("\n");
+        
+        
+        return null;
+    }
+
+    private Code elseBodyVisit(JmmNode jmmNode, Integer integer) {
+        ollirCode.append("else:");
+        ollirCode.append("\n");
+
+        for (JmmNode child : jmmNode.getChildren())
+            visit(child);
+
+        return null;
+    }
+
 
 }
 
