@@ -41,17 +41,17 @@ public class OllirUtils {
     public static String getOllirOperator(JmmNode node){
         switch (node.get("op")){
             case "add":
-                return " +.i32 ";
+                return "+.i32 ";
             case "less":
-                return " <.bool ";
+                return "<.bool ";
             case "sub":
-                return " -.i32 ";
+                return "-.i32 ";
             case "mult":
-                return " *.i32 ";
+                return "*.i32 ";
             case "div":
-                return " /.i32 ";
+                return "/.i32 ";
             case "and":
-                return " &&.bool ";
+                return "&&.bool ";
         }
         throw new NotImplementedException(node.get("op"));
     }
@@ -79,6 +79,11 @@ public class OllirUtils {
             return node.get("name");
 
         return "main";
+    }
+    public static String buildCondition(){
+        //TODO::
+        StringBuilder condition = new StringBuilder();
+        return condition.toString();
     }
 
 }

@@ -99,7 +99,7 @@ public class SemanticAnalysisVisitor extends PreorderJmmVisitor<Analysis, Boolea
         }
 
         //evaluate condition
-        SemanticAnalysisUtils.evaluatesToBoolean(method, leftChild, analysis);
+        SemanticAnalysisUtils.evaluatesToBoolean(method, leftChild.getJmmChild(0), analysis);
         //evaluate body
         visitMethodBody(method, rightChild, analysis);
     }
