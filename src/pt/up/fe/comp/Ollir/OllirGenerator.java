@@ -16,9 +16,11 @@ public class OllirGenerator extends AJmmVisitor<Integer, Code> {
     private final StringBuilder ollirCode;
     public final SymbolTable symbolTable;
     private int cont;
+    private int labelCount;
 
     public OllirGenerator(SymbolTable symbolTable) {
         cont = 0;
+        labelCount = 0;
         this.ollirCode = new StringBuilder();
         this.symbolTable = symbolTable;
         addVisit("Program", this::programVisit);
@@ -37,6 +39,7 @@ public class OllirGenerator extends AJmmVisitor<Integer, Code> {
         addVisit("EETrue", this::trueVisit);
         addVisit("EEThis", this::thisVisit);
         addVisit("EENew", this::newVisit);
+        addVisit("CompoundStatement", this::compoundStatementVisit);
         addVisit("WhileStatement", this::whileStatementVisit);
         addVisit("WhileCondition", this::whileConditionVisit);
         addVisit("WhileBody", this::whileBodyVisit);
@@ -217,7 +220,6 @@ public class OllirGenerator extends AJmmVisitor<Integer, Code> {
     }
 
     private Code callVisit(JmmNode call, Integer dummy) {
-        //TODO::
         String prefixCode = "";
         Code target = visit(call.getJmmChild(0));
         prefixCode += target.prefix;
@@ -306,7 +308,7 @@ public class OllirGenerator extends AJmmVisitor<Integer, Code> {
         thisCode.prefix = lhs.prefix;
         thisCode.prefix += rhs.prefix;
 
-        if (!binOp.getJmmParent().getKind().equals("Assignment")) {
+        if (!binOp.getJmmParent().getKind().equals("Assignment") && !binOp.getJmmParent().getKind().equals("WhileCondition")) {
             String temp = createTemp(typeOp);
             thisCode.prefix += temp + ":=" + typeOp + lhs.code + " " + op + rhs.code + ";\n";
             thisCode.code = temp;
@@ -387,50 +389,58 @@ public class OllirGenerator extends AJmmVisitor<Integer, Code> {
         return code;
     }
 
-    /*
-       Loop:
-       t1.bool :=.bool i.i32 <.i32 $2.N.i32; t2.i32 :=.i32 $1.A[i.i32].i32;
-       t3.bool :=.bool t2.i32 <.i32 $3.T.i32;
-       if (t1.bool &&.bool t3.bool) goto Body;
-       goto EndLoop;
-       Body:
-       i.i32 :=.i32 i.i32 +.i32 1.i32;
-       goto Loop;
-       EndLoop:
-     */
-    private Code whileStatementVisit(JmmNode jmmNode, Integer integer) {
-        ollirCode.append("Loop:");
+    private Code whileStatementVisit(JmmNode jmmNode, Integer integer){
+        labelCount++;
+
+        ollirCode.append("Loop"+labelCount+":");
         ollirCode.append("\n");
 
-        for(JmmNode child : jmmNode.getChildren())
-            visit(child);
+        for(JmmNode child : jmmNode.getChildren()){
+            Code vis = visit(child);
+            if (vis != null)
+                ollirCode.append(vis.prefix).append(vis.code).append(";\n");
+        }
 
-        ollirCode.append("EndLoop:");
+        ollirCode.append("EndLoop"+labelCount+":");
         ollirCode.append("\n");
+
         return null;
     }
 
 
     private Code whileConditionVisit(JmmNode jmmNode, Integer integer) {
-    //TODO 2 primeiras linhas apos LOOP (ver como se faz) (com create temp)
-        String condition = OllirUtils.buildCondition();
-        ollirCode.append("if (" + condition + ") goto Body;");
-        ollirCode.append("goto EndLoop;");
+        Code condition=visit(jmmNode.getJmmChild(0));
+
+        ollirCode.append(condition.prefix).append("\n");
+        ollirCode.append("if (" + condition.code+ ") goto Body"+labelCount+";\n");
+        ollirCode.append("goto EndLoop"+labelCount+";\n");
 
        return null;
     }
 
     private Code whileBodyVisit(JmmNode jmmNode, Integer integer) {
-        ollirCode.append("Body:");
+        ollirCode.append("Body"+labelCount+":");
         ollirCode.append("\n");
 
-        for (JmmNode child : jmmNode.getChildren())
-            visit(child);
+        for (JmmNode child : jmmNode.getChildren()){
+            Code vis = visit(child);
+            if (vis != null)
+                ollirCode.append(vis.prefix).append(vis.code).append(";\n");
+        }
 
-        ollirCode.append("goto Loop;");
+        ollirCode.append("goto Loop"+labelCount+";");
         ollirCode.append("\n");
         return null;
     }
+    private Code compoundStatementVisit(JmmNode jmmNode, Integer integer) {
+        for(JmmNode child:jmmNode.getChildren()){
+            Code vis = visit(child);
+            if (vis != null)
+                ollirCode.append(vis.prefix).append(vis.code).append(";\n");
+        }
+        return null;
+    }
+
 
 
 }

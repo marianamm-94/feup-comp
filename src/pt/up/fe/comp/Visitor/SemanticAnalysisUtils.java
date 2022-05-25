@@ -38,8 +38,9 @@ public class SemanticAnalysisUtils {
                 if (evaluateNotOperation(method, node, analysis)) return true;
             case "BinOp":
                 String op = node.get("op");
-                if(op.equals("and"))
+                if(op.equals("and")) {
                     if (evaluateOperationWithBooleans(method, node, analysis)) return true;
+                }
                 else if(op.equals("less"))
                     if (evaluateOperationWithIntegers(method, node, analysis)) return true;
             default:
@@ -134,7 +135,9 @@ public class SemanticAnalysisUtils {
 
     public static boolean evaluateOperationWithIntegers(JmmMethod method, JmmNode node, Analysis analysis) {
         List<JmmNode> children = node.getChildren();
-        if (children.size() != 2) return false;
+        if (children.size() != 2)
+            return false;
+
 
         if(node.getJmmChild(0).getKind().equals("Call")){
             node.getJmmChild(0).put("typeValue","int");
@@ -260,7 +263,7 @@ public class SemanticAnalysisUtils {
        JmmNode leftChild=node.getJmmChild(0);
        JmmNode rightChild=node.getJmmChild(1);
        methodCall(method,node,analysis);
-       if(leftChild.getKind().equals("ArrayLength")){
+       if(rightChild.getKind().equals("ArrayLength")){
            return new Type("int",false);
        }else{
            Type childType= getNodeType(method,leftChild,analysis);
@@ -276,7 +279,6 @@ public class SemanticAnalysisUtils {
 
     public static void methodCall(JmmMethod method,JmmNode node,Analysis analysis){
         JmmNode rightChild = node.getJmmChild(1);
-        String methodName=rightChild.get("name");
 
         Type nodeType= SemanticAnalysisUtils.getNodeType(method,node.getJmmChild(0),analysis);
 
@@ -291,6 +293,7 @@ public class SemanticAnalysisUtils {
             }
 
         }else {
+            String methodName=rightChild.get("name");
             if (nodeType.getName().equals(analysis.getSymbolTable().getClassName())) {
                 if (analysis.getSymbolTable().getMethodById(methodName) != null) {
                     List<Symbol> params = analysis.getSymbolTable().getParameters(methodName);
