@@ -135,6 +135,7 @@ public class SemanticAnalysisVisitor extends PreorderJmmVisitor<Analysis, Boolea
         Type leftType = SemanticAnalysisUtils.getNodeType(method,leftChild,analysis);
         Type rightType = SemanticAnalysisUtils.getNodeType(method,rightChild,analysis);
 
+
         if(leftChild.getKind().equals("Call")){
             leftChild.put("typeValue",rightType.getName());
             leftChild.put("isArray",Boolean.toString(rightType.isArray()));
