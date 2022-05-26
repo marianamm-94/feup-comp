@@ -448,8 +448,11 @@ public class OllirGenerator extends AJmmVisitor<Integer, Code> {
     private Code ifStatementVisit(JmmNode jmmNode, Integer integer) {
         labelCount++;
 
-        for(JmmNode child : jmmNode.getChildren())
-            visit(child);
+        for(JmmNode child : jmmNode.getChildren()){
+            Code vis = visit(child);
+            if (vis != null)
+                ollirCode.append(vis.prefix).append(vis.code).append(";\n");
+        }
 
         ollirCode.append("Endif" + labelCount + ":\n");
 
