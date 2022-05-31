@@ -484,12 +484,17 @@ public class OllirGenerator extends AJmmVisitor<Integer, Code> {
                   EEIdentifier (col: 16, line: 15, name: i)
  */
     private Code arrayVisit(JmmNode jmmNode, Integer integer) {
-        //TODO :: TESTAR
+        //TODO :: TESTAR criar temporarias
         JmmNode identifier=jmmNode.getJmmChild(0);
         JmmNode index=jmmNode.getJmmChild(1);
 
         ollirCode.append(identifier.get("name")).append("[");
-        ollirCode.append(index.get("name")).append(".i32]");
+
+        Code vis = visit(index);
+        if (vis != null)
+            ollirCode.append(vis.prefix).append(vis.code).append(";\n");
+
+        ollirCode.append("]");
         ollirCode.append(".i32");
         return null;
     }

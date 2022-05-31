@@ -12,16 +12,12 @@ class WhileAndIF {
 
 
         while((0-1) < c){
-            d[c] = a-b;
+            d[c+1] = a-b;
             c= c-1;
             a= a-1;
             b= b-1;
         }
         c=0;
-        while(c < d.length){
-            io.println(d[c]);
-            c= c+1;
-        }
     }
 
 }
