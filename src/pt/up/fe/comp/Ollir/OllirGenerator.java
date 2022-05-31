@@ -405,14 +405,18 @@ public class OllirGenerator extends AJmmVisitor<Integer, Code> {
         }
         else if(child.getKind().equals("NewArray")){
             //TODO:: ??
+            Code vis = visit(child.getJmmChild(0));
+            if (vis != null)
+                ollirCode.append(vis.prefix).append(vis.code).append(";\n");
             if (!jmmNode.getJmmParent().getKind().equals("Assignment")) {
                 String temp = createTemp(".i32");
+
                 code.code = temp;
-                code.prefix = " new(array," + visit(child.getJmmChild(0)).code + ").array.i32;\n";
+                code.prefix = " new(array," + vis.code + ").array.i32;\n";
                 code.prefix += "invokespecial(" + temp + ",\"<init>\").V;\n";
             }else{
                 code.prefix = "";
-                code.code = " new(array," + visit(child.getJmmChild(0)).code + ").array.i32;\n";
+                code.code = " new(array," + vis.code + ").array.i32;\n";
             }
         }
         return code;
