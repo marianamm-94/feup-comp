@@ -79,6 +79,8 @@ public class JasminUtils {
                 return JasminGetField.addGetField((GetFieldInstruction) instruction,method);
             case CALL:
                 return JasminCall.addCall((CallInstruction) instruction,method);
+            case GOTO:
+                return JasminLoops.gotoInstruction((GotoInstruction) instruction);
 
         }
         throw new NotImplementedException(instruction.getInstType());
