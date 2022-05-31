@@ -464,6 +464,7 @@ public class OllirGenerator extends AJmmVisitor<Integer, Code> {
 
         ollirCode.append(condition.prefix).append("\n");
         ollirCode.append("if (" + condition.code+ ") goto Then" + labelCount + ";\n");
+        ollirCode.append("goto Else" + labelCount +";\n");
 
             
         return null;
@@ -477,6 +478,8 @@ public class OllirGenerator extends AJmmVisitor<Integer, Code> {
             if (vis != null)
                 ollirCode.append(vis.prefix).append(vis.code).append(";\n");
         }
+
+        ollirCode.append("goto Endif" + labelCount +";\n");
         
         
         return null;
@@ -490,9 +493,6 @@ public class OllirGenerator extends AJmmVisitor<Integer, Code> {
             if (vis != null)
                 ollirCode.append(vis.prefix).append(vis.code).append(";\n");
         }
-
-
-        ollirCode.append("goto Endif" + labelCount +";");
 
         return null;
     }
