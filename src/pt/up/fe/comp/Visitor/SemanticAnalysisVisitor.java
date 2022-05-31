@@ -99,7 +99,7 @@ public class SemanticAnalysisVisitor extends PreorderJmmVisitor<Analysis, Boolea
         }
 
         //evaluate condition
-        SemanticAnalysisUtils.evaluatesToBoolean(method, leftChild, analysis);
+        SemanticAnalysisUtils.evaluatesToBoolean(method, leftChild.getJmmChild(0), analysis);
         //evaluate body
         visitMethodBody(method, rightChild, analysis);
     }
@@ -109,7 +109,7 @@ public class SemanticAnalysisVisitor extends PreorderJmmVisitor<Analysis, Boolea
 
         for (JmmNode child : children) {
             if (child.getKind().equals("IfCondition")){
-                SemanticAnalysisUtils.evaluatesToBoolean(method, child, analysis);
+                SemanticAnalysisUtils.evaluatesToBoolean(method, child.getJmmChild(0), analysis);
                 if(child.getJmmChild(0).getKind().equals("Call")){
                     child.getJmmChild(0).put("typeValue","boolean");
                     child.getJmmChild(0).put("isArray","false");

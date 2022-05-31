@@ -5,11 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="07c428b5-8a74-4e19-9325-579c7b1e1665" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/test/fixtures/public/If.jmm" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pt/up/fe/comp/Jasmin/JasminUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pt/up/fe/comp/Jasmin/JasminUtils.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pt/up/fe/comp/Visitor/SemanticAnalysisUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pt/up/fe/comp/Visitor/SemanticAnalysisUtils.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pt/up/fe/comp/Visitor/SemanticAnalysisVisitor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pt/up/fe/comp/Visitor/SemanticAnalysisVisitor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/fixtures/public/cp2/CompileMethodInvocation.jmm" beforeDir="false" afterPath="$PROJECT_DIR$/test/fixtures/public/cp2/CompileMethodInvocation.jmm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/OptimizeTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/OptimizeTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/pt/up/fe/comp/Cp2Test.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/pt/up/fe/comp/Cp2Test.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -83,17 +84,15 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">
-    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
-    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../../../../../../../comp2022-1d-master" />
-    <property name="project.structure.last.edited" value="Project" />
-    <property name="project.structure.proportion" value="0.0" />
-    <property name="project.structure.side.proportion" value="0.0" />
-    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
-  </component>
-  <component name="RunManager" selected="Gradle.Cp2Test (1)">
-    <configuration name="Cp2Test (1)" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.general&quot;
+  }
+}</component>
+  <component name="RunManager" selected="Gradle.Cp2Test.testIfOllir">
+    <configuration name="Cp2Test.testIfOllir" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -106,7 +105,7 @@
           <list>
             <option value=":test" />
             <option value="--tests" />
-            <option value="&quot;pt.up.fe.comp.Cp2Test&quot;" />
+            <option value="&quot;pt.up.fe.comp.Cp2Test.testIfOllir&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -116,7 +115,7 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="Cp2Test.test_1_19_AssumeArguments" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="Cp2Test.test_2_01_CompileBasic" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -129,7 +128,7 @@
           <list>
             <option value=":test" />
             <option value="--tests" />
-            <option value="&quot;pt.up.fe.comp.Cp2Test.test_1_19_AssumeArguments&quot;" />
+            <option value="&quot;pt.up.fe.comp.Cp2Test.test_2_01_CompileBasic&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -139,7 +138,7 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="GrammarTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="Cp2Test.test_2_02_CompileArithmetic (1)" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -152,7 +151,7 @@
           <list>
             <option value=":test" />
             <option value="--tests" />
-            <option value="&quot;pt.up.fe.comp.GrammarTest&quot;" />
+            <option value="&quot;pt.up.fe.comp.Cp2Test.test_2_02_CompileArithmetic&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -162,7 +161,7 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="ParserTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="Cp2Test.test_2_03_CompileMethodInvocation" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -175,7 +174,7 @@
           <list>
             <option value=":test" />
             <option value="--tests" />
-            <option value="&quot;pt.up.fe.comp.ParserTest&quot;" />
+            <option value="&quot;pt.up.fe.comp.Cp2Test.test_2_03_CompileMethodInvocation&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -185,7 +184,7 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="ParserTest.quickSort" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="Cp2Test.test_2_04_CompileAssignment (1)" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -198,7 +197,7 @@
           <list>
             <option value=":test" />
             <option value="--tests" />
-            <option value="&quot;pt.up.fe.comp.ParserTest.quickSort&quot;" />
+            <option value="&quot;pt.up.fe.comp.Cp2Test.test_2_04_CompileAssignment&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -210,11 +209,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Gradle.Cp2Test (1)" />
-        <item itemvalue="Gradle.ParserTest" />
-        <item itemvalue="Gradle.GrammarTest" />
-        <item itemvalue="Gradle.Cp2Test.test_1_19_AssumeArguments" />
-        <item itemvalue="Gradle.ParserTest.quickSort" />
+        <item itemvalue="Gradle.Cp2Test.testIfOllir" />
+        <item itemvalue="Gradle.Cp2Test.test_2_02_CompileArithmetic (1)" />
+        <item itemvalue="Gradle.Cp2Test.test_2_04_CompileAssignment (1)" />
+        <item itemvalue="Gradle.Cp2Test.test_2_03_CompileMethodInvocation" />
+        <item itemvalue="Gradle.Cp2Test.test_2_01_CompileBasic" />
       </list>
     </recent_temporary>
   </component>
