@@ -135,7 +135,9 @@ public class SemanticAnalysisUtils {
 
     public static boolean evaluateOperationWithIntegers(JmmMethod method, JmmNode node, Analysis analysis) {
         List<JmmNode> children = node.getChildren();
-        if (children.size() != 2) return false;
+        if (children.size() != 2)
+            return false;
+
 
         if(node.getJmmChild(0).getKind().equals("Call")){
             node.getJmmChild(0).put("typeValue","int");
