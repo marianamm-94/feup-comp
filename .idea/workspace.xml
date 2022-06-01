@@ -5,6 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="07c428b5-8a74-4e19-9325-579c7b1e1665" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/test/fixtures/public/If.jmm" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pt/up/fe/comp/Ollir/OllirGenerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pt/up/fe/comp/Ollir/OllirGenerator.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pt/up/fe/comp/Ollir/OllirUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pt/up/fe/comp/Ollir/OllirUtils.java" afterDir="false" />
@@ -104,7 +105,7 @@
           <list>
             <option value=":test" />
             <option value="--tests" />
-            <option value="&quot;pt.up.fe.comp.Cp2Test&quot;" />
+            <option value="&quot;pt.up.fe.comp.Cp2Test.testIfOllir&quot;" />
           </list>
         </option>
         <option name="vmOptions" />

@@ -383,5 +383,31 @@ public class Cp2Test {
         assertEquals("Assignment does not have the expected type", ElementType.INT32,
                 assignInst.get().getTypeOfAssign().getTypeOfElement());
     }
+    public void testIfOllir(ClassUnit classUnit) {
+        // Test name of the class
+        assertEquals("Class name not what was expected", "Test", classUnit.getClassName());
+
+        // Test foo
+        var methodName = "foo";
+        Method methodFoo = classUnit.getMethods().stream()
+                .filter(method -> method.getMethodName().equals(methodName))
+                .findFirst()
+                .orElse(null);
+
+        assertNotNull("Could not find method " + methodName, methodFoo);
+
+        var assignInst = methodFoo.getInstructions().stream()
+                .filter(inst -> inst instanceof AssignInstruction)
+                .map(AssignInstruction.class::cast)
+                .findFirst();
+        assertTrue("Could not find an assign instruction in method " + methodName, assignInst.isPresent());
+
+    }
+
+
+    @Test
+    public void testIfOllir() {
+        testJmmCompilation("fixtures/public/If.jmm", this::testIfOllir);
+    }
 
 }
