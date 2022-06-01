@@ -393,58 +393,6 @@ public class OllirGenerator extends AJmmVisitor<Integer, Code> {
         return code;
     }
 
-    private Code whileStatementVisit(JmmNode jmmNode, Integer integer){
-        labelCount++;
-
-        ollirCode.append("Loop"+labelCount+":");
-        ollirCode.append("\n");
-
-        for(JmmNode child : jmmNode.getChildren()){
-            Code vis = visit(child);
-            if (vis != null)
-                ollirCode.append(vis.prefix).append(vis.code).append(";\n");
-        }
-
-        ollirCode.append("EndLoop"+labelCount+":");
-        ollirCode.append("\n");
-
-        return null;
-    }
-
-
-    private Code whileConditionVisit(JmmNode jmmNode, Integer integer) {
-        Code condition=visit(jmmNode.getJmmChild(0));
-
-        ollirCode.append(condition.prefix).append("\n");
-        ollirCode.append("if (" + condition.code+ ") goto Body"+labelCount+";\n");
-        ollirCode.append("goto EndLoop"+labelCount+";\n");
-
-       return null;
-    }
-
-    private Code whileBodyVisit(JmmNode jmmNode, Integer integer) {
-        ollirCode.append("Body"+labelCount+":");
-        ollirCode.append("\n");
-
-        for (JmmNode child : jmmNode.getChildren()){
-            Code vis = visit(child);
-            if (vis != null)
-                ollirCode.append(vis.prefix).append(vis.code).append(";\n");
-        }
-
-        ollirCode.append("goto Loop"+labelCount+";");
-        ollirCode.append("\n");
-        return null;
-    }
-    private Code compoundStatementVisit(JmmNode jmmNode, Integer integer) {
-        for(JmmNode child:jmmNode.getChildren()){
-            Code vis = visit(child);
-            if (vis != null)
-                ollirCode.append(vis.prefix).append(vis.code).append(";\n");
-        }
-        return null;
-    }
-
     private Code ifStatementVisit(JmmNode jmmNode, Integer integer) {
         labelCount++;
 
@@ -494,6 +442,58 @@ public class OllirGenerator extends AJmmVisitor<Integer, Code> {
                 ollirCode.append(vis.prefix).append(vis.code).append(";\n");
         }
 
+        return null;
+    }
+
+    private Code whileStatementVisit(JmmNode jmmNode, Integer integer){
+        labelCount++;
+
+        ollirCode.append("Loop"+labelCount+":");
+        ollirCode.append("\n");
+
+        for(JmmNode child : jmmNode.getChildren()){
+            Code vis = visit(child);
+            if (vis != null)
+                ollirCode.append(vis.prefix).append(vis.code).append(";\n");
+        }
+
+        ollirCode.append("EndLoop"+labelCount+":");
+        ollirCode.append("\n");
+
+        return null;
+    }
+
+
+    private Code whileConditionVisit(JmmNode jmmNode, Integer integer) {
+        Code condition=visit(jmmNode.getJmmChild(0));
+
+        ollirCode.append(condition.prefix).append("\n");
+        ollirCode.append("if (" + condition.code+ ") goto Body"+labelCount+";\n");
+        ollirCode.append("goto EndLoop"+labelCount+";\n");
+
+        return null;
+    }
+
+    private Code whileBodyVisit(JmmNode jmmNode, Integer integer) {
+        ollirCode.append("Body"+labelCount+":");
+        ollirCode.append("\n");
+
+        for (JmmNode child : jmmNode.getChildren()){
+            Code vis = visit(child);
+            if (vis != null)
+                ollirCode.append(vis.prefix).append(vis.code).append(";\n");
+        }
+
+        ollirCode.append("goto Loop"+labelCount+";");
+        ollirCode.append("\n");
+        return null;
+    }
+    private Code compoundStatementVisit(JmmNode jmmNode, Integer integer) {
+        for(JmmNode child:jmmNode.getChildren()){
+            Code vis = visit(child);
+            if (vis != null)
+                ollirCode.append(vis.prefix).append(vis.code).append(";\n");
+        }
         return null;
     }
 

@@ -396,12 +396,6 @@ public class Cp2Test {
 
         assertNotNull("Could not find method " + methodName, methodFoo);
 
-        var assignInst = methodFoo.getInstructions().stream()
-                .filter(inst -> inst instanceof AssignInstruction)
-                .map(AssignInstruction.class::cast)
-                .findFirst();
-        assertTrue("Could not find an assign instruction in method " + methodName, assignInst.isPresent());
-
     }
 
 
