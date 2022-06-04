@@ -298,6 +298,18 @@ public class OllirGenerator extends AJmmVisitor<Integer, Code> {
             thisCode.prefix = lhs.prefix;
             thisCode.prefix += rhs.prefix;
 
+        if(assignment.getJmmChild(0).getKind().equals("Array")){
+            for (Symbol symbol : symbolTable.getFields()) {
+                if (symbol.getName().equals(assignment.getJmmChild(0).getJmmChild(0).get("name")))
+                    type = OllirUtils.getCode(symbol.getType());
+            }
+
+            for (Symbol symbol : symbolTable.getLocalVariables(methodSignature)) {
+                if (symbol.getName().equals(assignment.getJmmChild(0).getJmmChild(0).get("name")))
+                    type = OllirUtils.getCode(symbol.getType());
+            }
+        }else {
+
             for (Symbol symbol : symbolTable.getFields()) {
                 if (symbol.getName().equals(assignment.getJmmChild(0).get("name")))
                     type = OllirUtils.getCode(symbol.getType());
@@ -307,6 +319,7 @@ public class OllirGenerator extends AJmmVisitor<Integer, Code> {
                 if (symbol.getName().equals(assignment.getJmmChild(0).get("name")))
                     type = OllirUtils.getCode(symbol.getType());
             }
+        }
             if (!assignment.getJmmChild(1).getKind().equals("EENew"))
                 thisCode.code = lhs.code + " :=." + type + " " + rhs.code;
             else if(assignment.getJmmChild(1).getJmmChild(0).getKind().equals("EEObject"))
@@ -588,19 +601,24 @@ public class OllirGenerator extends AJmmVisitor<Integer, Code> {
     private Code arrayVisit(JmmNode jmmNode, Integer integer) {
         JmmNode identifier=jmmNode.getJmmChild(0);
         JmmNode index=jmmNode.getJmmChild(1);
-
-        //TODO : Precisa de visitar o lado esquerdo?
-        ollirCode.append(identifier.get("name"));
-        ollirCode.append("[");
-
+        Code code=new Code();
         Code vis=visit(index);
 
-        if(vis!=null)
-            ollirCode.append(vis.prefix).append(vis.code);
+       // if(!jmmNode.getJmmParent().getJmmParent().equals("Assignment")){
+         //   String temp= createTemp(".i32");
+           // code.prefix=vis.prefix;
+            //code.prefix += temp + " :=.i32 " + identifier.get("name")+"[";
+           // code.prefix +=vis.code+"].i32;\n";
+           // code.code = temp;
+//        }else{
+            code.prefix=vis.prefix;
+            code.code = identifier.get("name")+"[";
+            code.code+=vis.code+"].i32;\n";
+  //      }
 
-        ollirCode.append("].i32");
+        //TODO : Precisa de visitar o lado esquerdo?
 
-        return null;
+        return code;
     }
 
 }
