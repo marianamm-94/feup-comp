@@ -408,7 +408,7 @@ public class SemanticAnalysisUtils {
         if(!evaluatesToInteger(method,rightChild,analysis))
             analysis.newReport(node,"The array index is not integer!");
 
-        return new Type("int",true);
+        return new Type("int",false);
     }
 
 

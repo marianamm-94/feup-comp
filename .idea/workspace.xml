@@ -249,6 +249,16 @@
             </State>
           </value>
         </entry>
+        <entry key="b06917d9-a302-44c4-82df-790a518655a0">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="OPEN_GENERIC_TABS">
+      <map>
+        <entry key="b06917d9-a302-44c4-82df-790a518655a0" value="TOOL_WINDOW" />
       </map>
     </option>
   </component>
