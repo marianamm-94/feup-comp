@@ -167,7 +167,7 @@ public class OllirGenerator extends AJmmVisitor<Integer, Code> {
             ollirCode.append(".field ");
             ollirCode.append(name).append(".");
 
-            if (varDecl.getJmmChild(0).get("isArray").equals("true")) {
+            if (varDecl.getJmmChild(0).get("isArray").equals("True")) {
                 ollirCode.append("array.");
                 ollirCode.append(OllirUtils.getOllirType(type));
             } else {
@@ -225,54 +225,66 @@ public class OllirGenerator extends AJmmVisitor<Integer, Code> {
     }
 
     private Code callVisit(JmmNode call, Integer dummy) {
-        //TODO::
+        //TODO:: test
         String prefixCode = "";
-        Code target = visit(call.getJmmChild(0));
-        prefixCode += target.prefix;
-        String methodName = call.getJmmChild(1).get("name");
-        String finalcode;
-        if(target.code==null){
-            finalcode="invokestatic("+call.getJmmChild(0).get("name")+","+'"'+methodName+'"';
-        }  else{
-            finalcode= "invokevirtual(" + target.code + "," +'"'+methodName+'"';
-        }
-
-
-        for (JmmNode arg : call.getJmmChild(1).getChildren()) {
-            Code argCode = visit(arg);
-            prefixCode += argCode.prefix;
-            finalcode += "," + argCode.code;
-        }
-        Type type;
-        String returnType;
-
-        if(symbolTable.getMethods().contains(methodName)){
-            returnType=OllirUtils.getCode(symbolTable.getReturnType(methodName));
-        }else{
-            try {
-                type = new Type(call.get("typeValue"), Boolean.valueOf(call.get("isArray")));
-                returnType = OllirUtils.getCode(type);
-            }catch (Exception e){
-                type=new Type("void",false);
-                returnType=OllirUtils.getCode(type);
-            }
-        }
-
-        finalcode += ")." + returnType;
-
         Code thisCode = new Code();
+        Code target = visit(call.getJmmChild(0));
 
-        if(!call.getJmmParent().getKind().equals("MethodBody")) {
-            String temp = createTemp("."+returnType);
-            finalcode = temp + " :=."+returnType+ " " + finalcode;
-            thisCode.code = temp;
-            prefixCode+=finalcode+";\n";
-            thisCode.prefix = prefixCode;
-        }else{
-            thisCode.code=finalcode;
-            thisCode.prefix=prefixCode;
+        if(call.getJmmChild(1).getKind().equals("ArrayLength")){
+            Code vis= visit(call.getJmmChild(1));
+            thisCode.prefix=vis.prefix;
+            thisCode.code=vis.code;
+            return thisCode;
         }
-        return thisCode;
+
+        else {
+            prefixCode += target.prefix;
+            String methodName = call.getJmmChild(1).get("name");
+            String finalcode;
+            if (target.code == null) {
+                finalcode = "invokestatic(" + call.getJmmChild(0).get("name") + "," + '"' + methodName + '"';
+            } else {
+                finalcode = "invokevirtual(" + target.code + "," + '"' + methodName + '"';
+            }
+
+
+            for (JmmNode arg : call.getJmmChild(1).getChildren()) {
+                Code argCode = visit(arg);
+                prefixCode += argCode.prefix;
+                finalcode += "," + argCode.code;
+            }
+            Type type;
+            String returnType;
+
+            if (symbolTable.getMethods().contains(methodName)) {
+                returnType = OllirUtils.getCode(symbolTable.getReturnType(methodName));
+            } else {
+                try {
+                    type = new Type(call.get("typeValue"), Boolean.valueOf(call.get("isArray")));
+                    returnType = OllirUtils.getCode(type);
+                } catch (Exception e) {
+                    type = new Type("void", false);
+                    returnType = OllirUtils.getCode(type);
+                }
+            }
+
+            finalcode += ")." + returnType;
+
+
+
+            if (!call.getJmmParent().getKind().equals("MethodBody")) {
+                String temp = createTemp("." + returnType);
+                finalcode = temp + " :=." + returnType + " " + finalcode;
+                thisCode.code = temp;
+                prefixCode += finalcode + ";\n";
+                thisCode.prefix = prefixCode;
+            } else {
+                thisCode.code = finalcode;
+                thisCode.prefix = prefixCode;
+            }
+
+            return thisCode;
+        }
     }
 
     private Code assignmentVisit(JmmNode assignment, Integer dummy) {
@@ -301,33 +313,6 @@ public class OllirGenerator extends AJmmVisitor<Integer, Code> {
                 thisCode.code = lhs.code + " :=." + type + " " + rhs.code + ";\ninvokespecial(" + assignment.getJmmChild(0).get("name") + "." + type + ",\"<init>\").V";
             else
                 thisCode.code = lhs.code + " :=.i32" + rhs.code;
-
-        return thisCode;
-    }
-
-    /*
-    Assignment (col: 20, line: 15)
-                        Array (col: 14, line: 15)
-                           EEIdentifier (col: 14, line: 15, name: L)
-                           EEIdentifier (col: 16, line: 15, name: i)
-
-                C[i] = A[i] + B[i];
-              C[i.i32].i32 :=.i32 t4.i32;
-     */
-    private Code arrayAssignment(JmmNode assignment) {
-
-        Code thisCode = new Code();
-        Code lhs = visit(assignment.getJmmChild(0));
-        Code rhs = visit(assignment.getJmmChild(1));
-
-        if(lhs==null)
-
-        thisCode.prefix = lhs.prefix;
-        thisCode.prefix += rhs.prefix;
-
-
-
-        thisCode.code= lhs.code+" :=.i32 " +rhs.code;
 
         return thisCode;
     }
@@ -583,15 +568,21 @@ public class OllirGenerator extends AJmmVisitor<Integer, Code> {
      */
     private Code arrayLengthVisit(JmmNode jmmNode, Integer integer) {
         //TODO :: TESTE
-        JmmNode parent=jmmNode.getJmmParent();
-        String temp= createTemp(".i32");
+        Code code=new Code();
+        Code vis=visit(jmmNode.getJmmParent().getJmmChild(0));
+        if(!jmmNode.getJmmParent().getJmmParent().equals("Assignment")){
+            String temp= createTemp(".i32");
+            code.prefix=vis.prefix;
+            code.prefix += temp + " :=.i32 " + "arraylength(";
+            code.prefix+=vis.code+").i32;\n";
+            code.code = temp;
+        }else{
+            code.prefix=vis.prefix;
+            code.code = "arraylength(";
+            code.code+=vis.code+").i32;\n";
+        }
 
-        ollirCode.append(temp).append(" :=.i32 ");
-        ollirCode.append("arraylength(");
-        ollirCode.append(parent.getJmmChild(0).get("name"));
-        ollirCode.append(".array.i32).i32;\n");
-
-        return null;
+        return code;
     }
 
     private Code arrayVisit(JmmNode jmmNode, Integer integer) {

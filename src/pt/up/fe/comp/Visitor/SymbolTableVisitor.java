@@ -40,11 +40,10 @@ public class SymbolTableVisitor extends PreorderJmmVisitor<Analysis, Boolean>  {
     public boolean visitImport(JmmNode node, Analysis analysis){
         StringBuilder importString = new StringBuilder(node.get("name"));
         for (JmmNode child : node.getChildren()){
+            importString.append(".");
             importString.append(child.get("name"));
-            for(JmmNode importNode: child.getChildren()){
-                importString.append(".");
-                importString.append(importNode.get("name"));
-            }
+
+
         }
         analysis.getSymbolTable().addImport(importString.toString());
         return true;
