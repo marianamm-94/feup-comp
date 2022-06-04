@@ -49,6 +49,7 @@ public class OllirGenerator extends AJmmVisitor<Integer, Code> {
         addVisit("ElseBody", this::elseBodyVisit);
         addVisit("Array", this::arrayVisit);
         addVisit("ArrayLength", this::arrayLengthVisit);
+        addVisit("NewArray",this::newArrayVisit);
 
     }
 
@@ -282,11 +283,6 @@ public class OllirGenerator extends AJmmVisitor<Integer, Code> {
         Code lhs = visit(assignment.getJmmChild(0));
         Code rhs = visit(assignment.getJmmChild(1));
 
-
-        if(assignment.getJmmChild(0).getKind().equals("Array")){
-            arrayAssignment(assignment);
-        }
-        else {
             thisCode.prefix = lhs.prefix;
             thisCode.prefix += rhs.prefix;
 
@@ -301,9 +297,11 @@ public class OllirGenerator extends AJmmVisitor<Integer, Code> {
             }
             if (!assignment.getJmmChild(1).getKind().equals("EENew"))
                 thisCode.code = lhs.code + " :=." + type + " " + rhs.code;
-            else
+            else if(assignment.getJmmChild(1).getJmmChild(0).getKind().equals("EEObject"))
                 thisCode.code = lhs.code + " :=." + type + " " + rhs.code + ";\ninvokespecial(" + assignment.getJmmChild(0).get("name") + "." + type + ",\"<init>\").V";
-        }
+            else
+                thisCode.code = lhs.code + " :=.i32" + rhs.code;
+
         return thisCode;
     }
 
@@ -318,11 +316,20 @@ public class OllirGenerator extends AJmmVisitor<Integer, Code> {
      */
     private Code arrayAssignment(JmmNode assignment) {
 
-        visit(assignment.getJmmChild(0));
-        ollirCode.append(" :=.i32 " );
-        visit(assignment.getJmmChild(1));
+        Code thisCode = new Code();
+        Code lhs = visit(assignment.getJmmChild(0));
+        Code rhs = visit(assignment.getJmmChild(1));
 
-        return null;
+        if(lhs==null)
+
+        thisCode.prefix = lhs.prefix;
+        thisCode.prefix += rhs.prefix;
+
+
+
+        thisCode.code= lhs.code+" :=.i32 " +rhs.code;
+
+        return thisCode;
     }
 
     private Code binOpVisit(JmmNode binOp, Integer integer) {
@@ -411,11 +418,16 @@ public class OllirGenerator extends AJmmVisitor<Integer, Code> {
      */
     private Code newVisit(JmmNode jmmNode, Integer integer) {
         Code code = new Code();
-        String name;
-        if(jmmNode.getJmmChild(0).getKind().equals("Array"))
-            name=jmmNode.getJmmChild(0).getJmmChild(0).get("name");
-        else
-            name=jmmNode.getJmmChild(0).get("name");
+        if(jmmNode.getJmmChild(0).getKind().equals("NewArray")){
+                Code vis=visit(jmmNode.getJmmChild(0));
+                if(vis!=null){
+                    code.prefix=vis.prefix;
+                    code.code=vis.code;
+                }
+        }
+
+        else{
+            String name=jmmNode.getJmmChild(0).get("name");
         if(!jmmNode.getJmmParent().getKind().equals("Assignment")){
             String temp=createTemp("."+name);
             code.code=temp;
@@ -427,8 +439,33 @@ public class OllirGenerator extends AJmmVisitor<Integer, Code> {
             code.prefix="";
             code.code=" new("+name+")."+name;
         }
+        }
+
         return code;
     }
+/*
+ EENew (col: 17, line: 11)
+                  NewArray (col: 20, line: 11)
+                     EEInt (col: 23, line: 11, value: 10)
+
+                      EENew (col: 16, line: 7)
+                      NewArray (col: 19, line: 7)
+                         Call (col: 22, line: 7)
+                            EEIdentifier (col: 21, line: 7, name: A)
+                            ArrayLength (col: 22, line: 7)
+    t1.i32 :=.i32 arraylength($1.A.array.i32).i32;
+    C.array.i32 :=.array.i32 new(array, t1.i32).array.i32;
+ */
+    private Code newArrayVisit(JmmNode jmmNode, Integer dummy) {
+        Code code= new Code();
+            Code vis=visit(jmmNode.getJmmChild(0));
+            code.prefix=vis.prefix;
+            code.code=" new(array, ";
+            code.code+=vis.code+").array.i32";
+
+        return code;
+    }
+
     private Code whileStatementVisit(JmmNode jmmNode, Integer integer) {
         labelCount++;
 
@@ -552,7 +589,7 @@ public class OllirGenerator extends AJmmVisitor<Integer, Code> {
 
         ollirCode.append(temp).append(" :=.i32 ");
         ollirCode.append("arraylength(");
-        ollirCode.append(parent.get("name"));
+        ollirCode.append(parent.getJmmChild(0).get("name"));
         ollirCode.append(".array.i32).i32;\n");
 
         return null;
