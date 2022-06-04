@@ -80,9 +80,10 @@ public class SemanticAnalysisVisitor extends PreorderJmmVisitor<Analysis, Boolea
 
         for (JmmNode child : children) {
             if(child.getKind().equals("Assignment")) visitAssignment(method, child, analysis);
-            if(child.getKind().equals("WhileStatement")) visitWhileStatement(method, child, analysis);
-            if(child.getKind().equals("IfStatement")) visitIfStatement(method, child, analysis);
-            if(child.getKind().equals("Call")) visitCall(method, child, analysis);
+            else if(child.getKind().equals("WhileStatement")) visitWhileStatement(method, child, analysis);
+            else if(child.getKind().equals("IfStatement")) visitIfStatement(method, child, analysis);
+            else if(child.getKind().equals("Call")) visitCall(method, child, analysis);
+            else if(child.getKind().equals("CompoundStatement")) visitMethodBody(method,node.getJmmChild(0),analysis);
         }
     }
 
