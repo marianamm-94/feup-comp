@@ -463,10 +463,59 @@ public class OllirGenerator extends AJmmVisitor<Integer, Code> {
             code.code=" new(array, ";
             code.code+=vis.code+").array.i32";
 
-        return code;
+    private Code ifStatementVisit(JmmNode jmmNode, Integer integer) {
+        labelCount++;
+
+        for(JmmNode child : jmmNode.getChildren()){
+            Code vis = visit(child);
+            if (vis != null)
+                ollirCode.append(vis.prefix).append(vis.code).append(";\n");
+        }
+
+        ollirCode.append("Endif" + labelCount + ":\n");
+
+        return null;
     }
 
-    private Code whileStatementVisit(JmmNode jmmNode, Integer integer) {
+    private Code ifConditionVisit(JmmNode jmmNode, Integer integer) {
+        Code condition=visit(jmmNode.getJmmChild(0));
+
+        ollirCode.append(condition.prefix).append("\n");
+        ollirCode.append("if (" + condition.code+ ") goto Then" + labelCount + ";\n");
+        ollirCode.append("goto Else" + labelCount +";\n");
+
+            
+        return null;
+    }
+
+    private Code ifBodyVisit(JmmNode jmmNode, Integer integer) {
+        ollirCode.append("Then" + labelCount + ":\n");
+
+        for(JmmNode child : jmmNode.getChildren()){
+            Code vis = visit(child);
+            if (vis != null)
+                ollirCode.append(vis.prefix).append(vis.code).append(";\n");
+        }
+
+        ollirCode.append("goto Endif" + labelCount +";\n");
+        
+        
+        return null;
+    }
+
+    private Code elseBodyVisit(JmmNode jmmNode, Integer integer) {
+        ollirCode.append("Else" + labelCount + ":\n");
+
+        for(JmmNode child : jmmNode.getChildren()){
+            Code vis = visit(child);
+            if (vis != null)
+                ollirCode.append(vis.prefix).append(vis.code).append(";\n");
+        }
+
+        return null;
+    }
+
+    private Code whileStatementVisit(JmmNode jmmNode, Integer integer){
         labelCount++;
 
         ollirCode.append("Loop" + labelCount + ":");

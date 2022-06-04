@@ -1,6 +1,5 @@
-
 /**
- * Copyright 2021 SPeCS.
+ * Copyright 2022 SPeCS.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -12,15 +11,28 @@
  * specific language governing permissions and limitations under the License. under the License.
  */
 
+package pt.up.fe.comp.cpf;
+
 import org.junit.Test;
+
+import pt.up.fe.comp.CpUtils;
 import pt.up.fe.comp.TestUtils;
+import pt.up.fe.comp.jmm.jasmin.JasminResult;
 import pt.up.fe.specs.util.SpecsIo;
+import pt.up.fe.specs.util.SpecsStrings;
 
-public class OptimizeTest {
+public class Cpf1_ParserAndTree {
 
-    // @Test
-    public void testHelloWorld() {
-        var result = TestUtils.optimize(SpecsIo.getResource("fixtures/public/HelloWorld.jmm"));
-        TestUtils.noErrors(result.getReports());
+    static JasminResult getJmmResult(String filename) {
+        return TestUtils.backend(SpecsIo.getResource("fixtures/public/cpf/1_parser_and_tree/" + filename));
     }
+
+    @Test
+    public void section1_OpPrecedence_1_AddMultConstants() {
+        var result = getJmmResult("AddMultConstants.jmm");
+        TestUtils.noErrors(result.getReports());
+        CpUtils.assertEquals("Wrong results", "7\n12\n9", SpecsStrings.normalizeFileContents(result.run(), true),
+                result);
+    }
+
 }
