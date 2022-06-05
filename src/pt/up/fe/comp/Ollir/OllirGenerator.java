@@ -234,7 +234,6 @@ public class OllirGenerator extends AJmmVisitor<Integer, Code> {
             Code vis= visit(call.getJmmChild(1));
             thisCode.prefix=vis.prefix;
             thisCode.code=vis.code;
-            return thisCode;
         }
 
         else {
@@ -283,8 +282,9 @@ public class OllirGenerator extends AJmmVisitor<Integer, Code> {
                 thisCode.prefix = prefixCode;
             }
 
-            return thisCode;
+
         }
+        return thisCode;
     }
 
     private Code assignmentVisit(JmmNode assignment, Integer dummy) {
@@ -348,7 +348,7 @@ public class OllirGenerator extends AJmmVisitor<Integer, Code> {
             thisCode.code = temp;
         } else {
 
-            thisCode.code = lhs.code + op + rhs.code;
+            thisCode.code = lhs.code + " " + op + " " + rhs.code;
         }
 
         return thisCode;
@@ -394,8 +394,15 @@ public class OllirGenerator extends AJmmVisitor<Integer, Code> {
 
     private Code intVisit(JmmNode jmmNode, Integer integer) {
         Code code = new Code();
-        code.prefix = "";
-        code.code = jmmNode.get("value") + ".i32";
+        if(jmmNode.getJmmParent().getKind().equals("Array")){
+            String temp= createTemp(".i32");
+            code.prefix = temp + " :=.i32 " + jmmNode.get("value") + ".i32;\n";
+            code.code = temp;
+        }else{
+            code.prefix = "";
+            code.code = jmmNode.get("value") + ".i32";
+        }
+
         return code;
     }
     private Code thisVisit(JmmNode jmmNode, Integer integer) {
@@ -508,12 +515,10 @@ public class OllirGenerator extends AJmmVisitor<Integer, Code> {
     }
 
     private Code compoundStatementVisit(JmmNode jmmNode, Integer integer) {
-        for (JmmNode child : jmmNode.getChildren()) {
-            Code vis = visit(child);
-            if (vis != null)
-                ollirCode.append(vis.prefix).append(vis.code).append(";\n");
-        }
-        return null;
+        Code vis;
+        vis = visit(jmmNode.getJmmChild(0));
+
+        return vis;
     }
 
     private Code ifStatementVisit(JmmNode jmmNode, Integer integer) {
@@ -604,17 +609,17 @@ public class OllirGenerator extends AJmmVisitor<Integer, Code> {
         Code code=new Code();
         Code vis=visit(index);
 
-       // if(!jmmNode.getJmmParent().getJmmParent().equals("Assignment")){
-         //   String temp= createTemp(".i32");
-           // code.prefix=vis.prefix;
-            //code.prefix += temp + " :=.i32 " + identifier.get("name")+"[";
-           // code.prefix +=vis.code+"].i32;\n";
-           // code.code = temp;
-//        }else{
+        if(!jmmNode.getJmmParent().getKind().equals("Assignment")){
+            String temp= createTemp(".i32");
+            code.prefix=vis.prefix;
+            code.prefix += temp + " :=.i32 " + identifier.get("name")+"[";
+            code.prefix +=vis.code+"].i32;\n";
+            code.code = temp;
+      }else{
             code.prefix=vis.prefix;
             code.code = identifier.get("name")+"[";
-            code.code+=vis.code+"].i32;\n";
-  //      }
+            code.code+=vis.code+"].i32";
+      }
 
         //TODO : Precisa de visitar o lado esquerdo?
 
