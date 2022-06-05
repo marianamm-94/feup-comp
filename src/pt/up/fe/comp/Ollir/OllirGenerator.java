@@ -33,6 +33,7 @@ public class OllirGenerator extends AJmmVisitor<Integer, Code> {
         addVisit("Assignment", this::assignmentVisit);
         addVisit("Call", this::callVisit);
         addVisit("BinOp", this::binOpVisit);
+        addVisit("Not", this::notVisit);
         addVisit("EEInt", this::intVisit);
         addVisit("EEFalse", this::falseVisit);
         addVisit("EEIdentifier", this::identifierVisit);
@@ -52,6 +53,7 @@ public class OllirGenerator extends AJmmVisitor<Integer, Code> {
         addVisit("NewArray",this::newArrayVisit);
 
     }
+
 
     public String getCode() {
         return ollirCode.toString();
@@ -271,7 +273,7 @@ public class OllirGenerator extends AJmmVisitor<Integer, Code> {
 
 
 
-            if (!call.getJmmParent().getKind().equals("MethodBody")) {
+            if (!call.getJmmParent().getKind().equals("MethodBody") && !call.getJmmParent().getKind().equals("CompoundStatement")) {
                 String temp = createTemp("." + returnType);
                 finalcode = temp + " :=." + returnType + " " + finalcode;
                 thisCode.code = temp;
@@ -334,7 +336,6 @@ public class OllirGenerator extends AJmmVisitor<Integer, Code> {
         Code lhs = visit(binOp.getJmmChild(0));
         Code rhs = visit(binOp.getJmmChild(1));
 
-        //TODO:: NOT
         String op = OllirUtils.getOllirOperator(binOp);
         String typeOp = OllirUtils.getTypeOperator(binOp);
 
@@ -351,6 +352,21 @@ public class OllirGenerator extends AJmmVisitor<Integer, Code> {
             thisCode.code = lhs.code + " " + op + " " + rhs.code;
         }
 
+        return thisCode;
+    }
+
+    private Code notVisit(JmmNode jmmNode, Integer integer) {
+        Code vis =visit(jmmNode.getJmmChild(0));
+        Code thisCode= new Code();
+
+        thisCode.prefix=vis.prefix;
+        if(!jmmNode.getJmmParent().getKind().equals("Assignment")){
+            String temp=createTemp(".bool ");
+            thisCode.prefix+=temp + ":=.bool !.bool "+vis.code+";\n";
+            thisCode.code= temp;
+        }else {
+            thisCode.code=  "!.bool "+vis.code;
+        }
         return thisCode;
     }
 
@@ -516,9 +532,14 @@ public class OllirGenerator extends AJmmVisitor<Integer, Code> {
 
     private Code compoundStatementVisit(JmmNode jmmNode, Integer integer) {
         Code vis;
-        vis = visit(jmmNode.getJmmChild(0));
+        for(JmmNode child: jmmNode.getChildren()){
+            vis = visit(child);
+            if(vis!=null)
+                ollirCode.append(vis.prefix).append(vis.code).append(";\n");
+        }
 
-        return vis;
+
+        return null;
     }
 
     private Code ifStatementVisit(JmmNode jmmNode, Integer integer) {
