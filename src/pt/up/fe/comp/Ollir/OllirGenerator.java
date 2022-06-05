@@ -227,7 +227,6 @@ public class OllirGenerator extends AJmmVisitor<Integer, Code> {
     }
 
     private Code callVisit(JmmNode call, Integer dummy) {
-        //TODO:: test
         String prefixCode = "";
         Code thisCode = new Code();
         Code target = visit(call.getJmmChild(0));
@@ -273,7 +272,7 @@ public class OllirGenerator extends AJmmVisitor<Integer, Code> {
 
 
 
-            if (!call.getJmmParent().getKind().equals("MethodBody") && !call.getJmmParent().getKind().equals("CompoundStatement")) {
+            if (!call.getJmmParent().getKind().equals("MethodBody") && !call.getJmmParent().getKind().equals("CompoundStatement") && !call.getJmmParent().getKind().equals("ElseBody") &&!call.getJmmParent().getKind().equals("IfBody") ) {
                 String temp = createTemp("." + returnType);
                 finalcode = temp + " :=." + returnType + " " + finalcode;
                 thisCode.code = temp;
