@@ -8,6 +8,8 @@ public class JasminBuilder {
 
     private StringBuilder jasminCode;
     public static ClassUnit classUnit;
+    public static int currentStack;
+    public static int maxStack;
 
     public JasminBuilder(ClassUnit classUnit) {
         this.jasminCode = new StringBuilder();
@@ -59,6 +61,8 @@ public class JasminBuilder {
     private void addMethods() {
 
         for (var method : classUnit.getMethods()) {
+            currentStack=0;
+            maxStack=0;
             jasminCode.append("\n.method public ");
             if (method.isStaticMethod())
                 jasminCode.append("static ");
@@ -75,13 +79,22 @@ public class JasminBuilder {
                 jasminCode.append(JasminUtils.getJasminType(param.getType()));
             jasminCode.append(")").append(JasminUtils.getJasminType(method.getReturnType())).append("\n");
 
-            jasminCode.append(".limit stack 99\n");
-            jasminCode.append(".limit locals 99\n");
+            StringBuilder instructionCode= new StringBuilder();
+
             for(var instruction : method.getInstructions()){
-                 for(var label : method.getLabels(instruction))
-                     jasminCode.append(label).append(":\n");
-                 jasminCode.append(JasminUtils.addInstructions(instruction,method));
+                for(var label : method.getLabels(instruction))
+                    instructionCode.append(label).append(":\n");
+                instructionCode.append(JasminUtils.addInstructions(instruction,method));
             }
+
+            jasminCode.append(".limit stack "+ maxStack + "\n");
+            jasminCode.append(".limit locals 99\n");
+
+            if(currentStack!=0){
+                System.out.println("Error: the current stack is different from 0!");
+            }
+            jasminCode.append(instructionCode);
+
             if(method.getReturnType().getTypeOfElement()==ElementType.VOID)
                 jasminCode.append("return\n");
             jasminCode.append(".end method\n");

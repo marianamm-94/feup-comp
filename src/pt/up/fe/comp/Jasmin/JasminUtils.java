@@ -6,6 +6,13 @@ import pt.up.fe.specs.util.exceptions.NotImplementedException;
 public class JasminUtils {
     static ClassUnit classUnit;
 
+
+    public static void limitStack(int s){
+        JasminBuilder.currentStack+=s;
+        if(JasminBuilder.currentStack>JasminBuilder.maxStack)
+            JasminBuilder.maxStack=JasminBuilder.currentStack;
+    }
+
     public static String getAccessModifiers(AccessModifiers accessModifier) {
         switch (accessModifier) {
             case PUBLIC:
@@ -99,6 +106,8 @@ public class JasminUtils {
         jasminCode.append(JasminLoadStore.loadElement(right,varTable));
         jasminCode.append(getJasminOperationType(opType)).append("\n");
         //goto not implemented
+
+        JasminUtils.limitStack(-1);
 
         return jasminCode.toString();
     }

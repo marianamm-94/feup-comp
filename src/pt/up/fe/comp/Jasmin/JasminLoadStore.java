@@ -20,6 +20,7 @@ public class JasminLoadStore {
         else{
             jasminCode.append("aload ").append(reg).append("\n");
         }
+        JasminUtils.limitStack(1);
         return jasminCode.toString();
     }
 
@@ -31,13 +32,19 @@ public class JasminLoadStore {
         jasminCode.append("aload ").append(reg).append("\n");
         jasminCode.append("iload ").append(indexReg).append("\n");
         jasminCode.append("iaload\n");
+
+        JasminUtils.limitStack(-1);
+
         return jasminCode.toString();
     }
 
     private static String loadLiteral(LiteralElement operand) {
         StringBuilder jasminCode= new StringBuilder();
         String literal= operand.getLiteral();
+
         jasminCode.append("ldc ").append(literal).append("\n");
+        JasminUtils.limitStack(1);
+
         return jasminCode.toString();
     }
 
@@ -54,6 +61,9 @@ public class JasminLoadStore {
         else{
             jasminCode.append("astore ").append(reg).append("\n");
         }
+
+        JasminUtils.limitStack(-1);
+
         return jasminCode.toString();
     }
 
@@ -65,6 +75,9 @@ public class JasminLoadStore {
         jasminCode.append("aload ").append(reg).append("\n");
         jasminCode.append("iload ").append(indexReg).append("\n");
         jasminCode.append("iastore\n");
+
+        JasminUtils.limitStack(-3);
+
         return jasminCode.toString();
     }
 }
