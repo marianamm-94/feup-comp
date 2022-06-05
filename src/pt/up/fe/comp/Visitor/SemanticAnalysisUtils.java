@@ -24,18 +24,22 @@ public class SemanticAnalysisUtils {
                 String typeVar = node.get("name");
                 List<Symbol> checkExist = analysis.getSymbolTable().getLocalVariables(method.getName());
                 for(Symbol symbol: checkExist){
-                    if(symbol.getName().equals(typeVar))
+                    if(symbol.getName().equals(typeVar)) {
                         if (symbol.getType().getName().equals("boolean") && !symbol.getType().isArray())
                             return true;
+                    }
                 }
                 break;
             case "Call":
                 if (type.equals(evaluateCall(method, node, analysis))) return true;
+                break;
             case "ExpressionMethodCall":
             case "IfExpression":
                 if (type.equals(evaluateExpression(method, node, analysis))) return true;
+                break;
             case "Not":
                 if (evaluateNotOperation(method, node, analysis)) return true;
+                break;
             case "BinOp":
                 String op = node.get("op");
                 if(op.equals("and")) {
@@ -43,6 +47,7 @@ public class SemanticAnalysisUtils {
                 }
                 else if(op.equals("less"))
                     if (evaluateOperationWithIntegers(method, node, analysis)) return true;
+                break;
             default:
                 break;
         }
@@ -68,14 +73,18 @@ public class SemanticAnalysisUtils {
                 break;
             case "Call":
                 if (type.equals(evaluateCall(method, node, analysis))) return true;
+                break;
             case "ExpressionMethodCall":
                 if (type.equals(evaluateExpression(method, node, analysis))) return true;
+                break;
             case "Array":
                 if (evaluateArrayAccess(method, node, analysis)) return true;
+                break;
             case "BinOp":
                 String op = node.get("op");
                 if(op.equals("add") || op.equals("sub") || op.equals("div") || op.equals("mult"))
                     if (evaluateOperationWithIntegers(method, node, analysis)) return true;
+                break;
             default:
                 break;
         }
@@ -121,13 +130,13 @@ public class SemanticAnalysisUtils {
 
         boolean hasReport = false;
 
-        if (!evaluatesToBoolean(method, children.get(0), analysis)) {
-            analysis.newReport(children.get(0),"Left operand for binary operator '&&' is not a boolean");
+        if (!evaluatesToBoolean(method, node.getJmmChild(0), analysis)) {
+            analysis.newReport(node.getJmmChild(0),"Left operand for binary operator '&&' is not a boolean");
             hasReport = true;
         }
 
-        if (!evaluatesToBoolean(method, children.get(1), analysis)) {
-            analysis.newReport(children.get(1),"Right operand for binary operator '&&' is not a boolean");
+        if (!evaluatesToBoolean(method, node.getJmmChild(1), analysis)) {
+            analysis.newReport(node.getJmmChild(1),"Right operand for binary operator '&&' is not a boolean");
             hasReport = true;
         }
         return !hasReport;
@@ -359,10 +368,12 @@ public class SemanticAnalysisUtils {
             if(symbol.getName().equals(node.get("name")))
                 return symbol.getType();
         }
-        for(Symbol symbol : analysis.getSymbolTable().getFields())
-        {
-            if(symbol.getName().equals(node.get("name")))
-                return symbol.getType();
+        if(!method.getName().equals("main")){
+            for(Symbol symbol : analysis.getSymbolTable().getFields())
+            {
+                if(symbol.getName().equals(node.get("name")))
+                    return symbol.getType();
+            }
         }
         if(analysis.getSymbolTable().getImports().contains(node.get("name"))){
           return null;
@@ -388,6 +399,8 @@ public class SemanticAnalysisUtils {
             case "EEFalse":
                 return new Type("boolean",false);
             case "EEThis":
+                if(method.getName().equals("main"))
+                    analysis.newReport(node,"Can not use this on main method!");
                 return new Type(analysis.getSymbolTable().getClassName(),false);
             case "EEIdentifier":
                 return evaluateEEIdentifier(method,node,analysis);
