@@ -487,7 +487,7 @@ public class OllirGenerator extends AJmmVisitor<Integer, Code> {
     }
 
     private Code whileStatementVisit(JmmNode jmmNode, Integer integer){
-        labelCount++;
+        int labelAux=++labelCount;
 
         ollirCode.append("Loop" + labelCount + ":");
         ollirCode.append("\n");
@@ -498,7 +498,7 @@ public class OllirGenerator extends AJmmVisitor<Integer, Code> {
                 ollirCode.append(vis.prefix).append(vis.code).append(";\n");
         }
 
-        ollirCode.append("EndLoop" + labelCount + ":");
+        ollirCode.append("EndLoop" + labelAux + ":");
         ollirCode.append("\n");
 
         return null;
@@ -543,7 +543,7 @@ public class OllirGenerator extends AJmmVisitor<Integer, Code> {
     }
 
     private Code ifStatementVisit(JmmNode jmmNode, Integer integer) {
-        labelCount++;
+       int labelAux= ++labelCount;
 
         for(JmmNode child : jmmNode.getChildren()){
             Code vis = visit(child);
@@ -551,7 +551,7 @@ public class OllirGenerator extends AJmmVisitor<Integer, Code> {
                 ollirCode.append(vis.prefix).append(vis.code).append(";\n");
         }
 
-        ollirCode.append("Endif" + labelCount + ":\n");
+        ollirCode.append("Endif" + labelAux + ":\n");
 
         return null;
     }

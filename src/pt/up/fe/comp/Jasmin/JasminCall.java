@@ -85,8 +85,11 @@ public class JasminCall {
       jasminCode.append(((LiteralElement) instruction.getSecondArg()).getLiteral().replace("\"", ""));
       jasminCode.append("(");
 
-      for(Element element : instruction.getListOfOperands())
+      for(Element element : instruction.getListOfOperands()){
           jasminCode.append(JasminUtils.getJasminType(element.getType()));
+          JasminUtils.limitStack(-1);
+      }
+
 
      jasminCode.append(")").append(JasminUtils.getJasminType(instruction.getReturnType()));
      jasminCode.append("\n");
@@ -95,6 +98,7 @@ public class JasminCall {
     }
 
     private static String getInvokeSpecial(CallInstruction instruction, Method method) {
+        //TODO STACK
         StringBuilder jasminCode= new StringBuilder();
         var varTable= method.getVarTable();
         jasminCode.append(JasminLoadStore.loadElement(instruction.getFirstArg(),varTable));
@@ -114,6 +118,7 @@ public class JasminCall {
             jasminCode.append(JasminLoadStore.loadElement(element,varTable));
         jasminCode.append(")").append(JasminUtils.getJasminType(instruction.getReturnType()));
         jasminCode.append("\n");
+
         return jasminCode.toString();
     }
 
@@ -126,6 +131,7 @@ public class JasminCall {
             jasminCode.append("new ");
             jasminCode.append(((Operand) instruction.getFirstArg()).getName()).append("\n");
             jasminCode.append("dup\n");
+            JasminUtils.limitStack(1);
         }
         else if(instruction.getReturnType().getTypeOfElement()== ElementType.ARRAYREF){
             jasminCode.append("newarray int\n");
