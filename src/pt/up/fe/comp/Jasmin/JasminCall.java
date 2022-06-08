@@ -54,8 +54,14 @@ public class JasminCall {
         jasminCode.append(((LiteralElement) instruction.getSecondArg()).getLiteral().replace("\"", ""));
         jasminCode.append("(");
 
-        for(Element element : instruction.getListOfOperands())
+        for(Element element : instruction.getListOfOperands()){
             jasminCode.append(JasminUtils.getJasminType(element.getType()));
+            JasminUtils.limitStack(-1);
+        }
+
+        if(instruction.getReturnType().getTypeOfElement()!=ElementType.VOID){
+            JasminUtils.limitStack(1);
+        }
 
         jasminCode.append(")").append(JasminUtils.getJasminType(instruction.getReturnType()));
         jasminCode.append("\n");
@@ -94,6 +100,10 @@ public class JasminCall {
      jasminCode.append(")").append(JasminUtils.getJasminType(instruction.getReturnType()));
      jasminCode.append("\n");
 
+     if(instruction.getReturnType().getTypeOfElement()==ElementType.VOID){
+         JasminUtils.limitStack(-1);
+     }
+
       return jasminCode.toString();
     }
 
@@ -114,8 +124,10 @@ public class JasminCall {
         else
             jasminCode.append(method.getOllirClass().getClassName());
         jasminCode.append(".<init>(");
-        for(Element element : instruction.getListOfOperands())
+        for(Element element : instruction.getListOfOperands()){
+            JasminUtils.limitStack(-1);
             jasminCode.append(JasminLoadStore.loadElement(element,varTable));
+        }
         jasminCode.append(")").append(JasminUtils.getJasminType(instruction.getReturnType()));
         jasminCode.append("\n");
 
