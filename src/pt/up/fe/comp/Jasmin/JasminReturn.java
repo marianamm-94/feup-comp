@@ -16,6 +16,9 @@ public class JasminReturn {
             jasminCode.append("ireturn\n");
         else
             jasminCode.append("areturn\n");
+
+        JasminUtils.limitStack(-1);
+
         return jasminCode.toString();
     }
 }

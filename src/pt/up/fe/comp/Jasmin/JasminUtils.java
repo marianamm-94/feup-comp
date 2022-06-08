@@ -6,6 +6,13 @@ import pt.up.fe.specs.util.exceptions.NotImplementedException;
 public class JasminUtils {
     static ClassUnit classUnit;
 
+
+    public static void limitStack(int s){
+        JasminBuilder.currentStack+=s;
+        if(JasminBuilder.currentStack>JasminBuilder.maxStack)
+            JasminBuilder.maxStack=JasminBuilder.currentStack;
+    }
+
     public static String getAccessModifiers(AccessModifiers accessModifier) {
         switch (accessModifier) {
             case PUBLIC:
@@ -54,12 +61,11 @@ public class JasminUtils {
 
     private static String getJasminArrayType(ArrayType type) {
         StringBuilder jasminCode = new StringBuilder();
-        jasminCode.append("[".repeat(type.getNumDimensions()));
         if(type.getArrayType()==ElementType.INT32)
 
             jasminCode.append("[I");
         else
-            jasminCode.append("Ljava/lang/String;");
+            jasminCode.append("[Ljava/lang/String;");
         return jasminCode.toString();
     }
 
@@ -100,6 +106,8 @@ public class JasminUtils {
         jasminCode.append(getJasminOperationType(opType)).append("\n");
         //goto not implemented
 
+        JasminUtils.limitStack(-1);
+
         return jasminCode.toString();
     }
 
@@ -118,6 +126,17 @@ public class JasminUtils {
         }
             throw new NotImplementedException(opType);
     }
+    public static String getJasminEspecialType(Type type) {
+        switch (type.getTypeOfElement()) {
+            case THIS:
+                return JasminBuilder.classUnit.getClassName();
+            case CLASS:
+            case OBJECTREF:
+                return ((ClassType) type).getName();
+            default:
+                throw new NotImplementedException(type.getTypeOfElement());
 
+        }
+    }
 
 }

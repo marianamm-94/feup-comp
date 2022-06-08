@@ -23,6 +23,9 @@ public class JasminPutField {
         jasminCode.append(JasminLoadStore.loadElement(third,table)).append("putfield ");
         jasminCode.append(name).append("/").append(((Operand) second).getName()).append(" ").append(type);
         jasminCode.append("\n");
+
+        JasminUtils.limitStack(-2);
+
         return jasminCode.toString();
     }
 }
