@@ -12,6 +12,8 @@ public class JasminBuilder {
     public static int currentStack;
     public static int maxStack;
 
+    public static int conditionals;
+
     public JasminBuilder(ClassUnit classUnit) {
         this.jasminCode = new StringBuilder();
         JasminBuilder.classUnit = classUnit;
@@ -64,6 +66,7 @@ public class JasminBuilder {
         for (var method : classUnit.getMethods()) {
             currentStack=0;
             maxStack=0;
+            conditionals=0;
             jasminCode.append("\n.method public ");
             if (method.isStaticMethod())
                 jasminCode.append("static ");

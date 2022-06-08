@@ -6,7 +6,6 @@ import pt.up.fe.specs.util.exceptions.NotImplementedException;
 public class JasminUtils {
     static ClassUnit classUnit;
 
-
     public static void limitStack(int s){
         JasminBuilder.currentStack+=s;
         if(JasminBuilder.currentStack>JasminBuilder.maxStack)
@@ -85,6 +84,8 @@ public class JasminUtils {
                 return JasminGetField.addGetField((GetFieldInstruction) instruction,method);
             case CALL:
                 return JasminCall.addCall((CallInstruction) instruction,method);
+            case UNARYOPER:
+                return JasminUnaryOperation.addInstructionCode((UnaryOpInstruction) instruction,method);
 
         }
         throw new NotImplementedException(instruction.getInstType());
@@ -111,7 +112,7 @@ public class JasminUtils {
         return jasminCode.toString();
     }
 
-    private static String getJasminOperationType(OperationType opType) {
+    public static String getJasminOperationType(OperationType opType) {
         switch (opType){
             case ADD:
                 return "iadd";
@@ -123,6 +124,8 @@ public class JasminUtils {
                 return "idiv";
             case ANDB:
                 return "iand";
+            case NOTB:
+                return "ifeq";
         }
             throw new NotImplementedException(opType);
     }

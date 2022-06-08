@@ -404,9 +404,12 @@ public class SemanticAnalysisUtils {
                 return new Type(analysis.getSymbolTable().getClassName(),false);
             case "EEIdentifier":
                 return evaluateEEIdentifier(method,node,analysis);
+            case "Not":
+               return new Type("boolean",false);
         }
         throw new NotImplementedException(kind);
     }
+
 
     private static Type getArrayType(JmmMethod method, JmmNode node, Analysis analysis) {
         JmmNode leftChild=node.getJmmChild(0);
