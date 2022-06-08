@@ -112,12 +112,17 @@ public class JasminCall {
 
 
         else
-            jasminCode.append(method.getOllirClass().getClassName());
+            jasminCode.append(JasminUtils.getJasminEspecialType(instruction.getFirstArg().getType()));
         jasminCode.append(".<init>(");
-        for(Element element : instruction.getListOfOperands())
+        for(Element element : instruction.getListOfOperands()){
             jasminCode.append(JasminLoadStore.loadElement(element,varTable));
+            JasminUtils.limitStack(-1);
+        }
+
         jasminCode.append(")").append(JasminUtils.getJasminType(instruction.getReturnType()));
         jasminCode.append("\n");
+
+
 
         return jasminCode.toString();
     }

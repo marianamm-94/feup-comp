@@ -203,7 +203,7 @@ public class OllirGenerator extends AJmmVisitor<Integer, Code> {
             ollirCode.append(OllirUtils.getCode(returnType));
             ollirCode.append(";\n");
 
-        } else if (child.getKind().equals("EEInt") || child.getKind().equals("EETrue") || child.getKind().equals("EEFalse")) {
+        } else if (child.getKind().equals("EEInt")) {
             ollirCode.append("ret.");
             ollirCode.append(OllirUtils.getCode(returnType));
             ollirCode.append(" ");
@@ -211,7 +211,7 @@ public class OllirGenerator extends AJmmVisitor<Integer, Code> {
             ollirCode.append(".");
             ollirCode.append(OllirUtils.getCode(returnType));
             ollirCode.append(";\n");
-        } else {
+        } else{
             Code vis = visit(child);
             if (vis != null) {
                 ollirCode.append(vis.prefix);
@@ -272,7 +272,7 @@ public class OllirGenerator extends AJmmVisitor<Integer, Code> {
 
 
 
-            if (!call.getJmmParent().getKind().equals("MethodBody") && !call.getJmmParent().getKind().equals("CompoundStatement") && !call.getJmmParent().getKind().equals("ElseBody") &&!call.getJmmParent().getKind().equals("IfBody") ) {
+            if (!call.getJmmParent().getKind().equals("MethodBody") && !call.getJmmParent().getKind().equals("CompoundStatement") && !call.getJmmParent().getKind().equals("ElseBody") &&!call.getJmmParent().getKind().equals("IfBody") && !call.getJmmParent().getKind().equals("WhileBody") ) {
                 String temp = createTemp("." + returnType);
                 finalcode = temp + " :=." + returnType + " " + finalcode;
                 thisCode.code = temp;
@@ -605,7 +605,6 @@ public class OllirGenerator extends AJmmVisitor<Integer, Code> {
                         i.i32 :=.i32 0.i32;
      */
     private Code arrayLengthVisit(JmmNode jmmNode, Integer integer) {
-        //TODO :: TESTE
         Code code=new Code();
         Code vis=visit(jmmNode.getJmmParent().getJmmChild(0));
         if(!jmmNode.getJmmParent().getJmmParent().equals("Assignment")){

@@ -61,12 +61,11 @@ public class JasminUtils {
 
     private static String getJasminArrayType(ArrayType type) {
         StringBuilder jasminCode = new StringBuilder();
-        jasminCode.append("[".repeat(type.getNumDimensions()));
         if(type.getArrayType()==ElementType.INT32)
 
             jasminCode.append("[I");
         else
-            jasminCode.append("Ljava/lang/String;");
+            jasminCode.append("[Ljava/lang/String;");
         return jasminCode.toString();
     }
 
@@ -127,6 +126,17 @@ public class JasminUtils {
         }
             throw new NotImplementedException(opType);
     }
+    public static String getJasminEspecialType(Type type) {
+        switch (type.getTypeOfElement()) {
+            case THIS:
+                return JasminBuilder.classUnit.getClassName();
+            case CLASS:
+            case OBJECTREF:
+                return ((ClassType) type).getName();
+            default:
+                throw new NotImplementedException(type.getTypeOfElement());
 
+        }
+    }
 
 }
