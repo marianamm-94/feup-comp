@@ -2,6 +2,7 @@ package pt.up.fe.comp.Jasmin;
 
 import org.specs.comp.ollir.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class JasminBuilder {
@@ -87,8 +88,18 @@ public class JasminBuilder {
                 instructionCode.append(JasminUtils.addInstructions(instruction,method));
             }
 
-            jasminCode.append(".limit stack "+ maxStack + "\n");
-            jasminCode.append(".limit locals 99\n");
+            ArrayList<Integer> variables = new ArrayList<>();
+            for (Descriptor d : method.getVarTable().values()) {
+                if (!variables.contains(d.getVirtualReg()))
+                    variables.add(d.getVirtualReg());
+            }
+            if (!variables.contains(0) && !method.isStaticMethod())
+                variables.add(0);
+
+            jasminCode.append(".limit locals ").append(variables.size()).append("\n");
+
+            jasminCode.append(".limit stack ").append(maxStack).append("\n");
+            jasminCode.append(".limit locals ").append(variables.size()).append("\n");
 
             if(currentStack!=0){
                 System.out.println("Error: the current stack is different from 0!");
