@@ -89,6 +89,13 @@ public class JasminBuilder {
                 for(var label : method.getLabels(instruction))
                     instructionCode.append(label).append(":\n");
                 instructionCode.append(JasminUtils.addInstructions(instruction,method));
+
+                if(instruction.getInstType()==InstructionType.CALL){
+                    if(((CallInstruction)instruction).getReturnType().getTypeOfElement()!=ElementType.VOID){
+                        instructionCode.append("pop\n");
+                        JasminUtils.limitStack(-1);
+                    }
+                }
             }
 
             ArrayList<Integer> variables = new ArrayList<>();
@@ -98,8 +105,6 @@ public class JasminBuilder {
             }
             if (!variables.contains(0) && !method.isStaticMethod())
                 variables.add(0);
-
-            jasminCode.append(".limit locals ").append(variables.size()).append("\n");
 
             jasminCode.append(".limit stack ").append(maxStack).append("\n");
             jasminCode.append(".limit locals ").append(variables.size()).append("\n");

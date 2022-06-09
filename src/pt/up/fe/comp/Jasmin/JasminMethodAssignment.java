@@ -14,8 +14,25 @@ public class JasminMethodAssignment extends JasminBuilder{
 
         StringBuilder jasminCode = new StringBuilder();
 
-        jasminCode.append(JasminUtils.addInstructions(rhs,method));
-        jasminCode.append(JasminLoadStore.storeElement(lhs,table));
+        if(lhs instanceof ArrayOperand){
+
+            Element index=((ArrayOperand)lhs).getIndexOperands().get(0);
+            int reg= table.get(((Operand) lhs).getName()).getVirtualReg();
+            int indexReg=table.get(((Operand) index).getName()).getVirtualReg();
+
+            jasminCode.append("aload ").append(reg).append("\n");
+            jasminCode.append("iload ").append(indexReg).append("\n");
+            jasminCode.append(JasminUtils.addInstructions(rhs,method));
+            jasminCode.append("iastore\n");
+            JasminUtils.limitStack(3);
+            JasminUtils.limitStack(-3);
+
+        }else{
+            jasminCode.append(JasminUtils.addInstructions(rhs,method));
+            jasminCode.append(JasminLoadStore.storeElement(lhs,table));
+        }
+
+
 
     return jasminCode.toString();
     }

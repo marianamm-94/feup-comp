@@ -9,7 +9,6 @@ public class JasminUnaryOperation {
         StringBuilder jasminCode=new StringBuilder();
 
         jasminCode.append(JasminLoadStore.loadElement(instruction.getOperand(),method.getVarTable()));
-        JasminUtils.limitStack(1);
         jasminCode.append(JasminUtils.getJasminOperationType(instruction.getOperation().getOpType()));
 
         JasminBuilder.conditionals++;
@@ -18,8 +17,6 @@ public class JasminUnaryOperation {
         jasminCode.append("\niconst_0\ngoto FinalCond").append(JasminBuilder.conditionals);
         jasminCode.append("\nTrue").append(JasminBuilder.conditionals);
         jasminCode.append(":\niconst_1\nFinalCond").append(JasminBuilder.conditionals).append(":");
-
-        JasminUtils.limitStack(1);
 
         jasminCode.append("\n");
 

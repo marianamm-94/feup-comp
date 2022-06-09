@@ -108,7 +108,6 @@ public class JasminCall {
     }
 
     private static String getInvokeSpecial(CallInstruction instruction, Method method) {
-        //TODO STACK
         StringBuilder jasminCode= new StringBuilder();
         var varTable= method.getVarTable();
         jasminCode.append(JasminLoadStore.loadElement(instruction.getFirstArg(),varTable));
@@ -132,7 +131,7 @@ public class JasminCall {
         jasminCode.append(")").append(JasminUtils.getJasminType(instruction.getReturnType()));
         jasminCode.append("\n");
 
-
+        JasminUtils.limitStack(-1);
 
         return jasminCode.toString();
     }
@@ -145,7 +144,6 @@ public class JasminCall {
         if(instruction.getReturnType().getTypeOfElement()== ElementType.OBJECTREF){
             jasminCode.append("new ");
             jasminCode.append(((Operand) instruction.getFirstArg()).getName()).append("\n");
-            jasminCode.append("dup\n");
             JasminUtils.limitStack(1);
         }
         else if(instruction.getReturnType().getTypeOfElement()== ElementType.ARRAYREF){

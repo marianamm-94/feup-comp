@@ -13,7 +13,7 @@ public class JasminLoadStore {
         ElementType elementType = operand.getType().getTypeOfElement();
         if(elementType==ElementType.INT32 || elementType==ElementType.BOOLEAN){
             if(varTable.get(((Operand) operand).getName()).getVarType().getTypeOfElement()==ElementType.ARRAYREF){
-                loadArray(operand,varTable);
+               return loadArray(operand,varTable);
             }else
                 jasminCode.append("iload ").append(reg).append("\n");
         }
@@ -33,6 +33,7 @@ public class JasminLoadStore {
         jasminCode.append("iload ").append(indexReg).append("\n");
         jasminCode.append("iaload\n");
 
+        JasminUtils.limitStack(2);
         JasminUtils.limitStack(-1);
 
         return jasminCode.toString();

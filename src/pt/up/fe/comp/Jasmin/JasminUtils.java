@@ -105,7 +105,6 @@ public class JasminUtils {
         jasminCode.append(JasminLoadStore.loadElement(left,varTable));
         jasminCode.append(JasminLoadStore.loadElement(right,varTable));
         jasminCode.append(getJasminOperationType(opType)).append("\n");
-        //goto not implemented
 
         JasminUtils.limitStack(-1);
 
