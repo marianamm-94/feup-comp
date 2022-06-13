@@ -69,24 +69,27 @@ public class JasminUtils {
     }
 
     public static String addInstructions(Instruction instruction, Method method){
-        switch (instruction.getInstType()){
+        switch (instruction.getInstType()) {
             case ASSIGN:
-                return JasminMethodAssignment.getInstructionsAssign((AssignInstruction) instruction,method);
+                return JasminMethodAssignment.getInstructionsAssign((AssignInstruction) instruction, method);
             case PUTFIELD:
-                return JasminPutField.addPutField((PutFieldInstruction) instruction,method);
+                return JasminPutField.addPutField((PutFieldInstruction) instruction, method);
             case RETURN:
                 return JasminReturn.returnInstructions((ReturnInstruction) instruction, method);
             case BINARYOPER:
-                return  addBinaryOper((BinaryOpInstruction) instruction,method);
+                return addBinaryOper((BinaryOpInstruction) instruction, method);
             case NOPER:
-                return addNoOper((SingleOpInstruction) instruction,method);
+                return addNoOper((SingleOpInstruction) instruction, method);
             case GETFIELD:
-                return JasminGetField.addGetField((GetFieldInstruction) instruction,method);
+                return JasminGetField.addGetField((GetFieldInstruction) instruction, method);
             case CALL:
-                return JasminCall.addCall((CallInstruction) instruction,method);
+                return JasminCall.addCall((CallInstruction) instruction, method);
             case UNARYOPER:
-                return JasminUnaryOperation.addInstructionCode((UnaryOpInstruction) instruction,method);
-
+                return JasminUnaryOperation.addInstructionCode((UnaryOpInstruction) instruction, method);
+            case GOTO:
+                return JasminLoops.gotoInstruction((GotoInstruction) instruction, method);
+            case BRANCH:
+                return JasminLoops.branchInstruction((CondBranchInstruction) instruction, method);
         }
         throw new NotImplementedException(instruction.getInstType());
     }
@@ -125,6 +128,20 @@ public class JasminUtils {
                 return "iand";
             case NOTB:
                 return "ifeq";
+            case EQ:
+                return "if_icmpeq";
+            case NEQ:
+                return "if_icmpne";
+            case LTH:
+                return "if_icmplt";
+            case LTE:
+                return "if_icmple";
+            case GTH:
+                return "if_icmpgt";
+            case GTE:
+                return "if_icmpge";
+            case ORB:
+                return "ior";
         }
             throw new NotImplementedException(opType);
     }

@@ -5,10 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="07c428b5-8a74-4e19-9325-579c7b1e1665" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/pt/up/fe/comp/Jasmin/JasminLoops.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pt/up/fe/comp/Jasmin/JasminCall.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pt/up/fe/comp/Jasmin/JasminCall.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pt/up/fe/comp/Jasmin/JasminUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pt/up/fe/comp/Jasmin/JasminUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pt/up/fe/comp/Ollir/OllirGenerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pt/up/fe/comp/Ollir/OllirGenerator.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -64,12 +64,12 @@
     </file-type-list>
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/src/pt/up/fe/comp/SymbolTable/JmmAnalyser.java" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/test/BackendTest.java" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/test/fixtures/public/fail/semantic/arr_index_not_int.jmm" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/test/fixtures/public/fail/semantic/arr_size_not_int.jmm" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/test/fixtures/public/fail/semantic/badArguments.jmm" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/test/BackendTest.java" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/test/fixtures/public/fail/semantic/var_lit_incomp.jmm" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/pt/up/fe/comp/SymbolTable/JmmAnalyser.java" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/test/fixtures/public/fail/semantic/badArguments.jmm" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/test/fixtures/public/fail/semantic/arr_index_not_int.jmm" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -82,14 +82,30 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.general&quot;
-  }
-}</component>
-  <component name="RunManager" selected="Gradle.Cpf4_Jasmin.section1_Basic_Method_Declaration_Boolean">
+  <component name="RunManager" selected="Gradle.Cpf4_Jasmin">
+    <configuration name="Cpf4_Jasmin" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;pt.up.fe.comp.cpf.Cpf4_Jasmin&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
     <configuration name="Cpf4_Jasmin.section1_Basic_Method_Declaration_Boolean" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -113,7 +129,7 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="Cpf4_Jasmin.section5_Arrays_Init_Array" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="Cpf4_Jasmin.section3_ControlFlow_If_Simple" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -126,7 +142,7 @@
           <list>
             <option value=":test" />
             <option value="--tests" />
-            <option value="&quot;pt.up.fe.comp.cpf.Cpf4_Jasmin.section5_Arrays_Init_Array&quot;" />
+            <option value="&quot;pt.up.fe.comp.cpf.Cpf4_Jasmin.section3_ControlFlow_If_Simple&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -136,7 +152,7 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="Cpf4_Jasmin.section5_Arrays_Load_ComplexArrayAccess" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="Cpf4_Jasmin.section3_ControlFlow_While_Simple" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -149,30 +165,7 @@
           <list>
             <option value=":test" />
             <option value="--tests" />
-            <option value="&quot;pt.up.fe.comp.cpf.Cpf4_Jasmin.section5_Arrays_Load_ComplexArrayAccess&quot;" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <method v="2" />
-    </configuration>
-    <configuration name="Cpf4_Jasmin.section5_Arrays_Signature_ArrayAsArg" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" value="" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value=":test" />
-            <option value="--tests" />
-            <option value="&quot;pt.up.fe.comp.cpf.Cpf4_Jasmin.section5_Arrays_Signature_ArrayAsArg&quot;" />
+            <option value="&quot;pt.up.fe.comp.cpf.Cpf4_Jasmin.section3_ControlFlow_While_Simple&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -207,11 +200,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Gradle.Cpf4_Jasmin" />
+        <item itemvalue="Gradle.Cpf4_Jasmin.section3_ControlFlow_While_Simple" />
+        <item itemvalue="Gradle.Cpf4_Jasmin.section3_ControlFlow_If_Simple" />
         <item itemvalue="Gradle.Cpf4_Jasmin.section1_Basic_Method_Declaration_Boolean" />
         <item itemvalue="Gradle.Cpf4_Jasmin.section5_Arrays_Store_Array" />
-        <item itemvalue="Gradle.Cpf4_Jasmin.section5_Arrays_Signature_ArrayAsArg" />
-        <item itemvalue="Gradle.Cpf4_Jasmin.section5_Arrays_Load_ComplexArrayAccess" />
-        <item itemvalue="Gradle.Cpf4_Jasmin.section5_Arrays_Init_Array" />
       </list>
     </recent_temporary>
   </component>
