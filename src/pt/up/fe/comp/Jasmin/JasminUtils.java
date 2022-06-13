@@ -111,20 +111,8 @@ public class JasminUtils {
             case ANDB:
             case NOTB:
                 return "ifeq";
-            case EQ:
-                return "if_icmpeq";
-            case NEQ:
-                return "if_icmpne";
             case LTH:
                 return "if_icmplt";
-            case LTE:
-                return "if_icmple";
-            case GTH:
-                return "if_icmpgt";
-            case GTE:
-                return "if_icmpge";
-            case ORB:
-                return "ior";
         }
             throw new NotImplementedException(opType);
     }
