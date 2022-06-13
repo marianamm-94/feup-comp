@@ -34,24 +34,4 @@ public class JasminLoops {
 
         return jasminCode.toString();
     }
-
-    public static String getJasminInst(String leftInst, String rightInst, OperationType opType, String label) {
-        StringBuilder jasminCode = new StringBuilder();
-
-        if (opType == OperationType.LTH) {
-            jasminCode.append(leftInst);
-            jasminCode.append(rightInst);
-            jasminCode.append("if_icmplt").append(label).append("\n");
-        } else if (opType == OperationType.ANDB) {
-            //TODO
-        } else if (opType == OperationType.NOTB) {
-            //TODO
-        } else if ( opType == OperationType.GTE) {
-            jasminCode.append(leftInst);
-            jasminCode.append(rightInst);
-            jasminCode.append("if_icmpge").append(label).append("\n");
-        }
-
-        return jasminCode.toString();
-    }
 }

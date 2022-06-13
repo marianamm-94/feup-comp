@@ -77,7 +77,7 @@ public class JasminUtils {
             case RETURN:
                 return JasminReturn.returnInstructions((ReturnInstruction) instruction, method);
             case BINARYOPER:
-                return addBinaryOper((BinaryOpInstruction) instruction, method);
+                return JasminBinaryOp.addBinaryOper((BinaryOpInstruction) instruction, method);
             case NOPER:
                 return addNoOper((SingleOpInstruction) instruction, method);
             case GETFIELD:
@@ -98,22 +98,6 @@ public class JasminUtils {
         return JasminLoadStore.loadElement(instruction.getSingleOperand(),method.getVarTable());
     }
 
-    private static String addBinaryOper(BinaryOpInstruction instruction,Method method) {
-        Element left=instruction.getLeftOperand();
-        Element right= instruction.getRightOperand();
-        var varTable= method.getVarTable();
-        StringBuilder jasminCode= new StringBuilder();
-        OperationType opType=instruction.getOperation().getOpType();
-
-        jasminCode.append(JasminLoadStore.loadElement(left,varTable));
-        jasminCode.append(JasminLoadStore.loadElement(right,varTable));
-        jasminCode.append(getJasminOperationType(opType)).append("\n");
-
-        JasminUtils.limitStack(-1);
-
-        return jasminCode.toString();
-    }
-
     public static String getJasminOperationType(OperationType opType) {
         switch (opType){
             case ADD:
@@ -125,7 +109,6 @@ public class JasminUtils {
             case DIV:
                 return "idiv";
             case ANDB:
-                return "iand";
             case NOTB:
                 return "ifeq";
             case EQ:
