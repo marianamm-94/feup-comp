@@ -1,6 +1,6 @@
 # Group: 1D
 
-| Name             | Number    | Grade              |Contribution
+| Name             | Number    | Grade              |Contribution|
 | ---------------- | --------- | ------------------ | ------------ |
 | Inês Guimarães   | 201907886 |                    |              |
 | Mariana Monteiro | 202003480 |                    |              |
