@@ -9,18 +9,18 @@ public class JasminLoops {
         return "goto " + instruction.getLabel() + "\n";
     }
 
-    public static String branchInstruction(CondBranchInstruction binaryOpInstruction, Method method){
+    public static String branchInstruction(CondBranchInstruction instruction, Method method){
 
         System.out.println("entered branch instruction");
 
         StringBuilder jasminCode= new StringBuilder();
         var varTable= method.getVarTable();
 
-        Element firstElement = binaryOpInstruction.getLeftOperand();
-        Element secondElement = binaryOpInstruction.getRightOperand();
-        OperationType opType = binaryOpInstruction.getOperation().getOpType();
-        String label = condBranchInstruction.getLabel();
-        /String firstInstruction = JasminLoadStore.loadElement(firstElement,method.getVarTable());
+        Element firstElement = instruction.getLeftOperand();
+        Element secondElement = instruction.getRightOperand();
+        OperationType opType = instruction.getOperation().getOpType();
+        String label = instruction.getLabel();
+        String firstInstruction = JasminLoadStore.loadElement(firstElement,method.getVarTable());
         String secondInstruction = JasminLoadStore.loadElement(secondElement,method.getVarTable());
 
         System.out.println("GOT TO THIS POINT");
