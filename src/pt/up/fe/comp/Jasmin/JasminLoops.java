@@ -16,16 +16,21 @@ public class JasminLoops {
         StringBuilder jasminCode= new StringBuilder();
         var varTable= method.getVarTable();
 
-        Element firstElement = instruction.getLeftOperand();
-        Element secondElement = instruction.getRightOperand();
-        OperationType opType = instruction.getOperation().getOpType();
+        Element firstElement = instruction.getOperands().get(0);
+        //Element secondElement = instruction.getRightOperand();
+        //OperationType opType = instruction.getOperation().getOpType();
         String label = instruction.getLabel();
         String firstInstruction = JasminLoadStore.loadElement(firstElement,method.getVarTable());
-        String secondInstruction = JasminLoadStore.loadElement(secondElement,method.getVarTable());
+       // String secondInstruction = JasminLoadStore.loadElement(secondElement,method.getVarTable());
 
         System.out.println("GOT TO THIS POINT");
+        jasminCode.append(firstInstruction);
+        jasminCode.append("ifne ").append(label);
+        jasminCode.append("\n");
 
-        jasminCode.append(getJasminInst(firstInstruction, secondInstruction, opType, label));
+        JasminUtils.limitStack(-1);
+
+        //jasminCode.append(getJasminInst(firstInstruction, secondInstruction, opType, label));
 
         return jasminCode.toString();
     }
