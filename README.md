@@ -4,7 +4,7 @@
 | ---------------- | --------- |-------|--------------|
 | Inês Guimarães   | 201907886 | 14    | 10           |
 | Mariana Monteiro | 202003480 | 20    | 60           |
-| Marcos Pinto     | 201800177 |       |              |
+| Marcos Pinto     | 201800177 | 16    | 20           |
 | Tea Madzarac     | 202111384 |       |              |
 
 GLOBAL Grade of the project: 18
