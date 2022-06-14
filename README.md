@@ -1,13 +1,13 @@
 # Group: 1D
 
-| Name             | Number    | Grade              |Contribution|
-| ---------------- | --------- | ------------------ | ------------ |
-| Inês Guimarães   | 201907886 |                    |              |
-| Mariana Monteiro | 202003480 |                    |              |
-| Marcos Pinto     | 201800177 |                    |              |
-| Tea Madzarac     | 202111384 |                    |              |
+| Name             | Number    | Grade | Contribution |
+| ---------------- | --------- |-------|--------------|
+| Inês Guimarães   | 201907886 |       |              |
+| Mariana Monteiro | 202003480 | 20    | 60           |
+| Marcos Pinto     | 201800177 |       |              |
+| Tea Madzarac     | 202111384 |       |              |
 
-GLOBAL Grade of the project:
+GLOBAL Grade of the project: 18
 
 # Summary
 
@@ -16,8 +16,65 @@ To make a compiler there are a few phases of compilation. First, the input file 
 
 # Semantic Analysis
 
+### Symbol Table 	  
+
+- Has information about imports and the declared class   
+
+- Has information about extends, fields and methods   
+
+- Has information about the parameters and local variables of each method 
+
+ 
+
+### Type Verification    
+
+- Check that the variable names used in the code have a corresponding declaration, either as a local variable, method parameter, or class field
+
+- The operands of an operation must have types compatible with the operation
+
+- Array cannot be used in arithmetic operations
+
+- Array access is over an array	  
+
+- The array access index is an expression of type integer	  
+
+- The assignee type must match with the assignee 
+
+- Expressions in conditions must return a boolean  
+
+ 
+
+### Function Verification 	  
+
+- When calling methods of the class declared in code, check that the types of arguments in the call are compatible with the types in the method's declaration
+
+- If the method doesn't exist, verify if the class extends another class and report an error if it doesn't exist. Assume the method exists in one of the superclasses and is being called correctly
+
+- When calling methods that belong to classes other than the class declared in the code, make sure the classes are being imported
+
 # Code Generation
+
+### Abstract Syntax Tree (AST)
+
+The source code is read and transformed into an abstract syntax tree (AST). The AST has representations for every possible entity present in the source code.
+
+### Ollir Generation
+
+The OLLIR code is generated from .jmm files.
+We created the class OllirGenerator, in which there is a function for converting each type of expression and statement. Auxiliar variables are created when necessary.
+We also use a Code class to create temporary variables to implement basic blocks, maximum sequences of three consecutive address instructions.
+
+### Jasmin Generation 
+
+The OLLIR code created earlier is used to generate the Jasmin code.
+
+The Jasmin basic structure is being generated including the constructor, fields, and methods.
+Also the limit of the stack and locals is calculated based on the instructions used in each method.
 
 # Pros
 
+We developed a complete tool, implementing all the functionality specified in the project description with an organized and clean code.
+
 # Cons
+
+We were unable to implement the optimizations.
