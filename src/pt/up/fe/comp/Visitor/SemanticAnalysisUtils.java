@@ -28,6 +28,11 @@ public class SemanticAnalysisUtils {
                         if (symbol.getType().getName().equals("boolean") && !symbol.getType().isArray())
                             return true;
                     }
+                    for(Symbol symbol2 :analysis.getSymbolTable().getFields()){
+                        if(symbol2.getName().equals(typeVar))
+                            if (symbol2.getType().getName().equals("boolean") && !symbol2.getType().isArray())
+                                return true;
+                    }
                 }
                 break;
             case "Call":
@@ -66,6 +71,11 @@ public class SemanticAnalysisUtils {
                 String typeVar = node.get("name");
                 List<Symbol> checkExist = analysis.getSymbolTable().getLocalVariables(method.getName());
                 for(Symbol symbol: checkExist){
+                    if(symbol.getName().equals(typeVar))
+                        if (symbol.getType().getName().equals("int") && !symbol.getType().isArray())
+                            return true;
+                }
+                for(Symbol symbol :analysis.getSymbolTable().getFields()){
                     if(symbol.getName().equals(typeVar))
                         if (symbol.getType().getName().equals("int") && !symbol.getType().isArray())
                             return true;
@@ -197,11 +207,6 @@ public class SemanticAnalysisUtils {
             node.getJmmChild(0).put("typeValue","boolean");
             node.getJmmChild(0).put("isArray","false");
         }
-        if(node.getJmmChild(1).getKind().equals("Call")){
-            node.getJmmChild(1).put("typeValue","boolean");
-            node.getJmmChild(1).put("isArray","false");
-        }
-
 
         if (!evaluatesToBoolean( method, children.get(0), analysis)) {
             analysis.newReport(children.get(0), "bad operand type for binary operator '!': boolean expected");
@@ -211,12 +216,16 @@ public class SemanticAnalysisUtils {
     }
 
     public static Type checkIfIdentifierExists(JmmMethod method, JmmNode node, Analysis analysis) {
-        Type identType = null;
-        if(SemanticAnalysisUtils.EEIdentifierExists(method, node,analysis)){
-            Type typeTemp =  method.getLocalVariable(node.get("name")).getType();
-            identType = new Type(typeTemp.getName(),typeTemp.isArray());
+        String typeVar=node.get("name");
+        for(Symbol symbol :analysis.getSymbolTable().getLocalVariables(method.getName())){
+            if(symbol.getName().equals(typeVar))
+                return symbol.getType();
         }
-        return identType;
+        for(Symbol symbol :analysis.getSymbolTable().getFields()){
+            if(symbol.getName().equals(typeVar))
+                return symbol.getType();
+        }
+        return null;
     }
 
     public static boolean isIdentifier(JmmMethod method, JmmNode node, Analysis analysis, boolean isInt, boolean isArray) {
@@ -320,6 +329,7 @@ public class SemanticAnalysisUtils {
                             analysis.newReport(node, "Wrong type of parameter!");
                             return;
                         }
+                        index++;
                     }
 
                 } else if (analysis.getSymbolTable().getSuper() != null) {
@@ -351,17 +361,6 @@ public class SemanticAnalysisUtils {
         }
        return null;
     }
-
-
-    public static boolean EEIdentifierExists(JmmMethod method, JmmNode assignee, Analysis analysis){
-        try {
-            Type typeTemp =  method.getLocalVariable(assignee.get("name")).getType();
-            return true;
-        }
-        catch(Exception e){
-            return false;
-        }
-    }
     private static Type evaluateEEIdentifier(JmmMethod method, JmmNode node, Analysis analysis) {
         for(Symbol symbol : method.getLocalVariables())
         {
@@ -371,8 +370,10 @@ public class SemanticAnalysisUtils {
         if(!method.getName().equals("main")){
             for(Symbol symbol : analysis.getSymbolTable().getFields())
             {
-                if(symbol.getName().equals(node.get("name")))
+                if(symbol.getName().equals(node.get("name"))){
                     return symbol.getType();
+                }
+
             }
         }
         if(analysis.getSymbolTable().getImports().contains(node.get("name"))){
